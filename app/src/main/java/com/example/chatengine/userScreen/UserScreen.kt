@@ -2,9 +2,7 @@ package com.example.chatengine.userScreen
 
 import android.annotation.SuppressLint
 import android.content.Context
-import android.icu.text.CaseMap.Title
 import android.widget.Toast
-import androidx.compose.foundation.layout.fillMaxWidth
 import androidx.compose.foundation.layout.height
 import androidx.compose.foundation.layout.padding
 import androidx.compose.foundation.layout.width
@@ -18,14 +16,14 @@ import androidx.compose.runtime.remember
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.graphics.Color
 import androidx.compose.ui.platform.LocalContext
-import androidx.compose.ui.res.painterResource
 import androidx.compose.ui.unit.dp
 import androidx.navigation.NavController
 import androidx.navigation.NavHostController
 import com.example.chatengine.ChatScreen.ChatDataClass
 import com.example.chatengine.Navigation.NavigationItems
-import com.example.chatengine.loginScreen.LoginDataClass
 import com.example.chatengine.loginScreen.LoginViewModel
+import com.example.chatengine.messageScreen.MsgDataClassModel
+import com.example.chatengine.messageScreen.RecieveDataClass
 import retrofit2.Call
 import retrofit2.Callback
 import retrofit2.Response
@@ -69,6 +67,37 @@ private fun postRoom(
 }
 
 
+private fun getMsgHistory(
+    context: Context,
+    getApiResult: MutableState<String>,
+    loginViewModel: LoginViewModel
+) {
+    val retrofitAPI = loginViewModel.createMsgGet()
+
+    val call: Call<List<RecieveDataClass>?>? = retrofitAPI.getMsg()
+
+
+    call!!.enqueue(object : Callback<List<RecieveDataClass>?> {
+
+        override fun onResponse(call: Call<List<RecieveDataClass>?>, response: Response<List<RecieveDataClass>?>) {
+            Toast.makeText(context, "Logged in", Toast.LENGTH_SHORT).show()
+            val model: List<RecieveDataClass> = response.body()?: emptyList()
+
+            loginViewModel.firstMsgGet=model
+//            val resp =model
+//                        getApiResult.value= resp.toString()
+//            if (model != null) {
+//                loginViewModel.firstMsgGet=model
+//            }
+
+        }
+
+        override fun onFailure(call: Call<List<RecieveDataClass>?>?, t: Throwable) {
+            getApiResult.value="error "+t.message
+        }
+    })
+}
+
 
 @SuppressLint("UnusedMaterialScaffoldPaddingParameter")
 @Composable
@@ -76,6 +105,9 @@ fun UserScreen(navController: NavHostController, loginViewModel: LoginViewModel)
     val context= LocalContext.current
     val title=loginViewModel.user_name
     val result = remember {
+        mutableStateOf("")
+    }
+    val getApiResult = remember {
         mutableStateOf("")
     }
     Scaffold(
@@ -103,9 +135,14 @@ fun UserScreen(navController: NavHostController, loginViewModel: LoginViewModel)
     ) {
 
         Button(
-            onClick = { navController.navigate(NavigationItems.Messages.route) }
+            onClick = {
+                getMsgHistory(context,getApiResult,loginViewModel)
+                navController.navigate(NavigationItems.Messages.route)
+            }
         ) {
             Text(text = "Start messaging")
         }
     }
 }
+
+

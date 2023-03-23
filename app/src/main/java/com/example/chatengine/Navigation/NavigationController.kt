@@ -12,7 +12,6 @@ import com.example.chatengine.loginScreen.getDataLogin
 import com.example.chatengine.messageScreen.Messages
 import com.example.chatengine.signupScreen.PostDataSignUpScaffold
 import com.example.chatengine.userScreen.UserScreen
-import kotlin.math.log
 
 
 @Composable
@@ -41,7 +40,7 @@ fun NavigationController(navController: NavHostController = rememberNavControlle
         }
 
         composable(NavigationItems.Messages.route){
-            Messages()
+            Messages(navController,loginViewModel)
         }
 
     }}
