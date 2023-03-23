@@ -2,6 +2,7 @@ package com.example.chatengine.loginScreen
 
 import android.content.Context
 import android.widget.Toast
+import androidx.compose.foundation.Image
 import androidx.compose.foundation.background
 import androidx.compose.foundation.clickable
 import androidx.compose.foundation.layout.*
@@ -18,14 +19,20 @@ import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.graphics.Brush
 import androidx.compose.ui.graphics.Color
+import androidx.compose.ui.layout.ContentScale
 import androidx.compose.ui.platform.LocalContext
+import androidx.compose.ui.res.painterResource
 import androidx.compose.ui.text.TextStyle
+import androidx.compose.ui.text.font.FontFamily
 import androidx.compose.ui.text.font.FontWeight
+import androidx.compose.ui.text.style.TextAlign
 import androidx.compose.ui.unit.dp
 import androidx.compose.ui.unit.sp
 import androidx.lifecycle.viewmodel.compose.viewModel
 import androidx.navigation.NavController
 import com.example.chatengine.Navigation.NavigationItems
+import com.example.chatengine.R
+import com.example.chatengine.ui.theme.Purple200
 import retrofit2.Call
 import retrofit2.Callback
 import retrofit2.Response
@@ -135,6 +142,25 @@ fun getDataLogin(navController: NavController,loginViewModel: LoginViewModel) {
                 verticalArrangement = Arrangement.Center,
                 horizontalAlignment = Alignment.CenterHorizontally
             ) {
+
+                Image(
+                    painter = painterResource(id = R.drawable.icon), contentDescription = "",
+                    modifier = Modifier.width(100.dp)
+                        .height(100.dp),
+                    contentScale = ContentScale.Crop,
+                )
+
+                Spacer(modifier = Modifier.height(50.dp))
+
+                Text(
+                    text = "Welcome Back to Chat App",
+                    color = Purple200,
+                    fontSize = 20.sp,
+                    fontFamily = FontFamily.Default,
+                    fontWeight = FontWeight.Bold, textAlign = TextAlign.Center
+                )
+
+                Spacer(modifier = Modifier.height(50.dp))
 
 
                 OutlinedTextField(

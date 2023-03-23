@@ -2,13 +2,15 @@ package com.example.chatengine.signupScreen
 
 import android.annotation.SuppressLint
 import androidx.compose.foundation.layout.fillMaxWidth
-import androidx.compose.material.Scaffold
-import androidx.compose.material.Text
-import androidx.compose.material.TopAppBar
+import androidx.compose.foundation.layout.padding
+import androidx.compose.material.*
+import androidx.compose.material.icons.Icons
+import androidx.compose.material.icons.filled.ArrowBack
 import androidx.compose.runtime.Composable
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.graphics.Color
 import androidx.compose.ui.text.style.TextAlign
+import androidx.compose.ui.unit.dp
 import androidx.navigation.NavHostController
 import com.example.chatengine.ui.theme.Purple200
 
@@ -29,18 +31,25 @@ fun PostDataSignUpScaffold(navController: NavHostController){
                     // in the top bar we are specifying tile as a text
                     Text(
                         // on below line we are specifying text to display in top app bar.
-                        text = "Retrofit POST Request in Android",
+                        text = "New Account",
+
 
                         // on below line we are specifying modifier to fill max width.
-                        modifier = Modifier.fillMaxWidth(),
-
-                        // on below line we are specifying text alignment.
-                        textAlign = TextAlign.Center,
-
-                        // on below line we are specifying color for our text.
+                        modifier = Modifier.fillMaxWidth()
+                            .padding(start = 75.dp),
                         color = Color.White
                     )
-                })}
+                },
+                navigationIcon = {
+                    IconButton(onClick = { navController.popBackStack() }) { // Use NavHostController to handle navigation back
+                        Icon(
+                            Icons.Default.ArrowBack,
+                            contentDescription = "Back",
+                            tint = Color.White
+                        )
+                    }
+                }
+            )}
         ) {
         // on the below line we are calling the pop window dialog method to display ui.
         postData(navController)

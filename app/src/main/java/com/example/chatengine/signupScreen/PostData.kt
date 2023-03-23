@@ -35,6 +35,7 @@ import androidx.navigation.NavController
 import com.example.chatengine.Navigation.NavigationItems
 import com.example.chatengine.loginScreen.getDataLogin
 import com.example.chatengine.ui.theme.Purple200
+import com.example.chatengine.ui.theme.ReceiverColor
 import okhttp3.OkHttpClient
 import okhttp3.logging.HttpLoggingInterceptor
 import retrofit2.Call
@@ -135,12 +136,6 @@ fun postData(navController:NavController) {
 
         ) {
 
-//            Image(
-//                painter = painterResource(id = R.drawable.cardbackground), contentDescription = "",
-//                modifier = Modifier.fillMaxWidth()
-//                    .height(200.dp),
-//                contentScale = ContentScale.Crop,
-//            )
             Column(
                 modifier = Modifier
                     .fillMaxSize()
@@ -151,8 +146,21 @@ fun postData(navController:NavController) {
                 horizontalAlignment = Alignment.CenterHorizontally
             ) {
                 // on below line we are creating a text
+
+
+
+                Image(
+                    painter = painterResource(id = com.example.chatengine.R.drawable.icon), contentDescription = "",
+                    modifier = Modifier.width(80.dp)
+                        .height(80.dp),
+                    contentScale = ContentScale.Crop,
+                )
+
+                Spacer(modifier = Modifier.height(20.dp))
+
+
                 Text(
-                    text = "Retrofit POST Request in Android",
+                    text = "Welcome to Chat App",
                     color = Purple200,
                     fontSize = 20.sp,
                     fontFamily = FontFamily.Default,
@@ -203,7 +211,7 @@ fun postData(navController:NavController) {
                     leadingIcon = {
                         IconButton(onClick = { }) {
                             Icon(
-                                Icons.Filled.Face,
+                                Icons.Default.Face,
                                 contentDescription = "UserName Icon",
                                 tint = Color.Blue
                             )
