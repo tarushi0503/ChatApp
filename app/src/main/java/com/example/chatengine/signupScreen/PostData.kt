@@ -160,7 +160,7 @@ fun postData(navController:NavController) {
 
 
                 Text(
-                    text = "Welcome to Chat App",
+                    text = "Welcome to Rapi Chat",
                     color = Purple200,
                     fontSize = 20.sp,
                     fontFamily = FontFamily.Default,

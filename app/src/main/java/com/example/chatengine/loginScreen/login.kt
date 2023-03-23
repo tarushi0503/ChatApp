@@ -153,7 +153,7 @@ fun getDataLogin(navController: NavController,loginViewModel: LoginViewModel) {
                 Spacer(modifier = Modifier.height(50.dp))
 
                 Text(
-                    text = "Welcome Back to Chat App",
+                    text = "Welcome Back to Rapi Chat",
                     color = Purple200,
                     fontSize = 20.sp,
                     fontFamily = FontFamily.Default,

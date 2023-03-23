@@ -119,7 +119,7 @@ fun UserScreen(navController: NavHostController, loginViewModel: LoginViewModel)
     Scaffold(
         topBar= {
             TopAppBar() {
-                Text(text = "")
+                Text(text = "Room")
             }
         },
         modifier = Modifier.background(ReceiverColor),
