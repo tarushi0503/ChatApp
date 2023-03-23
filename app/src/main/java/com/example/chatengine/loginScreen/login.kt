@@ -70,10 +70,8 @@ private fun getDataUsingRetrofit(
 
 
 @Composable
-fun getDataLogin(navController: NavController) {
+fun getDataLogin(navController: NavController,loginViewModel: LoginViewModel) {
     val context= LocalContext.current
-
-    val loginViewModel:LoginViewModel= viewModel()
 
     val userName = remember {
         mutableStateOf("")
