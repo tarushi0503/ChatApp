@@ -12,11 +12,9 @@ import androidx.compose.runtime.Composable
 import androidx.compose.runtime.MutableState
 import androidx.compose.runtime.mutableStateOf
 import androidx.compose.runtime.remember
-import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.graphics.Color
 import androidx.compose.ui.platform.LocalContext
-import androidx.compose.ui.semantics.Role.Companion.Image
 import androidx.compose.ui.unit.dp
 import androidx.navigation.NavController
 import androidx.navigation.NavHostController
@@ -115,12 +113,13 @@ fun UserScreen(navController: NavHostController, loginViewModel: LoginViewModel)
         mutableStateOf("")
     }
     Scaffold(
+        modifier = Modifier.background(Color.Blue),
         topBar= {
             TopAppBar() {
-                Text(text = "Room")
+                Text(text = "")
             }
         },
-        modifier = Modifier.background(ReceiverColor),
+       // modifier = Modifier.background(Purple200),
         floatingActionButton = {
             FloatingActionButton(
                 onClick = {
@@ -139,10 +138,8 @@ fun UserScreen(navController: NavHostController, loginViewModel: LoginViewModel)
 
     ) {
 
-        Column(
-            horizontalAlignment = Alignment.CenterHorizontally
-        ){
             Button(
+                modifier = Modifier.padding(horizontal = 120.dp, vertical = 300.dp),
                 onClick = {
                     getMsgHistory(context, getApiResult, loginViewModel)
                     navController.navigate(NavigationItems.Messages.route)
@@ -150,7 +147,6 @@ fun UserScreen(navController: NavHostController, loginViewModel: LoginViewModel)
             ) {
                 Text(text = "Start messaging")
             }
-        }
 
 
     }

@@ -3,7 +3,7 @@ package com.example.chatengine.messageScreen
 import android.annotation.SuppressLint
 import android.content.Context
 import android.widget.Toast
-import androidx.compose.foundation.background
+import androidx.compose.foundation.*
 import androidx.compose.foundation.layout.*
 import androidx.compose.foundation.lazy.LazyColumn
 import androidx.compose.foundation.lazy.itemsIndexed
@@ -84,7 +84,9 @@ fun Messages(navController: NavHostController, loginViewModel: LoginViewModel) {
                 title = {
                     Text(
                         text = if(loginViewModel.user_name=="tarushi07") "yash07" else "tarushi07",
-                        modifier = Modifier.fillMaxWidth().padding(start = 10.dp),
+                        modifier = Modifier
+                            .fillMaxWidth()
+                            .padding(start = 10.dp),
                         //textAlign = TextAlign.Center,
                         color = Color.White
                     )
@@ -97,7 +99,7 @@ fun Messages(navController: NavHostController, loginViewModel: LoginViewModel) {
                         tint = Color.White
                     )
                 }
-            }
+            },
             )}
     ) {
 
@@ -107,7 +109,7 @@ fun Messages(navController: NavHostController, loginViewModel: LoginViewModel) {
                 .height(690.dp)
                 .background(Color.White)
                 .padding(8.dp),
-            reverseLayout = false
+
         ) {
             itemsIndexed(loginViewModel.firstMsgGet) { index, item ->
 
@@ -158,8 +160,6 @@ fun Messages(navController: NavHostController, loginViewModel: LoginViewModel) {
             }
         }
 
-
-
         Box(
             modifier = Modifier.fillMaxSize(),
             contentAlignment = Alignment.BottomCenter
@@ -191,6 +191,7 @@ fun Messages(navController: NavHostController, loginViewModel: LoginViewModel) {
                 text = result.value,
                 modifier = Modifier.align(Alignment.TopEnd)
             )
+
         }
     }
 

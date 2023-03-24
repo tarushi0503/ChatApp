@@ -11,10 +11,7 @@ import androidx.compose.material.*
 import androidx.compose.material.icons.Icons
 import androidx.compose.material.icons.filled.Face
 import androidx.compose.material.icons.filled.Lock
-import androidx.compose.runtime.Composable
-import androidx.compose.runtime.MutableState
-import androidx.compose.runtime.mutableStateOf
-import androidx.compose.runtime.remember
+import androidx.compose.runtime.*
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.graphics.Brush
@@ -33,6 +30,8 @@ import androidx.navigation.NavController
 import com.example.chatengine.Navigation.NavigationItems
 import com.example.chatengine.R
 import com.example.chatengine.ui.theme.Purple200
+import com.example.chatengine.ui.theme.Purple500
+import com.example.chatengine.ui.theme.Purple700
 import com.example.chatengine.ui.theme.card
 import retrofit2.Call
 import retrofit2.Callback
@@ -95,6 +94,10 @@ fun getDataLogin(navController: NavController,loginViewModel: LoginViewModel) {
         mutableStateOf("")
     }
 
+    val isCredentialsFilled = userName.value.isNotBlank() && password.value.isNotBlank()
+
+
+
     // on below line we are creating a column.
     Box(
         modifier = Modifier
@@ -146,7 +149,8 @@ fun getDataLogin(navController: NavController,loginViewModel: LoginViewModel) {
 
                 Image(
                     painter = painterResource(id = R.drawable.icon), contentDescription = "",
-                    modifier = Modifier.width(100.dp)
+                    modifier = Modifier
+                        .width(100.dp)
                         .height(100.dp),
                     contentScale = ContentScale.Crop,
                 )
@@ -214,20 +218,30 @@ fun getDataLogin(navController: NavController,loginViewModel: LoginViewModel) {
                 Spacer(modifier = Modifier.height(10.dp))
                 // on below line we are creating a button
                 Button(
-                    shape = RoundedCornerShape(10.dp),
+
                     onClick = {
                         if(userName.value == "" || password.value==""){
                             Toast.makeText(context,"Credentials incorrect or empty",Toast.LENGTH_SHORT).show()
                         }
                         else{
+
                             getDataUsingRetrofit(context,result,secret,navController,loginViewModel)
                         }
-
                     },
+                    enabled = isCredentialsFilled,
+
                     // on below line we are adding modifier to our button.
                     modifier = Modifier
                         .fillMaxWidth()
-                        .padding(16.dp)
+                        .padding(16.dp),
+                        //.background(),
+                    colors=ButtonDefaults.buttonColors(
+                        backgroundColor = Purple500,
+                        contentColor = Color.White
+                    ),
+                    shape = RoundedCornerShape(70.dp),
+
+
                 ) {
                     // on below line we are adding text for our button
                     Text(text = "Login",fontWeight = FontWeight.Bold)

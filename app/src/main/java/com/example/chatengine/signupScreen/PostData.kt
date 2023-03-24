@@ -105,6 +105,7 @@ fun postData(navController:NavController) {
     val response = remember {
         mutableStateOf("")
     }
+    val isCredentialsFilled = userName.value.text.isNotBlank() && password.value.text.isNotBlank() && firstName.value.text.isNotBlank() && lastName.value.text.isNotBlank()
     val context= LocalContext.current
     // on below line we are creating a column.
     Box(
