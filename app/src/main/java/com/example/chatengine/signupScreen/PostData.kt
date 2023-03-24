@@ -1,6 +1,7 @@
 package com.example.chatengine.signupScreen
 
 import android.content.Context
+import android.text.TextUtils
 import android.widget.Toast
 import androidx.compose.foundation.Image
 import androidx.compose.foundation.background
@@ -36,6 +37,7 @@ import com.example.chatengine.Navigation.NavigationItems
 import com.example.chatengine.loginScreen.getDataLogin
 import com.example.chatengine.ui.theme.Purple200
 import com.example.chatengine.ui.theme.ReceiverColor
+import com.example.chatengine.ui.theme.card
 import okhttp3.OkHttpClient
 import okhttp3.logging.HttpLoggingInterceptor
 import retrofit2.Call
@@ -68,11 +70,11 @@ private fun postDataUsingRetrofit(
 
     call!!.enqueue(object : Callback<DataModel?> {
         override fun onResponse(call: Call<DataModel?>?, response: Response<DataModel?>) {
-            Toast.makeText(ctx, "Data posted to API", Toast.LENGTH_SHORT).show()
-            val model: DataModel? = response.body()
-            val resp =
-                "Response Code : " + response.code()
-            result.value = resp
+            Toast.makeText(ctx, "Sign up successful", Toast.LENGTH_SHORT).show()
+//            val model: DataModel? = response.body()
+//            val resp =
+//                "Response Code : " + response.code()
+            //result.value = resp
         }
 
         override fun onFailure(call: Call<DataModel?>?, t: Throwable) {
@@ -97,12 +99,13 @@ fun postData(navController:NavController) {
     val lastName = remember {
         mutableStateOf(TextFieldValue())
     }
-    val password = remember{
+    val password = remember {
         mutableStateOf(TextFieldValue())
     }
     val response = remember {
         mutableStateOf("")
     }
+    val context= LocalContext.current
     // on below line we are creating a column.
     Box(
         modifier = Modifier
@@ -130,7 +133,7 @@ fun postData(navController:NavController) {
                 .height(700.dp)
                 //.alpha(0.9f)
                 .padding(16.dp),
-            backgroundColor = Color.LightGray,
+            backgroundColor = card,
             shape = RoundedCornerShape(50.dp),
             elevation = 8.dp
 
@@ -148,9 +151,9 @@ fun postData(navController:NavController) {
                 // on below line we are creating a text
 
 
-
                 Image(
-                    painter = painterResource(id = com.example.chatengine.R.drawable.icon), contentDescription = "",
+                    painter = painterResource(id = com.example.chatengine.R.drawable.icon),
+                    contentDescription = "",
                     modifier = Modifier.width(80.dp)
                         .height(80.dp),
                     contentScale = ContentScale.Crop,
@@ -275,12 +278,71 @@ fun postData(navController:NavController) {
                 // on below line we are creating a button
                 Button(
                     shape = RoundedCornerShape(10.dp),
-                    onClick =  {
-                        // on below line we are calling make payment method to update data.
-                        postDataUsingRetrofit(
-                            ctx, userName, firstName, lastName, password, response
-                        )
-                        navController.navigate(NavigationItems.getDataLogin.route)
+                    onClick = {
+                        if(TextUtils.isEmpty(userName.value.text) || TextUtils.isEmpty(firstName.value.text) || TextUtils.isEmpty(lastName.value.text) || TextUtils.isEmpty(password.value.text)){
+                            Toast.makeText(ctx,"Credentials empty",Toast.LENGTH_SHORT).show()
+                        }
+
+                        else if(
+                            userName.value.text.contains("@") ||
+                            userName.value.text.contains(",") ||
+                            userName.value.text.contains("!") ||
+                            userName.value.text.contains("$") ||
+                            userName.value.text.contains("%") ||
+                            userName.value.text.contains("^") ||
+                            userName.value.text.contains("&") ||
+                            userName.value.text.contains(",") ||
+                            userName.value.text.contains("(") ||
+                            userName.value.text.contains(".") ||
+                            userName.value.text.contains(")") ||
+                            userName.value.text.contains("_") ||
+                            userName.value.text.contains("+") ||
+                            userName.value.text.contains("-")
+                        ){
+                            Toast.makeText(context,"Special character not allowed in username",Toast.LENGTH_SHORT).show()
+                        }
+
+                        else if(firstName.value.text.contains("1") ||
+                            firstName.value.text.contains("2")||
+                            firstName.value.text.contains("3")||
+                            firstName.value.text.contains("4")||
+                            firstName.value.text.contains("5")||
+                            firstName.value.text.contains("6")||
+                            firstName.value.text.contains("7")||
+                            firstName.value.text.contains("8")||
+                            firstName.value.text.contains("9")||
+                            firstName.value.text.contains("0")){
+                            Toast.makeText(ctx,"Digits not allowed in First Name",Toast.LENGTH_SHORT).show()
+                        }
+
+                        else if(
+                            lastName.value.text.contains("1") ||
+                            lastName.value.text.contains("2")||
+                            lastName.value.text.contains("3")||
+                            lastName.value.text.contains("4")||
+                            lastName.value.text.contains("5")||
+                            lastName.value.text.contains("6")||
+                            lastName.value.text.contains("7")||
+                            lastName.value.text.contains("8")||
+                            lastName.value.text.contains("9")||
+                            lastName.value.text.contains("0"))
+                        {
+                            Toast.makeText(ctx,"Digits not allowed in Last Name",Toast.LENGTH_SHORT).show()
+                        }
+
+                        else if(password.value.text.length<=5){
+                            Toast.makeText(ctx,"Passowrd length less than 8",Toast.LENGTH_SHORT).show()
+                        }
+
+
+                        else{
+                            postDataUsingRetrofit(
+                                ctx, userName, firstName, lastName, password, response
+                            )
+                            navController.navigate(NavigationItems.getDataLogin.route)
+                        }
+
+
                     },
                     // on below line we are adding modifier to our button.
                     modifier = Modifier
@@ -288,7 +350,7 @@ fun postData(navController:NavController) {
                         .padding(16.dp)
                 ) {
                     // on below line we are adding text for our button
-                    Text(text = "SignUp",fontWeight = FontWeight.Bold)
+                    Text(text = "SignUp", fontWeight = FontWeight.Bold)
                 }
                 // on below line we are adding a spacer.
                 Spacer(modifier = Modifier.height(20.dp))
@@ -318,7 +380,6 @@ fun postData(navController:NavController) {
         }
     }
 }
-
 
 
 

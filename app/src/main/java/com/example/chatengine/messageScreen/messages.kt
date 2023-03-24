@@ -45,7 +45,7 @@ fun startMessaging(context: Context, value: String, result: MutableState<String>
     call!!.enqueue(object : Callback<MsgDataClassModel?> {
 
         override fun onResponse(call: Call<MsgDataClassModel?>, response: Response<MsgDataClassModel?>) {
-            Toast.makeText(context, " in", Toast.LENGTH_SHORT).show()
+            //Toast.makeText(context, " in", Toast.LENGTH_SHORT).show()
             val model: MsgDataClassModel? = response.body()
             val resp = model?.text
             if (resp != null) {
@@ -106,7 +106,8 @@ fun Messages(navController: NavHostController, loginViewModel: LoginViewModel) {
                 .fillMaxWidth()
                 .height(690.dp)
                 .background(Color.White)
-                .padding(8.dp)
+                .padding(8.dp),
+            reverseLayout = false
         ) {
             itemsIndexed(loginViewModel.firstMsgGet) { index, item ->
 

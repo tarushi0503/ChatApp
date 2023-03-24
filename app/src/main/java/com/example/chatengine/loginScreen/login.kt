@@ -33,6 +33,7 @@ import androidx.navigation.NavController
 import com.example.chatengine.Navigation.NavigationItems
 import com.example.chatengine.R
 import com.example.chatengine.ui.theme.Purple200
+import com.example.chatengine.ui.theme.card
 import retrofit2.Call
 import retrofit2.Callback
 import retrofit2.Response
@@ -56,16 +57,16 @@ private fun getDataUsingRetrofit(
         override fun onResponse(call: Call<LoginDataClass?>?, response: Response<LoginDataClass?>) {
             Toast.makeText(ctx, "Logged in", Toast.LENGTH_SHORT).show()
             val model: LoginDataClass? = response.body()
-            val resp =
-                "Response Code : " + response.code() + "\n"+"Id: " + model?.is_authenticated+  "\n"+ model?.username
-            result.value=resp
+//            val resp =
+//                "Response Code : " + response.code() + "\n"+"Id: " + model?.is_authenticated+  "\n"+ model?.username
+//            result.value=resp
             secret.value = model?.secret.toString()
             loginViewModel.UserData=model
             if(model?.is_authenticated==true){
                 navController.navigate(NavigationItems.UserScreen.route)
-                Toast.makeText(ctx,"Logged in",Toast.LENGTH_LONG).show()
+                Toast.makeText(ctx,"Logged in successfully",Toast.LENGTH_SHORT).show()
             }
-            println("/////////////////////////////////////////////////////${secret.value}")
+//            println("/////////////////////////////////////////////////////${secret.value}")
 
         }
 
@@ -121,7 +122,7 @@ fun getDataLogin(navController: NavController,loginViewModel: LoginViewModel) {
                 .height(700.dp)
                 //.alpha(0.9f)
                 .padding(16.dp),
-            backgroundColor = Color.LightGray,
+            backgroundColor = card,
             shape = RoundedCornerShape(50.dp),
             elevation = 8.dp
 
@@ -215,7 +216,13 @@ fun getDataLogin(navController: NavController,loginViewModel: LoginViewModel) {
                 Button(
                     shape = RoundedCornerShape(10.dp),
                     onClick = {
-                        getDataUsingRetrofit(context,result,secret,navController,loginViewModel)
+                        if(userName.value == "" || password.value==""){
+                            Toast.makeText(context,"Credentials incorrect or empty",Toast.LENGTH_SHORT).show()
+                        }
+                        else{
+                            getDataUsingRetrofit(context,result,secret,navController,loginViewModel)
+                        }
+
                     },
                     // on below line we are adding modifier to our button.
                     modifier = Modifier

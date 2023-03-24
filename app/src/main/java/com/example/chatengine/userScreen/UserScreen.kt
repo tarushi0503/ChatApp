@@ -4,10 +4,7 @@ import android.annotation.SuppressLint
 import android.content.Context
 import android.widget.Toast
 import androidx.compose.foundation.background
-import androidx.compose.foundation.layout.Box
-import androidx.compose.foundation.layout.height
-import androidx.compose.foundation.layout.padding
-import androidx.compose.foundation.layout.width
+import androidx.compose.foundation.layout.*
 import androidx.compose.material.*
 import androidx.compose.material.icons.Icons
 import androidx.compose.material.icons.filled.Add
@@ -30,6 +27,7 @@ import com.example.chatengine.messageScreen.MsgDataClassModel
 import com.example.chatengine.messageScreen.RecieveDataClass
 import com.example.chatengine.ui.theme.Purple200
 import com.example.chatengine.ui.theme.ReceiverColor
+import org.intellij.lang.annotations.JdkConstants.HorizontalAlignment
 import retrofit2.Call
 import retrofit2.Callback
 import retrofit2.Response
@@ -86,7 +84,7 @@ private fun getMsgHistory(
     call!!.enqueue(object : Callback<List<RecieveDataClass>?> {
 
         override fun onResponse(call: Call<List<RecieveDataClass>?>, response: Response<List<RecieveDataClass>?>) {
-            Toast.makeText(context, "Logged in", Toast.LENGTH_SHORT).show()
+            //Toast.makeText(context, "Logged in", Toast.LENGTH_SHORT).show()
             val model: List<RecieveDataClass> = response.body()?: emptyList()
 
             loginViewModel.firstMsgGet=model
@@ -141,7 +139,9 @@ fun UserScreen(navController: NavHostController, loginViewModel: LoginViewModel)
 
     ) {
 
-        Box(contentAlignment = Alignment.Center){
+        Column(
+            horizontalAlignment = Alignment.CenterHorizontally
+        ){
             Button(
                 onClick = {
                     getMsgHistory(context, getApiResult, loginViewModel)
