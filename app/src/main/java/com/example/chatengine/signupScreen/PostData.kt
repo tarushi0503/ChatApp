@@ -345,6 +345,7 @@ fun postData(navController:NavController) {
 
 
                     },
+                    enabled = isCredentialsFilled,
                     // on below line we are adding modifier to our button.
                     modifier = Modifier
                         .fillMaxWidth()

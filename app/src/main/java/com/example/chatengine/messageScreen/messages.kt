@@ -8,6 +8,7 @@ import androidx.compose.foundation.layout.*
 import androidx.compose.foundation.lazy.LazyColumn
 import androidx.compose.foundation.lazy.itemsIndexed
 import androidx.compose.foundation.shape.RoundedCornerShape
+import androidx.compose.foundation.text.KeyboardActions
 import androidx.compose.material.*
 import androidx.compose.material.icons.Icons
 import androidx.compose.material.icons.filled.ArrowBack
@@ -18,10 +19,13 @@ import androidx.compose.runtime.MutableState
 import androidx.compose.runtime.mutableStateOf
 import androidx.compose.runtime.remember
 import androidx.compose.ui.Alignment
+import androidx.compose.ui.ExperimentalComposeUiApi
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.draw.clip
 import androidx.compose.ui.graphics.Color
+import androidx.compose.ui.platform.LocalConfiguration
 import androidx.compose.ui.platform.LocalContext
+import androidx.compose.ui.platform.LocalSoftwareKeyboardController
 import androidx.compose.ui.text.TextStyle
 import androidx.compose.ui.text.font.FontFamily
 import androidx.compose.ui.text.style.TextAlign
@@ -64,9 +68,11 @@ fun startMessaging(context: Context, value: String, result: MutableState<String>
 
 
 
+@OptIn(ExperimentalComposeUiApi::class)
 @SuppressLint("UnusedMaterialScaffoldPaddingParameter")
 @Composable
 fun Messages(navController: NavHostController, loginViewModel: LoginViewModel) {
+
 
     val message = remember {
         mutableStateOf("")
@@ -76,6 +82,7 @@ fun Messages(navController: NavHostController, loginViewModel: LoginViewModel) {
         mutableStateOf("")
     }
     val context = LocalContext.current
+//    val keyboardController = LocalSoftwareKeyboardController.current
 
 
     Scaffold(
@@ -100,7 +107,8 @@ fun Messages(navController: NavHostController, loginViewModel: LoginViewModel) {
                     )
                 }
             },
-            )}
+            )},
+
     ) {
 
         LazyColumn(
@@ -110,8 +118,10 @@ fun Messages(navController: NavHostController, loginViewModel: LoginViewModel) {
                 .background(Color.White)
                 .padding(8.dp),
 
+            reverseLayout = true
+
         ) {
-            itemsIndexed(loginViewModel.firstMsgGet) { index, item ->
+            itemsIndexed(loginViewModel.firstMsgGet.sortedByDescending{it.created}) { lastIndex, item ->
 
                 val isCurrentUser = item.sender_username == loginViewModel.user_name
                 val messageBackgroundColor = if (isCurrentUser) SenderColor else ReceiverColor
@@ -175,6 +185,11 @@ fun Messages(navController: NavHostController, loginViewModel: LoginViewModel) {
                     value = message.value, onValueChange = {
                         message.value = it
                     },
+//                    keyboardActions = KeyboardActions(
+//                        onDone = {
+//                            keyboardController?.hide()
+//                        }
+//                    ),
                     placeholder = { Text(text = "Start typing..", color = Color.LightGray)}
                 )
                 IconButton(onClick = {

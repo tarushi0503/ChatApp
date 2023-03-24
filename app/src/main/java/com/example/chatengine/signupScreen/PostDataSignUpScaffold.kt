@@ -49,7 +49,8 @@ fun PostDataSignUpScaffold(navController: NavHostController){
                         )
                     }
                 }
-            )}
+            )},
+
         ) {
         // on the below line we are calling the pop window dialog method to display ui.
         postData(navController)
