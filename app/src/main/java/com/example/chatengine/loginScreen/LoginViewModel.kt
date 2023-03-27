@@ -13,6 +13,7 @@ import com.example.chatengine.messageScreen.MessageClass
 import com.example.chatengine.messageScreen.MsgDataClassModel
 import com.example.chatengine.messageScreen.PostMessageAPI
 import com.example.chatengine.messageScreen.RecieveDataClass
+import com.example.chatengine.userScreen.GetChatsDataClass
 import com.example.chatengine.userScreen.GetMyChats
 import com.example.chatengine.userScreen.GetMyChatsClass
 import kotlinx.coroutines.flow.MutableStateFlow
@@ -64,9 +65,7 @@ class LoginViewModel:ViewModel() {
     }
 
     //get messages
-    //var msgGet by mutableStateOf("")
     var firstMsgGet : MutableList<RecieveDataClass> by mutableStateOf(mutableListOf())
-    //var newMsgDetailsGet:MsgDataClassModel? by mutableStateOf(firstMsgGet)
     fun createMsgGet():PostMessageAPI{
         val msgApiService= MessageClass(user_name,password).getMsgInstance()
         return  msgApiService
@@ -79,10 +78,12 @@ class LoginViewModel:ViewModel() {
 
 
     //Different users
-    var allChats : MutableList<RecieveDataClass> by mutableStateOf(mutableListOf())
+    var allChats : MutableList<GetChatsDataClass> by mutableStateOf(mutableListOf())
     //var newMsgDetailsGet:MsgDataClassModel? by mutableStateOf(firstMsgGet)
     fun getAllChats(): GetMyChats {
         val msgApiService= GetMyChatsClass(user_name,password).getMsgInstance()
         return  msgApiService
     }
+
+
 }

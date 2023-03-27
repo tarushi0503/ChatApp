@@ -16,7 +16,7 @@ import retrofit2.http.POST
 interface GetMyChats {
 
     @GET("/chats")
-    fun getChats(): Call<List<RecieveDataClass>?>?
+    fun getChats(): Call<List<GetChatsDataClass>?>?
 }
 
 class GetMyChatsClass(username:String,password:String){
