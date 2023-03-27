@@ -1,31 +1,40 @@
 package com.example.chatengine.userScreen
 
+
 import android.annotation.SuppressLint
 import android.content.Context
 import android.widget.Toast
 import androidx.compose.foundation.background
 import androidx.compose.foundation.layout.*
+import androidx.compose.foundation.lazy.LazyColumn
+import androidx.compose.foundation.lazy.itemsIndexed
+import androidx.compose.foundation.shape.RoundedCornerShape
 import androidx.compose.material.*
 import androidx.compose.material.icons.Icons
 import androidx.compose.material.icons.filled.Add
+import androidx.compose.material.icons.filled.ArrowForward
+import androidx.compose.material.icons.filled.PlayArrow
 import androidx.compose.runtime.Composable
 import androidx.compose.runtime.MutableState
 import androidx.compose.runtime.mutableStateOf
 import androidx.compose.runtime.remember
+import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
+import androidx.compose.ui.draw.clip
 import androidx.compose.ui.graphics.Color
 import androidx.compose.ui.platform.LocalContext
+import androidx.compose.ui.text.TextStyle
 import androidx.compose.ui.unit.dp
+import androidx.compose.ui.unit.sp
 import androidx.navigation.NavController
 import androidx.navigation.NavHostController
 import com.example.chatengine.ChatScreen.ChatDataClass
 import com.example.chatengine.Navigation.NavigationItems
 import com.example.chatengine.loginScreen.LoginViewModel
-import com.example.chatengine.messageScreen.MsgDataClassModel
 import com.example.chatengine.messageScreen.RecieveDataClass
 import com.example.chatengine.ui.theme.Purple200
 import com.example.chatengine.ui.theme.ReceiverColor
-import org.intellij.lang.annotations.JdkConstants.HorizontalAlignment
+import com.example.chatengine.ui.theme.SenderColor
 import retrofit2.Call
 import retrofit2.Callback
 import retrofit2.Response
@@ -69,6 +78,7 @@ private fun postRoom(
 }
 
 
+//getAPI
 private fun getMsgHistory(
     context: Context,
     getApiResult: MutableState<String>,
@@ -85,7 +95,7 @@ private fun getMsgHistory(
             //Toast.makeText(context, "Logged in", Toast.LENGTH_SHORT).show()
             val model: List<RecieveDataClass> = response.body()?: emptyList()
 
-            loginViewModel.firstMsgGet=model
+            loginViewModel.firstMsgGet= model as MutableList<RecieveDataClass>
 //            val resp =model
 //                        getApiResult.value= resp.toString()
 //            if (model != null) {
@@ -94,8 +104,39 @@ private fun getMsgHistory(
 
         }
 
-        override fun onFailure(call: Call<List<RecieveDataClass>?>?, t: Throwable) {
-            getApiResult.value="error "+t.message
+        override fun onFailure(call: Call<List<RecieveDataClass>?>, t: Throwable) {
+            //getApiResult.value="error "+t.message
+        }
+    })
+}
+
+private fun getChatHistory(
+//    context: Context,
+//    getApiResult: MutableState<String>,
+    loginViewModel: LoginViewModel
+) {
+    val retrofitAPI = loginViewModel.getAllChats()
+
+    val call: Call<List<RecieveDataClass>?>? = retrofitAPI.getChats()
+
+
+    call!!.enqueue(object : Callback<List<RecieveDataClass>?> {
+
+        override fun onResponse(call: Call<List<RecieveDataClass>?>, response: Response<List<RecieveDataClass>?>) {
+            //Toast.makeText(context, "Logged in", Toast.LENGTH_SHORT).show()
+            val model: List<RecieveDataClass> = response.body()?: emptyList()
+
+            loginViewModel.firstMsgGet= model as MutableList<RecieveDataClass>
+//            val resp =model
+//                        getApiResult.value= resp.toString()
+//            if (model != null) {
+//                loginViewModel.firstMsgGet=model
+//            }
+
+        }
+
+        override fun onFailure(call: Call<List<RecieveDataClass>?>, t: Throwable) {
+            //getApiResult.value="error "+t.message
         }
     })
 }
@@ -106,6 +147,7 @@ private fun getMsgHistory(
 fun UserScreen(navController: NavHostController, loginViewModel: LoginViewModel) {
     val context= LocalContext.current
     val title=loginViewModel.user_name
+    //getChatHistory(loginViewModel)
     val result = remember {
         mutableStateOf("")
     }
@@ -115,8 +157,14 @@ fun UserScreen(navController: NavHostController, loginViewModel: LoginViewModel)
     Scaffold(
         modifier = Modifier.background(Color.Blue),
         topBar= {
-            TopAppBar() {
-                Text(text = "")
+            TopAppBar(
+            ) {
+                Text(text = "Chats")
+//                IconButton(onClick = {
+//
+//                }) {
+//                    Icon(Icons.Filled.Add, contentDescription = "Logout")
+//                }
             }
         },
        // modifier = Modifier.background(Purple200),
@@ -138,6 +186,90 @@ fun UserScreen(navController: NavHostController, loginViewModel: LoginViewModel)
 
     ) {
 
+
+        LazyColumn(
+            modifier = Modifier
+                .fillMaxWidth()
+                .height(690.dp)
+                .background(Color.White)
+                .padding(8.dp),
+
+            reverseLayout = true
+
+        ) {
+            itemsIndexed(loginViewModel.allChats.sortedByDescending{it.created}) { lastIndex, item ->
+
+                val isCurrentUser = item.sender_username == loginViewModel.user_name
+                val messageBackgroundColor = if (isCurrentUser) SenderColor else ReceiverColor
+                val messageTextColor = if (isCurrentUser) Color.Black else Color.Black
+
+                val time = item.created.subSequence(11, 16)
+
+                Column(
+                    modifier = Modifier
+                        .fillMaxWidth(),
+                    horizontalAlignment = if (isCurrentUser) Alignment.End else Alignment.Start
+                ) {
+                    Box(
+                        modifier = Modifier
+                            .padding(8.dp)
+                    ) {
+
+                        Card(
+                            modifier = Modifier
+                                .clip(RoundedCornerShape(12.dp, 0.dp, 9.dp, 12.dp)),
+                            elevation = 10.dp,
+
+                            ) {
+                            Column(
+                                modifier = Modifier
+                                    .background(messageBackgroundColor)
+                                    .padding(10.dp)
+                            ) {
+                                Text(
+                                    text = item.text,
+                                    color = messageTextColor,
+                                    style = TextStyle(fontSize = 16.sp),
+                                )
+                                Spacer(modifier = Modifier.height(4.dp))
+
+                                Text(
+                                    text = "$time",
+                                    color = messageTextColor,
+                                    style = TextStyle(fontSize = 12.sp),
+                                    modifier = Modifier.align(Alignment.End)
+                                )
+                            }
+                        }
+                    }
+                }
+            }
+        }
+
+//        Card(
+//            shape = RoundedCornerShape(8.dp),
+//            elevation = 4.dp,
+//            modifier = Modifier.padding(16.dp).fillMaxWidth()
+//        ) {
+//            Row(
+//                modifier = Modifier.padding(16.dp),
+//                horizontalArrangement = Arrangement.SpaceBetween
+//            ) {
+//                val cardName=if(title=="tarushi07")"yash07" else "tarushi07"
+//                Spacer(modifier = Modifier.height(16.dp))
+//                Text(text = cardName, style = MaterialTheme.typography.h6)
+//                IconButton(onClick = {
+//                    getMsgHistory(context, getApiResult, loginViewModel)
+//                    navController.navigate(NavigationItems.Messages.route)
+//                }) {
+//                    Icon( Icons.Default.ArrowForward, contentDescription = "")
+//
+//                }
+//            }
+//
+//        }
+        
+
             Button(
                 modifier = Modifier.padding(horizontal = 120.dp, vertical = 300.dp),
                 onClick = {
@@ -147,7 +279,6 @@ fun UserScreen(navController: NavHostController, loginViewModel: LoginViewModel)
             ) {
                 Text(text = "Start messaging")
             }
-
 
     }
 }

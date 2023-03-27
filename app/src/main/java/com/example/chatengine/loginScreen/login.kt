@@ -25,7 +25,6 @@ import androidx.compose.ui.text.font.FontWeight
 import androidx.compose.ui.text.style.TextAlign
 import androidx.compose.ui.unit.dp
 import androidx.compose.ui.unit.sp
-import androidx.lifecycle.viewmodel.compose.viewModel
 import androidx.navigation.NavController
 import com.example.chatengine.Navigation.NavigationItems
 import com.example.chatengine.R
@@ -63,7 +62,7 @@ private fun getDataUsingRetrofit(
             loginViewModel.UserData=model
             if(model?.is_authenticated==true){
                 navController.navigate(NavigationItems.UserScreen.route)
-                Toast.makeText(ctx,"Logged in successfully",Toast.LENGTH_SHORT).show()
+//                Toast.makeText(ctx,"Logged in successfully",Toast.LENGTH_SHORT).show()
             }
 //            println("/////////////////////////////////////////////////////${secret.value}")
 

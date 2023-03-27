@@ -1,7 +1,9 @@
 package com.example.chatengine.loginScreen
 
+import android.content.Context
 import androidx.compose.runtime.getValue
 import androidx.compose.runtime.mutableStateOf
+import androidx.compose.runtime.remember
 import androidx.compose.runtime.setValue
 import androidx.lifecycle.ViewModel
 import com.example.chatengine.ChatScreen.ChatApiInterface
@@ -11,14 +13,21 @@ import com.example.chatengine.messageScreen.MessageClass
 import com.example.chatengine.messageScreen.MsgDataClassModel
 import com.example.chatengine.messageScreen.PostMessageAPI
 import com.example.chatengine.messageScreen.RecieveDataClass
+import com.example.chatengine.userScreen.GetMyChats
+import com.example.chatengine.userScreen.GetMyChatsClass
+import kotlinx.coroutines.flow.MutableStateFlow
+import kotlinx.coroutines.flow.StateFlow
 
 class LoginViewModel:ViewModel() {
+
 
     var user_name by mutableStateOf("")
     var password by mutableStateOf("")
 
     val initial = LoginDataClass("","",false)
     var UserData: LoginDataClass? by mutableStateOf(initial)
+
+    //logout
 
     fun AuthenticateUser():LoginInterfaceAPI{
         val apiService=LoginClass(user_name,password).getInstance()
@@ -44,13 +53,36 @@ class LoginViewModel:ViewModel() {
         return  msgApiService
     }
 
+
+
+
+    private val _messageList = MutableStateFlow(emptyList<RecieveDataClass>())
+    val messageList: StateFlow<List<RecieveDataClass>> = _messageList
+
+    fun updateMessageList(newList: List<RecieveDataClass>) {
+        _messageList.value = newList
+    }
+
     //get messages
     //var msgGet by mutableStateOf("")
-    var firstMsgGet : List<RecieveDataClass> by mutableStateOf(listOf())
+    var firstMsgGet : MutableList<RecieveDataClass> by mutableStateOf(mutableListOf())
     //var newMsgDetailsGet:MsgDataClassModel? by mutableStateOf(firstMsgGet)
     fun createMsgGet():PostMessageAPI{
         val msgApiService= MessageClass(user_name,password).getMsgInstance()
         return  msgApiService
     }
-}
+    //update chatting messages
+    fun updateList(msg:RecieveDataClass){
+        firstMsgGet.add(msg)
+    }
 
+
+
+    //Different users
+    var allChats : MutableList<RecieveDataClass> by mutableStateOf(mutableListOf())
+    //var newMsgDetailsGet:MsgDataClassModel? by mutableStateOf(firstMsgGet)
+    fun getAllChats(): GetMyChats {
+        val msgApiService= GetMyChatsClass(user_name,password).getMsgInstance()
+        return  msgApiService
+    }
+}
