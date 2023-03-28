@@ -9,15 +9,15 @@ import androidx.compose.material.icons.filled.ArrowBack
 import androidx.compose.runtime.Composable
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.graphics.Color
-import androidx.compose.ui.text.style.TextAlign
 import androidx.compose.ui.unit.dp
 import androidx.navigation.NavHostController
+import com.example.chatengine.loginScreen.LoginViewModel
 import com.example.chatengine.ui.theme.Purple200
 
 
 @SuppressLint("UnusedMaterialScaffoldPaddingParameter")
 @Composable
-fun PostDataSignUpScaffold(navController: NavHostController){
+fun PostDataSignUpScaffold(navController: NavHostController, loginViewModel: LoginViewModel){
     Scaffold(
         // in scaffold we are specifying top bar.
         topBar = {
@@ -53,6 +53,6 @@ fun PostDataSignUpScaffold(navController: NavHostController){
 
         ) {
         // on the below line we are calling the pop window dialog method to display ui.
-        postData(navController)
+        postData(navController,loginViewModel)
     }
 }

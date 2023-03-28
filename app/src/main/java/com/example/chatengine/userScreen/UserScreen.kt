@@ -25,6 +25,7 @@ import androidx.compose.ui.unit.dp
 import androidx.navigation.NavController
 import androidx.navigation.NavHostController
 import com.example.chatengine.ChatScreen.ChatDataClass
+import com.example.chatengine.CircularProgressIndicator.LoadingView
 import com.example.chatengine.Navigation.NavigationItems
 import com.example.chatengine.loginScreen.LoginViewModel
 import com.example.chatengine.messageScreen.RecieveDataClass
@@ -61,7 +62,7 @@ private fun postRoom(
 //            loginViewModel.chatId= loginViewModel.newChatDetails!!.id
 //            loginViewModel.accessId= loginViewModel.newChatDetails!!.access_key
 
-            print("################################################### ${loginViewModel.chatId}")
+            //print("################################################### ${loginViewModel.chatId}")
             if(model?.is_direct_chat==false){
                 navController.navigate(NavigationItems.Chat.route)
                 Toast.makeText(ctx,"Chat created", Toast.LENGTH_LONG).show()
@@ -80,7 +81,8 @@ private fun postRoom(
 private fun getMsgHistory(
     context: Context,
     getApiResult: MutableState<String>,
-    loginViewModel: LoginViewModel
+    loginViewModel: LoginViewModel,
+    navController: NavController
 ) {
     val retrofitAPI = loginViewModel.createMsgGet()
 
@@ -94,6 +96,8 @@ private fun getMsgHistory(
             val model: List<RecieveDataClass> = response.body()?: emptyList()
 
             loginViewModel.firstMsgGet= model as MutableList<RecieveDataClass>
+            loginViewModel.isLoading.value = false
+            navController.navigate(NavigationItems.Messages.route)
 //            val resp =model
 //                        getApiResult.value= resp.toString()
 //            if (model != null) {
@@ -126,6 +130,7 @@ private fun getChatHistory(
             val model: List<GetChatsDataClass> = response.body()?: emptyList()
 
             loginViewModel.allChats= model as MutableList<GetChatsDataClass>
+
 //            val resp =model
 //                        getApiResult.value= resp.toString()
 //            if (model != null) {
@@ -241,10 +246,10 @@ fun UserScreen(navController: NavHostController, loginViewModel: LoginViewModel)
                                     )
                                     Spacer(modifier = Modifier.width(150.dp))
                                     IconButton(onClick = {
+                                        loginViewModel.isLoading.value = true
                                         loginViewModel.chatId=item.id
                                         loginViewModel.accesskey=item.access_key
-                                        getMsgHistory(context, getApiResult, loginViewModel)
-                                        navController.navigate(NavigationItems.Messages.route)
+                                        getMsgHistory(context, getApiResult, loginViewModel,navController)
                                     }) {
                                         Icon(
                                             Icons.Default.ArrowForward,
@@ -275,6 +280,10 @@ fun UserScreen(navController: NavHostController, loginViewModel: LoginViewModel)
 //                Text(text = "Start messaging")
 //            }
 
+    }
+
+    if (loginViewModel.isLoading.value == true){
+        LoadingView()
     }
 }
 

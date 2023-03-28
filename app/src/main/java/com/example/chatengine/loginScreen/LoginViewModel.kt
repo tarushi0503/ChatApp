@@ -1,8 +1,15 @@
 package com.example.chatengine.loginScreen
 
+import androidx.compose.foundation.layout.Box
+import androidx.compose.foundation.layout.fillMaxSize
+import androidx.compose.material.CircularProgressIndicator
+import androidx.compose.material.MaterialTheme
+import androidx.compose.runtime.Composable
 import androidx.compose.runtime.getValue
 import androidx.compose.runtime.mutableStateOf
 import androidx.compose.runtime.setValue
+import androidx.compose.ui.Alignment
+import androidx.compose.ui.Modifier
 import androidx.lifecycle.ViewModel
 import com.example.chatengine.ChatScreen.ChatApiInterface
 import com.example.chatengine.ChatScreen.ChatDataClass
@@ -19,11 +26,12 @@ import kotlinx.coroutines.flow.StateFlow
 
 class LoginViewModel:ViewModel() {
 
-
     var user_name by mutableStateOf("")
     var password by mutableStateOf("")
     var chatId by mutableStateOf(-1)
      var accesskey by mutableStateOf("")
+
+    var isLoading = mutableStateOf(false)
 
     val initial = LoginDataClass("","",false)
     var UserData: LoginDataClass? by mutableStateOf(initial)
@@ -32,7 +40,6 @@ class LoginViewModel:ViewModel() {
 
     fun AuthenticateUser():LoginInterfaceAPI{
         val apiService=LoginClass(user_name,password).getInstance()
-
         return  apiService
     }
 
@@ -84,6 +91,6 @@ class LoginViewModel:ViewModel() {
         val msgApiService= GetMyChatsClass(user_name,password).getMsgInstance()
         return  msgApiService
     }
-
-
 }
+
+

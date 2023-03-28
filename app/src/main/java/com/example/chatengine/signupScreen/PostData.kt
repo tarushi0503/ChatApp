@@ -34,7 +34,9 @@ import androidx.compose.ui.text.style.TextAlign
 import androidx.compose.ui.unit.dp
 import androidx.compose.ui.unit.sp
 import androidx.navigation.NavController
+import com.example.chatengine.CircularProgressIndicator.LoadingView
 import com.example.chatengine.Navigation.NavigationItems
+import com.example.chatengine.loginScreen.LoginViewModel
 import com.example.chatengine.ui.theme.Purple200
 import com.example.chatengine.ui.theme.card
 import retrofit2.Call
@@ -82,7 +84,7 @@ private fun postDataUsingRetrofit(
 
 
 @Composable
-fun postData(navController:NavController) {
+fun postData(navController:NavController,loginViewModel: LoginViewModel) {
     val ctx = LocalContext.current
 
     val userName = remember {
@@ -360,10 +362,12 @@ fun postData(navController:NavController) {
 
 
                         else{
+                            loginViewModel.isLoading.value = true
                             postDataUsingRetrofit(
                                 ctx, userName, firstName, lastName, password, response
                             )
                             navController.navigate(NavigationItems.getDataLogin.route)
+                            loginViewModel.isLoading.value = false
                         }
 
 
@@ -403,6 +407,9 @@ fun postData(navController:NavController) {
 
             }
         }
+    }
+    if (loginViewModel.isLoading.value){
+        LoadingView()
     }
 }
 

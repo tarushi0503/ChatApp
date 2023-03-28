@@ -32,6 +32,7 @@ import androidx.compose.ui.unit.dp
 import androidx.compose.ui.unit.sp
 import androidx.lifecycle.viewModelScope
 import androidx.navigation.NavController
+import com.example.chatengine.CircularProgressIndicator.LoadingView
 import com.example.chatengine.Navigation.NavigationItems
 import com.example.chatengine.R
 import com.example.chatengine.ui.theme.Purple200
@@ -69,6 +70,7 @@ private fun getDataUsingRetrofit(
             loginViewModel.UserData=model
             if(model?.is_authenticated==true){
                 navController.navigate(NavigationItems.UserScreen.route)
+                loginViewModel.isLoading.value=false
 //                Toast.makeText(ctx,"Logged in successfully",Toast.LENGTH_SHORT).show()
             }
 //            println("/////////////////////////////////////////////////////${secret.value}")
@@ -103,7 +105,6 @@ fun getDataLogin(navController: NavController,loginViewModel: LoginViewModel) {
     var passwordVisibility by remember {
         mutableStateOf(false)
     }
-    var isLoading by remember { mutableStateOf(false) }
 
     val isCredentialsFilled = userName.value.isNotBlank() && password.value.isNotBlank()
 
@@ -259,19 +260,8 @@ fun getDataLogin(navController: NavController,loginViewModel: LoginViewModel) {
                             Toast.makeText(context,"Credentials incorrect or empty",Toast.LENGTH_SHORT).show()
                         }
                         else{
-                            if (!isLoading) {
-                                isLoading = true
-
-                                // Start a coroutine to fetch data from the API
-                                loginViewModel.viewModelScope.launch {
-                                    try {
-                                        getDataUsingRetrofit(context,result,secret,navController,loginViewModel)
-                                        isLoading = false
-                                    } catch (e: Exception) {
-                                        isLoading = false
-                                    }
-                                }
-                            }
+                            loginViewModel.isLoading.value = true
+                            getDataUsingRetrofit(context,result,secret,navController,loginViewModel)
                         }
                     },
                     enabled = isCredentialsFilled,
@@ -290,9 +280,6 @@ fun getDataLogin(navController: NavController,loginViewModel: LoginViewModel) {
 
                 ) {
                     // on below line we are adding text for our button
-                    if (isLoading) {
-                        CircularProgressIndicator()
-                    }
                     Text(text = "Login",fontWeight = FontWeight.Bold)
                 }
                 Text(text = result.value)
@@ -312,5 +299,8 @@ fun getDataLogin(navController: NavController,loginViewModel: LoginViewModel) {
 
             }
         }
+    }
+    if (loginViewModel.isLoading.value){
+        LoadingView()
     }
 }

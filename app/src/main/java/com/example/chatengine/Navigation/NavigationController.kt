@@ -34,7 +34,7 @@ fun NavigationController(navController: NavHostController = rememberNavControlle
 //        }
 
         composable(NavigationItems.PostDataSignUpScaffold.route){
-            PostDataSignUpScaffold(navController)
+            PostDataSignUpScaffold(navController,loginViewModel)
         }
 
         composable(NavigationItems.UserScreen.route){
