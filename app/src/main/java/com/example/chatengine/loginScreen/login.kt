@@ -30,6 +30,7 @@ import androidx.compose.ui.text.input.VisualTransformation
 import androidx.compose.ui.text.style.TextAlign
 import androidx.compose.ui.unit.dp
 import androidx.compose.ui.unit.sp
+import androidx.lifecycle.viewModelScope
 import androidx.navigation.NavController
 import com.example.chatengine.Navigation.NavigationItems
 import com.example.chatengine.R
@@ -37,6 +38,7 @@ import com.example.chatengine.ui.theme.Purple200
 import com.example.chatengine.ui.theme.Purple500
 import com.example.chatengine.ui.theme.Purple700
 import com.example.chatengine.ui.theme.card
+import kotlinx.coroutines.launch
 import retrofit2.Call
 import retrofit2.Callback
 import retrofit2.Response
@@ -101,6 +103,7 @@ fun getDataLogin(navController: NavController,loginViewModel: LoginViewModel) {
     var passwordVisibility by remember {
         mutableStateOf(false)
     }
+    var isLoading by remember { mutableStateOf(false) }
 
     val isCredentialsFilled = userName.value.isNotBlank() && password.value.isNotBlank()
 
@@ -251,14 +254,24 @@ fun getDataLogin(navController: NavController,loginViewModel: LoginViewModel) {
                 Spacer(modifier = Modifier.height(10.dp))
                 // on below line we are creating a button
                 Button(
-
                     onClick = {
                         if(userName.value == "" || password.value==""){
                             Toast.makeText(context,"Credentials incorrect or empty",Toast.LENGTH_SHORT).show()
                         }
                         else{
+                            if (!isLoading) {
+                                isLoading = true
 
-                            getDataUsingRetrofit(context,result,secret,navController,loginViewModel)
+                                // Start a coroutine to fetch data from the API
+                                loginViewModel.viewModelScope.launch {
+                                    try {
+                                        getDataUsingRetrofit(context,result,secret,navController,loginViewModel)
+                                        isLoading = false
+                                    } catch (e: Exception) {
+                                        isLoading = false
+                                    }
+                                }
+                            }
                         }
                     },
                     enabled = isCredentialsFilled,
@@ -277,6 +290,9 @@ fun getDataLogin(navController: NavController,loginViewModel: LoginViewModel) {
 
                 ) {
                     // on below line we are adding text for our button
+                    if (isLoading) {
+                        CircularProgressIndicator()
+                    }
                     Text(text = "Login",fontWeight = FontWeight.Bold)
                 }
                 Text(text = result.value)

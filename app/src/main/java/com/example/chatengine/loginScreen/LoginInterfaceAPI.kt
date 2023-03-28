@@ -8,10 +8,10 @@ import retrofit2.converter.gson.GsonConverterFactory
 import retrofit2.create
 import retrofit2.http.GET
 
-const val url = "https://api.chatengine.io/users/"
+//const val url = "https://api.chatengine.io/users/"
 interface LoginInterfaceAPI {
 
-    @GET("me/")
+    @GET("users/me/")
     fun getUsers(): Call<LoginDataClass?>?
 }
 
@@ -39,7 +39,7 @@ class LoginClass(username:String,password:String){
             .build()
 
         val retrofit=Retrofit.Builder()
-            .baseUrl(url)
+            .baseUrl("https://api.chatengine.io/")
             .client(httpClient)
             .addConverterFactory(GsonConverterFactory.create())
             .build().create(LoginInterfaceAPI::class.java)

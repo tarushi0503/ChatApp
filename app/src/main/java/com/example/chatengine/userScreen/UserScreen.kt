@@ -34,6 +34,7 @@ import retrofit2.Callback
 import retrofit2.Response
 
 
+//FLOATING ACTION BUTTON: CREATE NEW ROOM
 private fun postRoom(
     ctx: Context,
     title: String,
@@ -47,7 +48,6 @@ private fun postRoom(
 
     val call: Call<ChatDataClass?>? = retrofitAPI.postChatRoom(chatDataClass)
 
-
     call!!.enqueue(object : Callback<ChatDataClass?> {
 
         override fun onResponse(call: Call<ChatDataClass?>, response: Response<ChatDataClass?>) {
@@ -58,6 +58,8 @@ private fun postRoom(
             result.value=resp
 //            secret.value = model?.secret.toString()
             loginViewModel.newChatDetails = model
+//            loginViewModel.chatId= loginViewModel.newChatDetails!!.id
+//            loginViewModel.accessId= loginViewModel.newChatDetails!!.access_key
 
             //print("################################################### ${loginViewModel.chatId}")
             if(model?.is_direct_chat==false){
@@ -74,7 +76,7 @@ private fun postRoom(
 }
 
 
-//getAPI
+//onCLick -> to chatting screen
 private fun getMsgHistory(
     context: Context,
     getApiResult: MutableState<String>,
@@ -106,6 +108,7 @@ private fun getMsgHistory(
     })
 }
 
+//number of users
 private fun getChatHistory(
 //    context: Context,
 //    getApiResult: MutableState<String>,
@@ -180,7 +183,6 @@ fun UserScreen(navController: NavHostController, loginViewModel: LoginViewModel)
         },
 
         ) {
-
 
         LazyColumn(
             modifier = Modifier
@@ -261,8 +263,6 @@ fun UserScreen(navController: NavHostController, loginViewModel: LoginViewModel)
         Text(
                 text = result.value,
             )
-
-
 
 //            Button(
 //                modifier = Modifier.padding(horizontal = 120.dp, vertical = 300.dp),
