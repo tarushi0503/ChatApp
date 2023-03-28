@@ -22,8 +22,8 @@ class LoginViewModel:ViewModel() {
 
     var user_name by mutableStateOf("")
     var password by mutableStateOf("")
-//    var chatId by mutableStateOf<DataClassResponse>(null)
-     //var chatId by mutableStateOf<DataClassResponse?>(null)
+    var chatId by mutableStateOf(-1)
+     var accesskey by mutableStateOf("")
 
     val initial = LoginDataClass("","",false)
     var UserData: LoginDataClass? by mutableStateOf(initial)
@@ -50,7 +50,7 @@ class LoginViewModel:ViewModel() {
     var firstMsg = MsgDataClassModel("")
     var newMsgDetails:MsgDataClassModel? by mutableStateOf(firstMsg)
     fun createMsg():PostMessageAPI{
-        val msgApiService= MessageClass(user_name,password).postMsgInstance()
+        val msgApiService= MessageClass(user_name,password,chatId).postMsgInstance()
         return  msgApiService
     }
 
@@ -67,7 +67,7 @@ class LoginViewModel:ViewModel() {
     //get messages
     var firstMsgGet : MutableList<RecieveDataClass> by mutableStateOf(mutableListOf())
     fun createMsgGet():PostMessageAPI{
-        val msgApiService= MessageClass(user_name,password).getMsgInstance()
+        val msgApiService= MessageClass(user_name,password,chatId).getMsgInstance()
         return  msgApiService
     }
     //update chatting messages

@@ -13,14 +13,13 @@ import retrofit2.http.POST
 
 
 interface PostMessageAPI {
-
-    @GET("/chats/153494/messages/")
+    @GET("messages/")
     fun getMsg(): Call<List<RecieveDataClass>?>?
-    @POST("chats/153494/messages/")
+    @POST("messages/")
     fun postMsg(@Body msgDataClassModel: MsgDataClassModel?): Call<MsgDataClassModel?>?
 }
 
-class MessageClass(username:String,password:String){
+class MessageClass(username: String, password: String, val chatId: Int){
 
     var username=username
     var password=password
@@ -29,7 +28,7 @@ class MessageClass(username:String,password:String){
     fun postMsgInstance(): PostMessageAPI{
         val loggingInterceptor= HttpLoggingInterceptor()
         loggingInterceptor.setLevel(HttpLoggingInterceptor.Level.BODY)
-        val url = "https://api.chatengine.io/"
+        //val url = "https://api.chatengine.io/chats/${chatId}"
 
         val httpClient= OkHttpClient.Builder()
             .addInterceptor(loggingInterceptor)
@@ -45,7 +44,7 @@ class MessageClass(username:String,password:String){
             .build()
 
         val retrofit= Retrofit.Builder()
-            .baseUrl(url)
+            .baseUrl("https://api.chatengine.io/chats/${chatId}/")
             .client(httpClient)
             .addConverterFactory(GsonConverterFactory.create())
             .build().create(PostMessageAPI::class.java)
@@ -72,7 +71,7 @@ class MessageClass(username:String,password:String){
             .build()
 
         val retrofit=Retrofit.Builder()
-            .baseUrl("https://api.chatengine.io/")
+            .baseUrl("https://api.chatengine.io/chats/${chatId}/")
             .client(httpClient)
             .addConverterFactory(GsonConverterFactory.create())
             .build().create(PostMessageAPI::class.java)

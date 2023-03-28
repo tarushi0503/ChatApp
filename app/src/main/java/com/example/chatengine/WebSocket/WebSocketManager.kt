@@ -14,7 +14,7 @@ class WebSocketManager(private val loginViewModel: LoginViewModel):WebSocketList
     private var webSocket: WebSocket
 
     init {
-        val request = Request.Builder().url("wss://api.chatengine.io/chat/?projectID=0ddfa87c-cd5d-4103-8946-0b0ccc96cf9e&chatID=153494&accessKey=ca-468a06ad-8aad-4024-b282-7f1ff509d003").build()
+        val request = Request.Builder().url("wss://api.chatengine.io/chat/?projectID=0ddfa87c-cd5d-4103-8946-0b0ccc96cf9e&chatID=153494&accessKey=${loginViewModel.accesskey}").build()
         val client = OkHttpClient()
         webSocket = client.newWebSocket(request, this)
     }

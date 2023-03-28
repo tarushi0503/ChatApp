@@ -61,7 +61,7 @@ private fun postRoom(
 //            loginViewModel.chatId= loginViewModel.newChatDetails!!.id
 //            loginViewModel.accessId= loginViewModel.newChatDetails!!.access_key
 
-            //print("################################################### ${loginViewModel.chatId}")
+            print("################################################### ${loginViewModel.chatId}")
             if(model?.is_direct_chat==false){
                 navController.navigate(NavigationItems.Chat.route)
                 Toast.makeText(ctx,"Chat created", Toast.LENGTH_LONG).show()
@@ -196,7 +196,6 @@ fun UserScreen(navController: NavHostController, loginViewModel: LoginViewModel)
 
         ) {
             itemsIndexed(loginViewModel.allChats) { lastIndex, item ->
-
                 val time = item.created.subSequence(11, 16)
 
                 Column(
@@ -242,6 +241,8 @@ fun UserScreen(navController: NavHostController, loginViewModel: LoginViewModel)
                                     )
                                     Spacer(modifier = Modifier.width(150.dp))
                                     IconButton(onClick = {
+                                        loginViewModel.chatId=item.id
+                                        loginViewModel.accesskey=item.access_key
                                         getMsgHistory(context, getApiResult, loginViewModel)
                                         navController.navigate(NavigationItems.Messages.route)
                                     }) {
