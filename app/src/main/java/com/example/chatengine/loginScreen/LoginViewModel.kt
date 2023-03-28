@@ -1,9 +1,7 @@
 package com.example.chatengine.loginScreen
 
-import android.content.Context
 import androidx.compose.runtime.getValue
 import androidx.compose.runtime.mutableStateOf
-import androidx.compose.runtime.remember
 import androidx.compose.runtime.setValue
 import androidx.lifecycle.ViewModel
 import com.example.chatengine.ChatScreen.ChatApiInterface
@@ -24,6 +22,8 @@ class LoginViewModel:ViewModel() {
 
     var user_name by mutableStateOf("")
     var password by mutableStateOf("")
+//    var chatId by mutableStateOf<DataClassResponse>(null)
+     //var chatId by mutableStateOf<DataClassResponse?>(null)
 
     val initial = LoginDataClass("","",false)
     var UserData: LoginDataClass? by mutableStateOf(initial)

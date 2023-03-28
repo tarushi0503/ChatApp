@@ -7,16 +7,15 @@ import androidx.compose.foundation.Image
 import androidx.compose.foundation.background
 import androidx.compose.foundation.clickable
 import androidx.compose.foundation.layout.*
-import androidx.compose.foundation.layout.R
 import androidx.compose.foundation.shape.RoundedCornerShape
+import androidx.compose.foundation.text.KeyboardOptions
 import androidx.compose.material.*
 import androidx.compose.material.icons.Icons
+import androidx.compose.material.icons.filled.AccountCircle
+import androidx.compose.material.icons.filled.CheckCircle
 import androidx.compose.material.icons.filled.Face
 import androidx.compose.material.icons.filled.Lock
-import androidx.compose.runtime.Composable
-import androidx.compose.runtime.MutableState
-import androidx.compose.runtime.mutableStateOf
-import androidx.compose.runtime.remember
+import androidx.compose.runtime.*
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.graphics.Brush
@@ -27,24 +26,20 @@ import androidx.compose.ui.res.painterResource
 import androidx.compose.ui.text.TextStyle
 import androidx.compose.ui.text.font.FontFamily
 import androidx.compose.ui.text.font.FontWeight
+import androidx.compose.ui.text.input.KeyboardType
 import androidx.compose.ui.text.input.PasswordVisualTransformation
 import androidx.compose.ui.text.input.TextFieldValue
+import androidx.compose.ui.text.input.VisualTransformation
 import androidx.compose.ui.text.style.TextAlign
 import androidx.compose.ui.unit.dp
 import androidx.compose.ui.unit.sp
 import androidx.navigation.NavController
 import com.example.chatengine.Navigation.NavigationItems
-import com.example.chatengine.loginScreen.getDataLogin
 import com.example.chatengine.ui.theme.Purple200
-import com.example.chatengine.ui.theme.ReceiverColor
 import com.example.chatengine.ui.theme.card
-import okhttp3.OkHttpClient
-import okhttp3.logging.HttpLoggingInterceptor
 import retrofit2.Call
 import retrofit2.Callback
 import retrofit2.Response
-import retrofit2.Retrofit
-import retrofit2.converter.gson.GsonConverterFactory
 
 
 
@@ -105,6 +100,9 @@ fun postData(navController:NavController) {
     val response = remember {
         mutableStateOf("")
     }
+    var passwordVisibility by remember {
+        mutableStateOf(false)
+    }
     val isCredentialsFilled = userName.value.text.isNotBlank() && password.value.text.isNotBlank() && firstName.value.text.isNotBlank() && lastName.value.text.isNotBlank()
     val context= LocalContext.current
     // on below line we are creating a column.
@@ -156,22 +154,37 @@ fun postData(navController:NavController) {
                     painter = painterResource(id = com.example.chatengine.R.drawable.icon),
                     contentDescription = "",
                     modifier = Modifier.width(80.dp)
-                        .height(80.dp),
+                        .height(80.dp)
+                        .padding(top = 5.dp),
                     contentScale = ContentScale.Crop,
                 )
-
                 Spacer(modifier = Modifier.height(20.dp))
 
-
                 Text(
-                    text = "Welcome to Rapi Chat",
+                    text = "Welcome to",
                     color = Purple200,
-                    fontSize = 20.sp,
+                    fontSize = 19.sp,
+                    fontFamily = FontFamily.Default,
+                    fontWeight = FontWeight.Bold, textAlign = TextAlign.Center
+                )
+                Spacer(modifier = Modifier.height(3.dp))
+                Text(
+                    text = "Nye Interactive Assistant",
+                    color = Purple200,
+                    fontSize = 22.sp,
+                    fontFamily = FontFamily.Default,
+                    fontWeight = FontWeight.ExtraBold, textAlign = TextAlign.Center
+                )
+                Spacer(modifier = Modifier.height(3.dp))
+                Text(
+                    text = "(NIA)",
+                    color = Purple200,
+                    fontSize = 19.sp,
                     fontFamily = FontFamily.Default,
                     fontWeight = FontWeight.Bold, textAlign = TextAlign.Center
                 )
 
-                Spacer(modifier = Modifier.height(5.dp))
+                Spacer(modifier = Modifier.height(15.dp))
 
                 OutlinedTextField(
                     value = userName.value,
@@ -255,6 +268,16 @@ fun postData(navController:NavController) {
                     value = password.value,
                     onValueChange = { password.value = it },
                     placeholder = { Text(text = "Enter your Password") },
+                    visualTransformation = if (passwordVisibility) VisualTransformation.None else PasswordVisualTransformation(),
+                    keyboardOptions = KeyboardOptions(keyboardType = KeyboardType.Password),
+                    trailingIcon = {
+                        IconButton(onClick = { passwordVisibility = !passwordVisibility }) {
+                            Icon(
+                                if (passwordVisibility) Icons.Filled.CheckCircle else Icons.Filled.Lock,
+                                contentDescription = if (passwordVisibility) "Hide password" else "Show password"
+                            )
+                        }
+                    },
                     modifier = Modifier
                         .padding(16.dp)
                         .fillMaxWidth(),

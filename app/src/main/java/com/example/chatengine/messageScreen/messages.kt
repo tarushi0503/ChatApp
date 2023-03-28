@@ -163,7 +163,8 @@ fun Messages(
 
                 Column(
                     modifier = Modifier
-                        .fillMaxWidth(),
+                        .fillMaxWidth()
+                    ,
                     horizontalAlignment = if (isCurrentUser) Alignment.End else Alignment.Start
                 ) {
                     Box(

@@ -7,8 +7,10 @@ import androidx.compose.foundation.background
 import androidx.compose.foundation.clickable
 import androidx.compose.foundation.layout.*
 import androidx.compose.foundation.shape.RoundedCornerShape
+import androidx.compose.foundation.text.KeyboardOptions
 import androidx.compose.material.*
 import androidx.compose.material.icons.Icons
+import androidx.compose.material.icons.filled.CheckCircle
 import androidx.compose.material.icons.filled.Face
 import androidx.compose.material.icons.filled.Lock
 import androidx.compose.runtime.*
@@ -22,6 +24,9 @@ import androidx.compose.ui.res.painterResource
 import androidx.compose.ui.text.TextStyle
 import androidx.compose.ui.text.font.FontFamily
 import androidx.compose.ui.text.font.FontWeight
+import androidx.compose.ui.text.input.KeyboardType
+import androidx.compose.ui.text.input.PasswordVisualTransformation
+import androidx.compose.ui.text.input.VisualTransformation
 import androidx.compose.ui.text.style.TextAlign
 import androidx.compose.ui.unit.dp
 import androidx.compose.ui.unit.sp
@@ -93,8 +98,11 @@ fun getDataLogin(navController: NavController,loginViewModel: LoginViewModel) {
         mutableStateOf("")
     }
 
-    val isCredentialsFilled = userName.value.isNotBlank() && password.value.isNotBlank()
+    var passwordVisibility by remember {
+        mutableStateOf(false)
+    }
 
+    val isCredentialsFilled = userName.value.isNotBlank() && password.value.isNotBlank()
 
 
     // on below line we are creating a column.
@@ -154,17 +162,33 @@ fun getDataLogin(navController: NavController,loginViewModel: LoginViewModel) {
                     contentScale = ContentScale.Crop,
                 )
 
-                Spacer(modifier = Modifier.height(50.dp))
+                Spacer(modifier = Modifier.height(30.dp))
 
                 Text(
-                    text = "Welcome Back to Rapi Chat",
+                    text = "Welcome Back to",
+                    color = Purple200,
+                    fontSize = 20.sp,
+                    fontFamily = FontFamily.Default,
+                    fontWeight = FontWeight.Bold, textAlign = TextAlign.Center
+                )
+                Spacer(modifier = Modifier.height(3.dp))
+                Text(
+                    text = "Nye Interactive Assistant",
+                    color = Purple200,
+                    fontSize = 24.sp,
+                    fontFamily = FontFamily.Default,
+                    fontWeight = FontWeight.ExtraBold, textAlign = TextAlign.Center
+                )
+                Spacer(modifier = Modifier.height(4.dp))
+                Text(
+                    text = "(NIA)",
                     color = Purple200,
                     fontSize = 20.sp,
                     fontFamily = FontFamily.Default,
                     fontWeight = FontWeight.Bold, textAlign = TextAlign.Center
                 )
 
-                Spacer(modifier = Modifier.height(50.dp))
+                Spacer(modifier = Modifier.height(30.dp))
 
 
                 OutlinedTextField(
@@ -193,6 +217,16 @@ fun getDataLogin(navController: NavController,loginViewModel: LoginViewModel) {
                 OutlinedTextField(
                     value = password.value,
                     onValueChange = { password.value = it },
+                    visualTransformation = if (passwordVisibility) VisualTransformation.None else PasswordVisualTransformation(),
+                    keyboardOptions = KeyboardOptions(keyboardType = KeyboardType.Password),
+                    trailingIcon = {
+                        IconButton(onClick = { passwordVisibility = !passwordVisibility }) {
+                            Icon(
+                                if (passwordVisibility) Icons.Filled.CheckCircle else Icons.Filled.Lock,
+                                contentDescription = if (passwordVisibility) "Hide password" else "Show password"
+                            )
+                        }
+                    },
                     placeholder = { Text(text = "Enter your Password") },
                     modifier = Modifier
                         .padding(16.dp)

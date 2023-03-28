@@ -16,6 +16,7 @@ import androidx.compose.runtime.Composable
 import androidx.compose.runtime.MutableState
 import androidx.compose.runtime.mutableStateOf
 import androidx.compose.runtime.remember
+import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.graphics.Color
 import androidx.compose.ui.platform.LocalContext
@@ -57,6 +58,8 @@ private fun postRoom(
             result.value=resp
 //            secret.value = model?.secret.toString()
             loginViewModel.newChatDetails = model
+
+            //print("################################################### ${loginViewModel.chatId}")
             if(model?.is_direct_chat==false){
                 navController.navigate(NavigationItems.Chat.route)
                 Toast.makeText(ctx,"Chat created", Toast.LENGTH_LONG).show()
@@ -212,21 +215,22 @@ fun UserScreen(navController: NavHostController, loginViewModel: LoginViewModel)
 
                                 ) {
                                     val cardName =
-                                        if (item.people[lastIndex].person.username == "tarushi07") "yash07" else "tarushi07"
+                                        if (title == "tarushi07") "yash07" else "tarushi07"
+//                                        if (item.people[lastIndex].person.username == "tarushi07") "yash07" else "tarushi07"
                                     Text(
                                         text = cardName,
                                         style = MaterialTheme.typography.h6,
                                         fontWeight = FontWeight.Bold,
                                         color = Color.Black
                                     )
-                                    Spacer(modifier = Modifier.width(150.dp))
+                                    Spacer(modifier = Modifier.width(200.dp))
                                     Text(
                                         text = time.toString(),
                                         style = MaterialTheme.typography.h6,
                                         color = Color.LightGray,
                                     )
                                 }
-                                Spacer(modifier = Modifier.height(20.dp))
+                                Spacer(modifier = Modifier.height(10.dp))
                                 Row(
                                 ) {
                                     Text(
@@ -234,7 +238,7 @@ fun UserScreen(navController: NavHostController, loginViewModel: LoginViewModel)
                                         style = MaterialTheme.typography.h6,
                                         color = Color.LightGray
                                     )
-                                    Spacer(modifier = Modifier.width(100.dp))
+                                    Spacer(modifier = Modifier.width(150.dp))
                                     IconButton(onClick = {
                                         getMsgHistory(context, getApiResult, loginViewModel)
                                         navController.navigate(NavigationItems.Messages.route)
@@ -242,7 +246,7 @@ fun UserScreen(navController: NavHostController, loginViewModel: LoginViewModel)
                                         Icon(
                                             Icons.Default.ArrowForward,
                                             contentDescription = "",
-                                            tint = Color.LightGray,
+                                            tint = Color.Gray,
                                             //modifier = Modifier.align(Alignment.CenterEnd)
                                         )
 
@@ -250,10 +254,14 @@ fun UserScreen(navController: NavHostController, loginViewModel: LoginViewModel)
                                 }
                             }
                     }
-                    Divider(Modifier.height(2.dp))
+                    Divider(Modifier.height(3.dp))
                 }
             }
         }
+        Text(
+                text = result.value,
+            )
+
 
 
 //            Button(
