@@ -45,7 +45,7 @@ class LoginViewModel:ViewModel() {
 
     //create new chat room
     //var chat by mutableStateOf("")
-    var initialChat=ChatDataClass("",false)
+    var initialChat=ChatDataClass("",false, listOf("tarushi07"))
     var newChatDetails:ChatDataClass? by mutableStateOf(initialChat)
     fun createChat():ChatApiInterface{
         val chatApiService = ChatRoom(user_name,password).postRoomInstance()

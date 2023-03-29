@@ -50,7 +50,7 @@ private fun postRoom(
 ) {
 
     val retrofitAPI = loginViewModel.createChat()
-    val chatDataClass=ChatDataClass(title,false)
+    val chatDataClass=ChatDataClass(title,false, listOf("tarushi07"))
 
     val call: Call<ChatDataClass?>? = retrofitAPI.postChatRoom(chatDataClass)
 
@@ -213,7 +213,7 @@ fun UserScreen(navController: NavHostController, loginViewModel: LoginViewModel)
             ) {
             itemsIndexed(loginViewModel.allChats) { lastIndex, item ->
                 val time = item.created.subSequence(11, 16)
-                val cardName = if (title == "tarushi07") "yash07" else "tarushi07"
+                val cardName = item.title
                 //if (item.people[lastIndex].person.username == "tarushi07") "yash07" else "tarushi07"
 
                 Card(
