@@ -3,6 +3,7 @@ package com.example.chatengine.messageScreen
 import android.annotation.SuppressLint
 import android.content.Context
 import android.os.Build
+import android.widget.Toast
 import androidx.annotation.RequiresApi
 import androidx.compose.foundation.*
 import androidx.compose.foundation.layout.*
@@ -26,6 +27,7 @@ import androidx.compose.ui.unit.sp
 import androidx.navigation.NavHostController
 import com.example.chatengine.CircularProgressIndicator.LoadingView
 import com.example.chatengine.WebSocket.WebSocketManager
+import com.example.chatengine.isTyping.isTypingDataClass
 import com.example.chatengine.loginScreen.LoginViewModel
 import com.example.chatengine.ui.theme.*
 import retrofit2.Call
@@ -33,7 +35,25 @@ import retrofit2.Callback
 import retrofit2.Response
 import java.time.LocalDateTime
 
-
+fun IsTypingHelpingFunction(
+    context: Context,
+    viewModel: LoginViewModel
+)
+{
+    val retrofitAPI= viewModel.IsUserTyping()
+    val call: Call<isTypingDataClass?>? = retrofitAPI.notifyTyping()
+    call!!.enqueue(object : Callback<isTypingDataClass?> {
+        override fun onResponse(call: Call<isTypingDataClass?>?, response: Response<isTypingDataClass?>) {
+            val model: isTypingDataClass? = response.body()
+            val resp =
+                "Response Code : " + response.code()
+        }
+        override fun onFailure(call: Call<isTypingDataClass?>?, t: Throwable) {
+            var temp = "Error found is : " + t.message
+            Toast.makeText(context,temp, Toast.LENGTH_SHORT).show()
+        }
+    })
+}
 //private fun getAllMessages(
 //    loginViewModel: LoginViewModel
 //) {
@@ -120,14 +140,21 @@ fun Messages(
         topBar = {
             TopAppBar(backgroundColor = Purple200,
                 title = {
+                    if(loginViewModel.istyping.value&&loginViewModel.user_name.value!=loginViewModel.istypinguser.value){
+                        Text(text = " is typing")
+                        loginViewModel.startTyping()
+//                    isTYping=false
+                    }
+                    else{
                     Text(
-                        text = if(loginViewModel.user_name.value=="tarushi07")"" else "tarushi07",
+                        text = if (loginViewModel.user_name.value == "tarushi07") "" else "tarushi07",
                         modifier = Modifier
                             .fillMaxWidth()
                             .padding(start = 10.dp),
                         //textAlign = TextAlign.Center,
                         color = Color.White
                     )
+                }
                 },
                 navigationIcon = {
                     IconButton(onClick = {
@@ -217,8 +244,11 @@ fun Messages(
 
                 OutlinedTextField(
                     modifier = Modifier.weight(1f),
-                    value = inputText, onValueChange = {
+                    value = inputText,
+                    onValueChange = {
                         inputText = it
+                        IsTypingHelpingFunction(context,loginViewModel)
+
                     },
 //                    keyboardActions = KeyboardActions(
 //                        onDone = {

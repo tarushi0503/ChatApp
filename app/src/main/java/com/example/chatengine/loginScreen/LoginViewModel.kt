@@ -1,13 +1,17 @@
 package com.example.chatengine.loginScreen
 
 
+import android.annotation.SuppressLint
 import androidx.compose.runtime.getValue
 import androidx.compose.runtime.mutableStateOf
 import androidx.compose.runtime.setValue
 import androidx.lifecycle.ViewModel
+import androidx.lifecycle.viewModelScope
 import com.example.chatengine.ChatScreen.ChatApiInterface
 import com.example.chatengine.ChatScreen.ChatDataClass
 import com.example.chatengine.ChatScreen.ChatRoom
+import com.example.chatengine.isTyping.TypingClass
+import com.example.chatengine.isTyping.isTypingInterface
 import com.example.chatengine.messageScreen.MessageClass
 import com.example.chatengine.messageScreen.MsgDataClassModel
 import com.example.chatengine.messageScreen.PostMessageAPI
@@ -15,8 +19,12 @@ import com.example.chatengine.messageScreen.RecieveDataClass
 import com.example.chatengine.userScreen.GetChatsDataClass
 import com.example.chatengine.userScreen.GetMyChats
 import com.example.chatengine.userScreen.GetMyChatsClass
+import kotlinx.coroutines.Dispatchers
+import kotlinx.coroutines.delay
 import kotlinx.coroutines.flow.MutableStateFlow
 import kotlinx.coroutines.flow.StateFlow
+import kotlinx.coroutines.launch
+import kotlinx.coroutines.withContext
 
 class LoginViewModel:ViewModel() {
 
@@ -84,6 +92,26 @@ class LoginViewModel:ViewModel() {
     fun getAllChats(): GetMyChats {
         val msgApiService= GetMyChatsClass(user_name.value,password.value).getMsgInstance()
         return  msgApiService
+    }
+
+
+
+    //user is typing or not
+    val istyping = mutableStateOf(false)
+    val istypinguser= mutableStateOf("")
+
+    @SuppressLint("SuspiciousIndentation")
+    fun IsUserTyping(): isTypingInterface {
+        val apiService= TypingClass(user_name.value,password.value,chatId.toString()).getTypingInstance()
+        return apiService
+    }
+    fun startTyping(){
+        viewModelScope.launch {
+            withContext(Dispatchers.Default){
+                delay(2000L)
+            }
+            istyping.value=false
+        }
     }
 }
 

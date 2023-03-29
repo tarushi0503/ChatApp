@@ -41,6 +41,13 @@ class WebSocketManager(private val loginViewModel: LoginViewModel):WebSocketList
             loginViewModel.updateMessageList((loginViewModel.messageList.value + message) as List<RecieveDataClass>)
             Log.d("MYTAG", "onMessage: $receivedMessage ")
         }
+
+        if (action =="is_typing") {
+            val data=json.getJSONObject("data")
+            val name=data.getString("person")
+            loginViewModel.istyping.value=true
+            loginViewModel.istypinguser.value= name.toString()
+        }
     }
 
     fun onClose(webSocket: WebSocket, code: Int, reason: String) {
