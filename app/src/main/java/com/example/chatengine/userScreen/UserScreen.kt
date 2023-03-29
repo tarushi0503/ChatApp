@@ -213,8 +213,7 @@ fun UserScreen(navController: NavHostController, loginViewModel: LoginViewModel)
             ) {
             itemsIndexed(loginViewModel.allChats) { lastIndex, item ->
                 val time = item.created.subSequence(11, 16)
-                val cardName = item.title
-                //if (item.people[lastIndex].person.username == "tarushi07") "yash07" else "tarushi07"
+                val cardName = if(loginViewModel.user_name == "tarushi07") item.title else item.people[lastIndex].person.username
 
                 Card(
                     modifier = Modifier

@@ -120,7 +120,7 @@ fun Messages(
             TopAppBar(backgroundColor = Purple200,
                 title = {
                     Text(
-                        text = "tarushi07",
+                        text = if(loginViewModel.user_name=="tarushi07")"" else "tarushi07",
                         modifier = Modifier
                             .fillMaxWidth()
                             .padding(start = 10.dp),
