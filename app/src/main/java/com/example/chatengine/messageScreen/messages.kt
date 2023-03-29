@@ -120,7 +120,7 @@ fun Messages(
             TopAppBar(backgroundColor = Purple200,
                 title = {
                     Text(
-                        text = if(loginViewModel.user_name=="tarushi07")"" else "tarushi07",
+                        text = if(loginViewModel.user_name.value=="tarushi07")"" else "tarushi07",
                         modifier = Modifier
                             .fillMaxWidth()
                             .padding(start = 10.dp),
@@ -155,7 +155,7 @@ fun Messages(
         ) {
             itemsIndexed(loginViewModel.firstMsgGet.sortedByDescending{it.created}) { lastIndex, item ->
 
-                val isCurrentUser = item.sender_username == loginViewModel.user_name
+                val isCurrentUser = item.sender_username == loginViewModel.user_name.value
                 val messageBackgroundColor = if (isCurrentUser) SenderColor else ReceiverColor
                 val messageTextColor = if (isCurrentUser) Color.Black else Color.Black
 

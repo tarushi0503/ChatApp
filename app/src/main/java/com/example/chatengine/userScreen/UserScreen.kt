@@ -3,6 +3,7 @@ package com.example.chatengine.userScreen
 
 import android.annotation.SuppressLint
 import android.content.Context
+import android.content.SharedPreferences
 import android.widget.Toast
 import androidx.compose.foundation.background
 import androidx.compose.foundation.clickable
@@ -14,7 +15,6 @@ import androidx.compose.material.*
 import androidx.compose.material.icons.Icons
 import androidx.compose.material.icons.filled.Add
 import androidx.compose.material.icons.filled.ArrowBack
-import androidx.compose.material.icons.filled.ArrowForward
 import androidx.compose.material.icons.filled.ExitToApp
 import androidx.compose.runtime.Composable
 import androidx.compose.runtime.MutableState
@@ -118,11 +118,13 @@ private fun getMsgHistory(
 }
 
 //number of users
-private fun getChatHistory(
-//    context: Context,
-//    getApiResult: MutableState<String>,
-    loginViewModel: LoginViewModel
-) {
+ fun getChatHistory(
+    context: Context,
+    loginViewModel: LoginViewModel,
+    username: String,
+    password: String,
+
+    ) {
     val retrofitAPI = loginViewModel.getAllChats()
 
     val call: Call<List<GetChatsDataClass>?>? = retrofitAPI.getChats()
@@ -153,10 +155,15 @@ private fun getChatHistory(
 
 @SuppressLint("UnusedMaterialScaffoldPaddingParameter")
 @Composable
-fun UserScreen(navController: NavHostController, loginViewModel: LoginViewModel) {
+fun UserScreen(
+    navController: NavHostController,
+    loginViewModel: LoginViewModel,
+    sharedPreferences: SharedPreferences
+) {
+    val editor: SharedPreferences.Editor = sharedPreferences.edit()
     val context = LocalContext.current
     val title = loginViewModel.user_name
-    getChatHistory(loginViewModel)
+
     val result = remember {
         mutableStateOf("")
     }
@@ -178,7 +185,12 @@ fun UserScreen(navController: NavHostController, loginViewModel: LoginViewModel)
                     }
                 },
                 actions = {
-                    IconButton(onClick = {}) {
+                    IconButton(onClick = {
+                        editor.putString("USERNAME", "")
+                        editor.putString("SECRET", "")
+                        editor.apply()
+                        navController.navigate(NavigationItems.getDataLogin.route)
+                    }) {
                         Icon(Icons.Default.ExitToApp, contentDescription = "LogOut")
                     }
                 }
@@ -187,7 +199,7 @@ fun UserScreen(navController: NavHostController, loginViewModel: LoginViewModel)
         floatingActionButton = {
             FloatingActionButton(
                 onClick = {
-                    postRoom(context, title, result, navController, loginViewModel)
+                    postRoom(context, title.value, result, navController, loginViewModel)
                 },
                 backgroundColor = Purple200,
                 contentColor = Color.White,
@@ -213,7 +225,7 @@ fun UserScreen(navController: NavHostController, loginViewModel: LoginViewModel)
             ) {
             itemsIndexed(loginViewModel.allChats) { lastIndex, item ->
                 val time = item.created.subSequence(11, 16)
-                val cardName = if(loginViewModel.user_name == "tarushi07") item.title else item.people[lastIndex].person.username
+                val cardName = if(loginViewModel.user_name.value == "tarushi07") item.title else item.people[lastIndex].person.username
 
                 Card(
                     modifier = Modifier

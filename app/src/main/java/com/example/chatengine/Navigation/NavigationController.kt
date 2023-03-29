@@ -1,5 +1,6 @@
 package com.example.chatengine.Navigation
 
+import android.content.SharedPreferences
 import android.os.Build
 import androidx.annotation.RequiresApi
 import androidx.compose.runtime.Composable
@@ -19,7 +20,7 @@ import com.example.chatengine.userScreen.UserScreen
 
 @RequiresApi(Build.VERSION_CODES.O)
 @Composable
-fun NavigationController(navController: NavHostController = rememberNavController()) {
+fun NavigationController(sharedPreferences: SharedPreferences, navController: NavHostController = rememberNavController()) {
 
     val loginViewModel:LoginViewModel= viewModel()
     val webSocketManager=WebSocketManager(loginViewModel)
@@ -27,7 +28,7 @@ fun NavigationController(navController: NavHostController = rememberNavControlle
 
     NavHost(navController = navController, startDestination = NavigationItems.getDataLogin.route){
         composable(NavigationItems.getDataLogin.route){
-            getDataLogin(navController,loginViewModel)
+            getDataLogin(navController,loginViewModel,sharedPreferences)
         }
 //        composable(NavigationItem.Navigation.route){
 //            Navigation()
@@ -38,7 +39,7 @@ fun NavigationController(navController: NavHostController = rememberNavControlle
         }
 
         composable(NavigationItems.UserScreen.route){
-            UserScreen(navController, loginViewModel)
+            UserScreen(navController, loginViewModel,sharedPreferences)
         }
 
         composable(NavigationItems.Chat.route){
