@@ -115,10 +115,10 @@ private fun getMsgHistory(
 
 //number of users
  fun getChatHistory(
-    context: Context,
+    //context: Context,
     loginViewModel: LoginViewModel,
-    username: String,
-    password: String,
+//    username: String,
+//    password: String,
 
     ) {
     val retrofitAPI = loginViewModel.getAllChats()
@@ -166,6 +166,7 @@ fun UserScreen(
     val getApiResult = remember {
         mutableStateOf("")
     }
+    getChatHistory(loginViewModel)
     Scaffold(
         modifier = Modifier.background(Color.Blue),
         topBar = {
@@ -224,7 +225,7 @@ fun UserScreen(
             ) {
             itemsIndexed(loginViewModel.allChats) { lastIndex, item ->
                 val time = item.created.subSequence(11, 16)
-                val cardName = if(loginViewModel.user_name.value == "tarushi07") item.title else item.people[lastIndex].person.username
+                val cardName = if(loginViewModel.user_name.value == "tarushi07") item.title else "tarushi07"
 
                 Card(
                     modifier = Modifier

@@ -80,7 +80,7 @@ private fun getDataUsingRetrofit(
 //            println("/////////////////////////////////////////////////////${secret.value}")
 
             if(response.isSuccessful){
-                getChatHistory(ctx,loginViewModel,username,password)
+                getChatHistory(loginViewModel)
                 editor.putString("USERNAME", username)
                 editor.putString("SECRET", password)
                 editor.apply()
