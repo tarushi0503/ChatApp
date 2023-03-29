@@ -30,9 +30,6 @@ fun NavigationController(sharedPreferences: SharedPreferences, navController: Na
         composable(NavigationItems.getDataLogin.route){
             getDataLogin(navController,loginViewModel,sharedPreferences)
         }
-//        composable(NavigationItem.Navigation.route){
-//            Navigation()
-//        }
 
         composable(NavigationItems.PostDataSignUpScaffold.route){
             PostDataSignUpScaffold(navController,loginViewModel)

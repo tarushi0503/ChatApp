@@ -11,7 +11,6 @@ import androidx.compose.foundation.shape.RoundedCornerShape
 import androidx.compose.foundation.text.KeyboardOptions
 import androidx.compose.material.*
 import androidx.compose.material.icons.Icons
-import androidx.compose.material.icons.filled.AccountCircle
 import androidx.compose.material.icons.filled.CheckCircle
 import androidx.compose.material.icons.filled.Face
 import androidx.compose.material.icons.filled.Lock
@@ -51,27 +50,21 @@ private fun postDataUsingRetrofit(
     firstName: MutableState<TextFieldValue>,
     lastName: MutableState<TextFieldValue>,
     password: MutableState<TextFieldValue>,
-    result: MutableState<String>
+    result: MutableState<String>,
+    loginViewModel: LoginViewModel
 ) {
-    val retrofitAPI = RetrofitAPI.postInstance()
-
-    val dataModel = DataModel(
-        userName.value.text,
+    val retrofitAPI = loginViewModel.signup()
+    val signupDataClass=DataModel(userName.value.text,
         firstName.value.text,
         lastName.value.text,
         password.value.text,
-        email = ""
-    )
+        email = "")
 
-    val call: Call<DataModel?>? = retrofitAPI.postData(dataModel)
+    val call: Call<DataModel?>? = retrofitAPI.postData(signupDataClass)
 
     call!!.enqueue(object : Callback<DataModel?> {
         override fun onResponse(call: Call<DataModel?>?, response: Response<DataModel?>) {
             Toast.makeText(ctx, "Sign up successful", Toast.LENGTH_SHORT).show()
-//            val model: DataModel? = response.body()
-//            val resp =
-//                "Response Code : " + response.code()
-            //result.value = resp
         }
 
         override fun onFailure(call: Call<DataModel?>?, t: Throwable) {
@@ -364,7 +357,7 @@ fun postData(navController:NavController,loginViewModel: LoginViewModel) {
                         else{
                             loginViewModel.isLoading.value = true
                             postDataUsingRetrofit(
-                                ctx, userName, firstName, lastName, password, response
+                                ctx, userName, firstName, lastName, password, response,loginViewModel
                             )
                             navController.navigate(NavigationItems.getDataLogin.route)
                             loginViewModel.isLoading.value = false

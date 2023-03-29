@@ -54,34 +54,7 @@ fun IsTypingHelpingFunction(
         }
     })
 }
-//private fun getAllMessages(
-//    loginViewModel: LoginViewModel
-//) {
-//    val retrofitAPI = loginViewModel.createMsgGet()
-//
-//    val call: Call<List<RecieveDataClass>?>? = retrofitAPI.getMsg()
-//
-//
-//    call!!.enqueue(object : Callback<List<RecieveDataClass>?> {
-//
-//        override fun onResponse(call: Call<List<RecieveDataClass>?>, response: Response<List<RecieveDataClass>?>) {
-//            //Toast.makeText(context, "Logged in", Toast.LENGTH_SHORT).show()
-//            val model: List<RecieveDataClass> = response.body()?: emptyList()
-//
-//            loginViewModel.firstMsgGet= model as MutableList<RecieveDataClass>
-////            val resp =model
-////                        getApiResult.value= resp.toString()
-////            if (model != null) {
-////                loginViewModel.firstMsgGet=model
-////            }
-//
-//        }
-//
-//        override fun onFailure(call: Call<List<RecieveDataClass>?>?, t: Throwable) {
-//            //getApiResult.value="error "+t.message
-//        }
-//    })
-//}
+
 
 fun startMessaging(context: Context, value: String, result: MutableState<String>,  loginViewModel: LoginViewModel) {
 
@@ -241,7 +214,6 @@ fun Messages(
                     .padding(horizontal = 16.dp, vertical = 8.dp),
                 verticalAlignment = Alignment.Bottom
             ) {
-
                 OutlinedTextField(
                     modifier = Modifier.weight(1f),
                     value = inputText,
@@ -250,20 +222,12 @@ fun Messages(
                         IsTypingHelpingFunction(context,loginViewModel)
 
                     },
-//                    keyboardActions = KeyboardActions(
-//                        onDone = {
-//                            keyboardController?.hide()
-//                        }
-//                    ),
                     placeholder = { Text(text = "Start typing..", color = Color.LightGray)}
                 )
                 IconButton(onClick = {
                     webSocketManager.sendMessage(inputText)
                     startMessaging(context, inputText, result, loginViewModel)
-//                    val timeCreated= LocalDateTime.now().toString()
-//                    loginViewModel.updateList(msg = RecieveDataClass(inputText, timeCreated,loginViewModel.user_name))
                     inputText = ""
-                   // println("@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@ ${loginViewModel.firstMsgGet[loginViewModel.firstMsgGet.size-1]}")
                 },
                     modifier = Modifier.padding(start = 8.dp)
                 ) {
@@ -271,14 +235,10 @@ fun Messages(
 
                 }
             }
-//            Text(
-//                text = result.value,
-//                modifier = Modifier.align(Alignment.TopEnd)
-//            )
-
         }
 
     }
+
     if(loginViewModel.isLoading.value==true){
         LoadingView()
     }

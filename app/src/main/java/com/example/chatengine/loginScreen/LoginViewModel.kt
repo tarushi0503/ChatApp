@@ -16,6 +16,8 @@ import com.example.chatengine.messageScreen.MessageClass
 import com.example.chatengine.messageScreen.MsgDataClassModel
 import com.example.chatengine.messageScreen.PostMessageAPI
 import com.example.chatengine.messageScreen.RecieveDataClass
+import com.example.chatengine.signupScreen.RetrofitAPI
+import com.example.chatengine.signupScreen.SignUpClass
 import com.example.chatengine.userScreen.GetChatsDataClass
 import com.example.chatengine.userScreen.GetMyChats
 import com.example.chatengine.userScreen.GetMyChatsClass
@@ -38,7 +40,11 @@ class LoginViewModel:ViewModel() {
     val initial = LoginDataClass("","",false)
     var UserData: LoginDataClass? by mutableStateOf(initial)
 
-    //logout
+    //signup
+    fun signup():RetrofitAPI{
+        val msgApiService= SignUpClass(user_name.value,password.value).postInstance()
+        return  msgApiService
+    }
 
     fun AuthenticateUser():LoginInterfaceAPI{
         val apiService=LoginClass(user_name.value,password.value).getInstance()
