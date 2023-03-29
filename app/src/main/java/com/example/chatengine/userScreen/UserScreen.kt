@@ -5,13 +5,17 @@ import android.annotation.SuppressLint
 import android.content.Context
 import android.widget.Toast
 import androidx.compose.foundation.background
+import androidx.compose.foundation.clickable
 import androidx.compose.foundation.layout.*
 import androidx.compose.foundation.lazy.LazyColumn
 import androidx.compose.foundation.lazy.itemsIndexed
+import androidx.compose.foundation.shape.RoundedCornerShape
 import androidx.compose.material.*
 import androidx.compose.material.icons.Icons
 import androidx.compose.material.icons.filled.Add
+import androidx.compose.material.icons.filled.ArrowBack
 import androidx.compose.material.icons.filled.ArrowForward
+import androidx.compose.material.icons.filled.ExitToApp
 import androidx.compose.runtime.Composable
 import androidx.compose.runtime.MutableState
 import androidx.compose.runtime.mutableStateOf
@@ -21,6 +25,7 @@ import androidx.compose.ui.Modifier
 import androidx.compose.ui.graphics.Color
 import androidx.compose.ui.platform.LocalContext
 import androidx.compose.ui.text.font.FontWeight
+import androidx.compose.ui.text.style.TextOverflow
 import androidx.compose.ui.unit.dp
 import androidx.navigation.NavController
 import androidx.navigation.NavHostController
@@ -162,14 +167,22 @@ fun UserScreen(navController: NavHostController, loginViewModel: LoginViewModel)
         modifier = Modifier.background(Color.Blue),
         topBar = {
             TopAppBar(
-            ) {
-                Text(text = "Chats")
-//                IconButton(onClick = {
-//
-//                }) {
-//                    Icon(Icons.Filled.Add, contentDescription = "Logout")
-//                }
-            }
+                title = { Text(text = "Chats") },
+                navigationIcon = {
+                    IconButton(onClick = { navController.popBackStack() }) {
+                        Icon(
+                            Icons.Default.ArrowBack,
+                            contentDescription = "Back",
+                            tint = Color.White
+                        )
+                    }
+                },
+                actions = {
+                    IconButton(onClick = {}) {
+                        Icon(Icons.Default.ExitToApp, contentDescription = "LogOut")
+                    }
+                }
+            )
         },
         floatingActionButton = {
             FloatingActionButton(
@@ -196,79 +209,66 @@ fun UserScreen(navController: NavHostController, loginViewModel: LoginViewModel)
                 .background(Color.White)
                 .padding(8.dp),
 
-            //reverseLayout = true
-            //.sortedByDescending{it.created}
 
-        ) {
+            ) {
             itemsIndexed(loginViewModel.allChats) { lastIndex, item ->
                 val time = item.created.subSequence(11, 16)
+                val cardName = if (title == "tarushi07") "yash07" else "tarushi07"
+                //if (item.people[lastIndex].person.username == "tarushi07") "yash07" else "tarushi07"
 
-                Column(
+                Card(
                     modifier = Modifier
-                        .fillMaxWidth(),
+                        .fillMaxWidth()
+                        .padding(bottom = 8.dp)
+                        .clickable {
+                            loginViewModel.isLoading.value = true
+                            loginViewModel.chatId = item.id
+                            loginViewModel.accesskey = item.access_key
+                            getMsgHistory(context, getApiResult, loginViewModel, navController)
+
+                        },
+                    elevation = 4.dp,
+                    shape = RoundedCornerShape(8.dp),
+                    backgroundColor = Color.White
                 ) {
-                    Box(
-                        modifier = Modifier
-                            .padding(3.dp)
+                    Row(
+                        verticalAlignment = Alignment.CenterVertically,
+                        modifier = Modifier.padding(horizontal = 8.dp, vertical = 12.dp)
                     ) {
-                            Column(
-                                Modifier.padding(8.dp),
-                                verticalArrangement = Arrangement.SpaceBetween
-
-                            ) {
-                                Row(
-                                    modifier = Modifier.padding(5.dp),
-
-                                ) {
-                                    val cardName =
-                                        if (title == "tarushi07") "yash07" else "tarushi07"
-//                                        if (item.people[lastIndex].person.username == "tarushi07") "yash07" else "tarushi07"
-                                    Text(
-                                        text = cardName,
-                                        style = MaterialTheme.typography.h6,
-                                        fontWeight = FontWeight.Bold,
-                                        color = Color.Black
-                                    )
-                                    Spacer(modifier = Modifier.width(200.dp))
-                                    Text(
-                                        text = time.toString(),
-                                        style = MaterialTheme.typography.h6,
-                                        color = Color.LightGray,
-                                    )
-                                }
-                                Spacer(modifier = Modifier.height(10.dp))
-                                Row(
-                                ) {
-                                    Text(
-                                        text = item.last_message.text,
-                                        style = MaterialTheme.typography.h6,
-                                        color = Color.LightGray
-                                    )
-                                    Spacer(modifier = Modifier.width(150.dp))
-                                    IconButton(onClick = {
-                                        loginViewModel.isLoading.value = true
-                                        loginViewModel.chatId=item.id
-                                        loginViewModel.accesskey=item.access_key
-                                        getMsgHistory(context, getApiResult, loginViewModel,navController)
-                                    }) {
-                                        Icon(
-                                            Icons.Default.ArrowForward,
-                                            contentDescription = "",
-                                            tint = Color.Gray,
-                                            //modifier = Modifier.align(Alignment.CenterEnd)
-                                        )
-
-                                    }
-                                }
-                            }
+                        Column(
+                            modifier = Modifier
+                                .padding(horizontal = 8.dp)
+                                .weight(1f)
+                        ) {
+                            Text(
+                                text = cardName,
+                                style = MaterialTheme.typography.h6,
+                                fontWeight = FontWeight.Bold,
+                                color = Color.Black
+                            )
+                            Spacer(modifier = Modifier.height(10.dp))
+                            Text(
+                                text = item.last_message.text,
+                                style = MaterialTheme.typography.body1,
+                                maxLines = 1,
+                                overflow = TextOverflow.Ellipsis,
+                                color = Color.Gray
+                            )
+                        }
+                        Text(
+                            text = time.toString(),
+                            style = MaterialTheme.typography.body1,
+                            color = Color.Gray,
+                            modifier = Modifier.padding(horizontal = 8.dp)
+                        )
                     }
-                    Divider(Modifier.height(3.dp))
                 }
+
             }
         }
         Text(
-                text = result.value,
-            )
+            text = result.value,
+        )
 
 //            Button(
 //                modifier = Modifier.padding(horizontal = 120.dp, vertical = 300.dp),
@@ -281,9 +281,9 @@ fun UserScreen(navController: NavHostController, loginViewModel: LoginViewModel)
 //            }
 
     }
-
-    if (loginViewModel.isLoading.value == true){
+    if (loginViewModel.isLoading.value) {
         LoadingView()
     }
+
 }
 
