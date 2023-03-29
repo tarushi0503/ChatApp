@@ -3,6 +3,7 @@ package com.example.chatengine.userScreen
 
 import android.annotation.SuppressLint
 import android.content.Context
+import android.content.Intent
 import android.content.SharedPreferences
 import android.widget.Toast
 import androidx.compose.foundation.background
@@ -31,6 +32,7 @@ import androidx.navigation.NavController
 import androidx.navigation.NavHostController
 import com.example.chatengine.ChatScreen.ChatDataClass
 import com.example.chatengine.CircularProgressIndicator.LoadingView
+import com.example.chatengine.MainActivity
 import com.example.chatengine.Navigation.NavigationItems
 import com.example.chatengine.loginScreen.LoginViewModel
 import com.example.chatengine.messageScreen.RecieveDataClass
@@ -102,12 +104,6 @@ private fun getMsgHistory(
 
             loginViewModel.firstMsgGet= model as MutableList<RecieveDataClass>
             loginViewModel.isLoading.value = false
-            navController.navigate(NavigationItems.Messages.route)
-//            val resp =model
-//                        getApiResult.value= resp.toString()
-//            if (model != null) {
-//                loginViewModel.firstMsgGet=model
-//            }
 
         }
 
@@ -189,7 +185,10 @@ fun UserScreen(
                         editor.putString("USERNAME", "")
                         editor.putString("SECRET", "")
                         editor.apply()
-                        navController.navigate(NavigationItems.getDataLogin.route)
+                        val intent = Intent(context, MainActivity::class.java)
+                        intent.flags =
+                            Intent.FLAG_ACTIVITY_NEW_TASK or Intent.FLAG_ACTIVITY_CLEAR_TASK
+                        context.startActivity(intent)
                     }) {
                         Icon(Icons.Default.ExitToApp, contentDescription = "LogOut")
                     }
@@ -232,6 +231,7 @@ fun UserScreen(
                         .fillMaxWidth()
                         .padding(bottom = 8.dp)
                         .clickable {
+                            navController.navigate(NavigationItems.Messages.route)
                             loginViewModel.isLoading.value = true
                             loginViewModel.chatId = item.id
                             loginViewModel.accesskey = item.access_key
