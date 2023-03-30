@@ -33,9 +33,9 @@ import androidx.compose.ui.text.style.TextAlign
 import androidx.compose.ui.unit.dp
 import androidx.compose.ui.unit.sp
 import androidx.navigation.NavController
-import com.example.chatengine.CircularProgressIndicator.LoadingView
-import com.example.chatengine.Navigation.NavigationItems
-import com.example.chatengine.loginScreen.LoginViewModel
+import com.example.chatengine.circularProgressIndicator.LoadingView
+import com.example.chatengine.navigation.NavigationItems
+import com.example.chatengine.viewModel.MainViewModel
 import com.example.chatengine.ui.theme.Purple200
 import com.example.chatengine.ui.theme.card
 import retrofit2.Call
@@ -51,9 +51,9 @@ private fun postDataUsingRetrofit(
     lastName: MutableState<TextFieldValue>,
     password: MutableState<TextFieldValue>,
     result: MutableState<String>,
-    loginViewModel: LoginViewModel
+    mainViewModel: MainViewModel
 ) {
-    val retrofitAPI = loginViewModel.signup()
+    val retrofitAPI = mainViewModel.signup()
     val signupDataClass=DataModel(userName.value.text,
         firstName.value.text,
         lastName.value.text,
@@ -77,7 +77,7 @@ private fun postDataUsingRetrofit(
 
 
 @Composable
-fun postData(navController:NavController,loginViewModel: LoginViewModel) {
+fun postData(navController:NavController, mainViewModel: MainViewModel) {
     val ctx = LocalContext.current
 
     val userName = remember {
@@ -355,12 +355,12 @@ fun postData(navController:NavController,loginViewModel: LoginViewModel) {
 
 
                         else{
-                            loginViewModel.isLoading.value = true
+                            mainViewModel.isLoading.value = true
                             postDataUsingRetrofit(
-                                ctx, userName, firstName, lastName, password, response,loginViewModel
+                                ctx, userName, firstName, lastName, password, response,mainViewModel
                             )
                             navController.navigate(NavigationItems.getDataLogin.route)
-                            loginViewModel.isLoading.value = false
+                            mainViewModel.isLoading.value = false
                         }
 
 
@@ -401,7 +401,7 @@ fun postData(navController:NavController,loginViewModel: LoginViewModel) {
             }
         }
     }
-    if (loginViewModel.isLoading.value){
+    if (mainViewModel.isLoading.value){
         LoadingView()
     }
 }

@@ -1,4 +1,4 @@
-package com.example.chatengine.loginScreen
+package com.example.chatengine.viewModel
 
 
 import android.annotation.SuppressLint
@@ -7,11 +7,14 @@ import androidx.compose.runtime.mutableStateOf
 import androidx.compose.runtime.setValue
 import androidx.lifecycle.ViewModel
 import androidx.lifecycle.viewModelScope
-import com.example.chatengine.ChatScreen.ChatApiInterface
-import com.example.chatengine.ChatScreen.ChatDataClass
-import com.example.chatengine.ChatScreen.ChatRoom
+import com.example.chatengine.chatScreen.ChatApiInterface
+import com.example.chatengine.chatScreen.ChatDataClass
+import com.example.chatengine.chatScreen.ChatRoom
 import com.example.chatengine.isTyping.TypingClass
 import com.example.chatengine.isTyping.isTypingInterface
+import com.example.chatengine.loginScreen.LoginClass
+import com.example.chatengine.loginScreen.LoginDataClass
+import com.example.chatengine.loginScreen.LoginInterfaceAPI
 import com.example.chatengine.messageScreen.MessageClass
 import com.example.chatengine.messageScreen.MsgDataClassModel
 import com.example.chatengine.messageScreen.PostMessageAPI
@@ -28,7 +31,7 @@ import kotlinx.coroutines.flow.StateFlow
 import kotlinx.coroutines.launch
 import kotlinx.coroutines.withContext
 
-class LoginViewModel:ViewModel() {
+class MainViewModel:ViewModel() {
 
     var user_name = mutableStateOf("")
     var password = mutableStateOf("")
@@ -46,8 +49,8 @@ class LoginViewModel:ViewModel() {
         return  msgApiService
     }
 
-    fun AuthenticateUser():LoginInterfaceAPI{
-        val apiService=LoginClass(user_name.value,password.value).getInstance()
+    fun AuthenticateUser(): LoginInterfaceAPI {
+        val apiService= LoginClass(user_name.value,password.value).getInstance()
         return  apiService
     }
 

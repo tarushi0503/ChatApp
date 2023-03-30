@@ -1,4 +1,4 @@
-package com.example.chatengine.CircularProgressIndicator
+package com.example.chatengine.circularProgressIndicator
 
 import androidx.compose.foundation.layout.Box
 import androidx.compose.foundation.layout.fillMaxSize

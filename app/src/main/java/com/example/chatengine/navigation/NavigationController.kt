@@ -1,4 +1,4 @@
-package com.example.chatengine.Navigation
+package com.example.chatengine.navigation
 
 import android.content.SharedPreferences
 import android.os.Build
@@ -9,9 +9,9 @@ import androidx.navigation.NavHostController
 import androidx.navigation.compose.NavHost
 import androidx.navigation.compose.composable
 import androidx.navigation.compose.rememberNavController
-import com.example.chatengine.ChatScreen.Chat
-import com.example.chatengine.WebSocket.WebSocketManager
-import com.example.chatengine.loginScreen.LoginViewModel
+import com.example.chatengine.chatScreen.Chat
+import com.example.chatengine.webSocket.WebSocketManager
+import com.example.chatengine.viewModel.MainViewModel
 import com.example.chatengine.loginScreen.getDataLogin
 import com.example.chatengine.messageScreen.Messages
 import com.example.chatengine.signupScreen.PostDataSignUpScaffold
@@ -22,29 +22,29 @@ import com.example.chatengine.userScreen.UserScreen
 @Composable
 fun NavigationController(sharedPreferences: SharedPreferences, navController: NavHostController = rememberNavController()) {
 
-    val loginViewModel:LoginViewModel= viewModel()
-    val webSocketManager=WebSocketManager(loginViewModel)
+    val mainViewModel: MainViewModel = viewModel()
+    val webSocketManager=WebSocketManager(mainViewModel)
 
 
     NavHost(navController = navController, startDestination = NavigationItems.getDataLogin.route){
         composable(NavigationItems.getDataLogin.route){
-            getDataLogin(navController,loginViewModel,sharedPreferences)
+            getDataLogin(navController,mainViewModel,sharedPreferences)
         }
 
         composable(NavigationItems.PostDataSignUpScaffold.route){
-            PostDataSignUpScaffold(navController,loginViewModel)
+            PostDataSignUpScaffold(navController,mainViewModel)
         }
 
         composable(NavigationItems.UserScreen.route){
-            UserScreen(navController, loginViewModel,sharedPreferences)
+            UserScreen(navController, mainViewModel,sharedPreferences)
         }
 
         composable(NavigationItems.Chat.route){
-            Chat(navController,loginViewModel)
+            Chat(navController,mainViewModel)
         }
 
         composable(NavigationItems.Messages.route){
-            Messages(navController,loginViewModel,webSocketManager)
+            Messages(navController,mainViewModel,webSocketManager)
         }
 
     }}

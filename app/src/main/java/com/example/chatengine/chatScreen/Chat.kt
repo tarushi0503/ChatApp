@@ -1,4 +1,4 @@
-package com.example.chatengine.ChatScreen
+package com.example.chatengine.chatScreen
 
 import android.annotation.SuppressLint
 import android.content.Context
@@ -22,8 +22,8 @@ import androidx.compose.ui.platform.LocalContext
 import androidx.compose.ui.text.font.FontWeight
 import androidx.compose.ui.unit.dp
 import androidx.navigation.NavController
-import com.example.chatengine.Navigation.NavigationItems
-import com.example.chatengine.loginScreen.LoginViewModel
+import com.example.chatengine.navigation.NavigationItems
+import com.example.chatengine.viewModel.MainViewModel
 import com.example.chatengine.ui.theme.Purple500
 import retrofit2.Call
 import retrofit2.Callback
@@ -31,7 +31,7 @@ import retrofit2.Response
 
 @SuppressLint("UnusedMaterialScaffoldPaddingParameter")
 @Composable
-fun Chat(navController: NavController, loginViewModel: LoginViewModel) {
+fun Chat(navController: NavController, mainViewModel: MainViewModel) {
     Scaffold(
         topBar = {
             TopAppBar(
@@ -51,7 +51,7 @@ fun Chat(navController: NavController, loginViewModel: LoginViewModel) {
     ) {
 
         val context = LocalContext.current
-        val title = loginViewModel.user_name
+        val title = mainViewModel.user_name
 
         val result = remember {
             mutableStateOf("")
@@ -66,7 +66,7 @@ fun Chat(navController: NavController, loginViewModel: LoginViewModel) {
 
             Button(
                 onClick = {
-                    postRoom(context, title.value, result, navController, loginViewModel)
+                    postRoom(context, title.value, result, navController, mainViewModel)
                 },
                 modifier = Modifier
                     .fillMaxWidth()
@@ -90,10 +90,10 @@ private fun postRoom(
     title: String,
     result: MutableState<String>,
     navController: NavController,
-    loginViewModel: LoginViewModel
+    mainViewModel: MainViewModel
 ) {
 
-    val retrofitAPI = loginViewModel.createChat()
+    val retrofitAPI = mainViewModel.createChat()
     val chatDataClass=ChatDataClass(title,false, listOf("tarushi07"))
 
     val call: Call<ChatDataClass?>? = retrofitAPI.postChatRoom(chatDataClass)
@@ -107,7 +107,7 @@ private fun postRoom(
                 "Response Code : " + response.code() + "\n"+"Id: " + model?.is_direct_chat+  "\n"+ model?.title
             result.value=resp
 //            secret.value = model?.secret.toString()
-            loginViewModel.newChatDetails = model
+            mainViewModel.newChatDetails = model
 //            loginViewModel.chatId= loginViewModel.newChatDetails!!.id
 //            loginViewModel.accessId= loginViewModel.newChatDetails!!.access_key
 

@@ -5,7 +5,6 @@ import android.annotation.SuppressLint
 import android.content.Context
 import android.content.Intent
 import android.content.SharedPreferences
-import android.widget.Toast
 import androidx.compose.foundation.Image
 import androidx.compose.foundation.background
 import androidx.compose.foundation.clickable
@@ -25,7 +24,6 @@ import androidx.compose.runtime.remember
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.graphics.Color
-import androidx.compose.ui.graphics.painter.Painter
 import androidx.compose.ui.platform.LocalContext
 import androidx.compose.ui.res.painterResource
 import androidx.compose.ui.text.font.FontWeight
@@ -34,18 +32,14 @@ import androidx.compose.ui.unit.dp
 import androidx.compose.ui.unit.sp
 import androidx.navigation.NavController
 import androidx.navigation.NavHostController
-import com.example.chatengine.ChatScreen.ChatDataClass
-import com.example.chatengine.CircularProgressIndicator.LoadingView
+import com.example.chatengine.circularProgressIndicator.LoadingView
 import com.example.chatengine.MainActivity
-import com.example.chatengine.Navigation.NavigationItems
+import com.example.chatengine.navigation.NavigationItems
 import com.example.chatengine.R
-import com.example.chatengine.loginScreen.LoginViewModel
+import com.example.chatengine.viewModel.MainViewModel
 import com.example.chatengine.messageScreen.RecieveDataClass
 import com.example.chatengine.ui.theme.Purple200
-import com.example.chatengine.ui.theme.ReceiverColor
 import com.example.chatengine.ui.theme.card
-import com.example.chatengine.userScreen.DataClass.People
-import com.example.chatengine.userScreen.DataClass.Person
 import retrofit2.Call
 import retrofit2.Callback
 import retrofit2.Response
@@ -57,10 +51,10 @@ import retrofit2.Response
 private fun getMsgHistory(
     context: Context,
     getApiResult: MutableState<String>,
-    loginViewModel: LoginViewModel,
+    mainViewModel: MainViewModel,
     navController: NavController
 ) {
-    val retrofitAPI = loginViewModel.createMsgGet()
+    val retrofitAPI = mainViewModel.createMsgGet()
 
     val call: Call<List<RecieveDataClass>?>? = retrofitAPI.getMsg()
 
@@ -71,8 +65,8 @@ private fun getMsgHistory(
             //Toast.makeText(context, "Logged in", Toast.LENGTH_SHORT).show()
             val model: List<RecieveDataClass> = response.body()?: emptyList()
 
-            loginViewModel.firstMsgGet= model as MutableList<RecieveDataClass>
-            loginViewModel.isLoading.value = false
+            mainViewModel.firstMsgGet= model as MutableList<RecieveDataClass>
+            mainViewModel.isLoading.value = false
 
         }
 
@@ -84,9 +78,9 @@ private fun getMsgHistory(
 
 //number of users
  fun getChatHistory(
-    loginViewModel: LoginViewModel
+    mainViewModel: MainViewModel
     ) {
-    val retrofitAPI = loginViewModel.getAllChats()
+    val retrofitAPI = mainViewModel.getAllChats()
 
     val call: Call<List<GetChatsDataClass>?>? = retrofitAPI.getChats()
 
@@ -97,7 +91,7 @@ private fun getMsgHistory(
             //Toast.makeText(context, "Logged in", Toast.LENGTH_SHORT).show()
             val model: List<GetChatsDataClass> = response.body()?: emptyList()
 
-            loginViewModel.allChats= model as MutableList<GetChatsDataClass>
+            mainViewModel.allChats= model as MutableList<GetChatsDataClass>
 
 //            val resp =model
 //                        getApiResult.value= resp.toString()
@@ -118,7 +112,7 @@ private fun getMsgHistory(
 @Composable
 fun UserScreen(
     navController: NavHostController,
-    loginViewModel: LoginViewModel,
+    mainViewModel: MainViewModel,
     sharedPreferences: SharedPreferences
 ) {
     val editor: SharedPreferences.Editor = sharedPreferences.edit()
@@ -127,7 +121,7 @@ fun UserScreen(
     val getApiResult = remember {
         mutableStateOf("")
     }
-    getChatHistory(loginViewModel)
+    getChatHistory(mainViewModel)
     Scaffold(
         modifier = Modifier.background(Color.Blue),
         topBar = {
@@ -175,7 +169,7 @@ fun UserScreen(
 
         ) {
 
-        if((loginViewModel.allChats.size!=0)) {
+        if((mainViewModel.allChats.size!=0)) {
             LazyColumn(
                 modifier = Modifier
                     .fillMaxWidth()
@@ -185,10 +179,10 @@ fun UserScreen(
 
 
                 ) {
-                itemsIndexed(loginViewModel.allChats) { lastIndex, item ->
+                itemsIndexed(mainViewModel.allChats) { lastIndex, item ->
                     val time = item.created.subSequence(11, 16)
                     val cardName =
-                        if (loginViewModel.user_name.value == "tarushi07") item.title else "tarushi07"
+                        if (mainViewModel.user_name.value == "tarushi07") item.title else "tarushi07"
 
                     Card(
                         modifier = Modifier
@@ -196,10 +190,10 @@ fun UserScreen(
                             .padding(bottom = 8.dp)
                             .clickable {
                                 navController.navigate(NavigationItems.Messages.route)
-                                loginViewModel.isLoading.value = true
-                                loginViewModel.chatId = item.id
-                                loginViewModel.accesskey = item.access_key
-                                getMsgHistory(context, getApiResult, loginViewModel, navController)
+                                mainViewModel.isLoading.value = true
+                                mainViewModel.chatId = item.id
+                                mainViewModel.accesskey = item.access_key
+                                getMsgHistory(context, getApiResult, mainViewModel, navController)
 
                             },
                         elevation = 4.dp,
@@ -280,7 +274,7 @@ fun UserScreen(
 //            }
 
     }
-    if (loginViewModel.isLoading.value) {
+    if (mainViewModel.isLoading.value) {
         LoadingView()
     }
 

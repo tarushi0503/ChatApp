@@ -1,8 +1,8 @@
-package com.example.chatengine.WebSocket
+package com.example.chatengine.webSocket
 
 
 import android.util.Log
-import com.example.chatengine.loginScreen.LoginViewModel
+import com.example.chatengine.viewModel.MainViewModel
 import com.example.chatengine.messageScreen.RecieveDataClass
 import com.google.gson.Gson
 import okhttp3.*
@@ -10,11 +10,11 @@ import org.json.JSONObject
 import java.net.SocketException
 
 
-class WebSocketManager(private val loginViewModel: LoginViewModel):WebSocketListener(){
+class WebSocketManager(private val mainViewModel: MainViewModel):WebSocketListener(){
     private var webSocket: WebSocket
 
     init {
-        val request = Request.Builder().url("wss://api.chatengine.io/chat/?projectID=0ddfa87c-cd5d-4103-8946-0b0ccc96cf9e&chatID=${loginViewModel.chatId}&accessKey=${loginViewModel.accesskey}").build()
+        val request = Request.Builder().url("wss://api.chatengine.io/chat/?projectID=0ddfa87c-cd5d-4103-8946-0b0ccc96cf9e&chatID=${mainViewModel.chatId}&accessKey=${mainViewModel.accesskey}").build()
         val client = OkHttpClient()
         webSocket = client.newWebSocket(request, this)
     }
@@ -36,17 +36,17 @@ class WebSocketManager(private val loginViewModel: LoginViewModel):WebSocketList
                 created = message.getString("created"),
                 sender_username = message.getString("sender_username")
             )
-            loginViewModel.updateList(receivedMessage)
+            mainViewModel.updateList(receivedMessage)
 //            loginViewModel.firstMsgGet.add(receivedMessage)
-            loginViewModel.updateMessageList((loginViewModel.messageList.value + message) as List<RecieveDataClass>)
+            mainViewModel.updateMessageList((mainViewModel.messageList.value + message) as List<RecieveDataClass>)
             Log.d("MYTAG", "onMessage: $receivedMessage ")
         }
 
         if (action =="is_typing") {
             val data=json.getJSONObject("data")
             val name=data.getString("person")
-            loginViewModel.istyping.value=true
-            loginViewModel.istypinguser.value= name.toString()
+            mainViewModel.istyping.value=true
+            mainViewModel.istypinguser.value= name.toString()
         }
     }
 

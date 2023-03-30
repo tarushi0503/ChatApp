@@ -7,11 +7,10 @@ import android.os.Build
 import android.os.Bundle
 import androidx.activity.ComponentActivity
 import androidx.activity.compose.setContent
-import androidx.activity.viewModels
 import androidx.annotation.RequiresApi
 import androidx.compose.runtime.mutableStateOf
 import androidx.compose.runtime.remember
-import com.example.chatengine.Navigation.NavigationController
+import com.example.chatengine.navigation.NavigationController
 
 class MainActivity : ComponentActivity() {
     lateinit var sharedPreferences:SharedPreferences

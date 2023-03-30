@@ -1,8 +1,4 @@
-package com.example.chatengine.Navigation
-
-import androidx.compose.material.icons.Icons
-import androidx.compose.material.icons.filled.Notifications
-import androidx.compose.ui.graphics.vector.ImageVector
+package com.example.chatengine.navigation
 
 sealed class NavigationItems(val route:String) {
 

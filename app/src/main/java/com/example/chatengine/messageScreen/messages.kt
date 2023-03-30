@@ -25,19 +25,18 @@ import androidx.compose.ui.text.TextStyle
 import androidx.compose.ui.unit.dp
 import androidx.compose.ui.unit.sp
 import androidx.navigation.NavHostController
-import com.example.chatengine.CircularProgressIndicator.LoadingView
-import com.example.chatengine.WebSocket.WebSocketManager
+import com.example.chatengine.circularProgressIndicator.LoadingView
+import com.example.chatengine.webSocket.WebSocketManager
 import com.example.chatengine.isTyping.isTypingDataClass
-import com.example.chatengine.loginScreen.LoginViewModel
+import com.example.chatengine.viewModel.MainViewModel
 import com.example.chatengine.ui.theme.*
 import retrofit2.Call
 import retrofit2.Callback
 import retrofit2.Response
-import java.time.LocalDateTime
 
 fun IsTypingHelpingFunction(
     context: Context,
-    viewModel: LoginViewModel
+    viewModel: MainViewModel
 )
 {
     val retrofitAPI= viewModel.IsUserTyping()
@@ -56,9 +55,9 @@ fun IsTypingHelpingFunction(
 }
 
 
-fun startMessaging(context: Context, value: String, result: MutableState<String>,  loginViewModel: LoginViewModel) {
+fun startMessaging(context: Context, value: String, result: MutableState<String>, mainViewModel: MainViewModel) {
 
-    val retrofitAPI = loginViewModel.createMsg()
+    val retrofitAPI = mainViewModel.createMsg()
     val msgDataClassModel=MsgDataClassModel(value)
 
     val call: Call<MsgDataClassModel?>? = retrofitAPI.postMsg(msgDataClassModel)
@@ -72,7 +71,7 @@ fun startMessaging(context: Context, value: String, result: MutableState<String>
             if (resp != null) {
                 result.value=resp
             }
-            loginViewModel.newMsgDetails = model
+            mainViewModel.newMsgDetails = model
 
         }
 
@@ -90,11 +89,11 @@ fun startMessaging(context: Context, value: String, result: MutableState<String>
 @Composable
 fun Messages(
     navController: NavHostController,
-    loginViewModel: LoginViewModel,
+    mainViewModel: MainViewModel,
     webSocketManager: WebSocketManager
 ) {
 
-    val messageListState = loginViewModel.messageList.collectAsState()
+    val messageListState = mainViewModel.messageList.collectAsState()
     val messageList = messageListState.value
     Text(text = messageList.size.toString())
 
@@ -114,13 +113,13 @@ fun Messages(
             TopAppBar(
                 backgroundColor = Purple200,
                 title = {
-                    if (loginViewModel.istyping.value && loginViewModel.user_name.value != loginViewModel.istypinguser.value) {
+                    if (mainViewModel.istyping.value && mainViewModel.user_name.value != mainViewModel.istypinguser.value) {
                         Text(text = " is typing")
-                        loginViewModel.startTyping()
+                        mainViewModel.startTyping()
 //                    isTYping=false
                     } else {
                         Text(
-                            text = if (loginViewModel.user_name.value == "tarushi07") "" else "tarushi07",
+                            text = if (mainViewModel.user_name.value == "tarushi07") "" else "tarushi07",
                             modifier = Modifier
                                 .fillMaxWidth()
                                 .padding(start = 10.dp),
@@ -145,7 +144,7 @@ fun Messages(
 
         ) {
 
-        if (loginViewModel.firstMsgGet.size == 0) {
+        if (mainViewModel.firstMsgGet.size == 0) {
             Box(
                 modifier = Modifier.height(500.dp)
                     .width(800.dp),
@@ -168,9 +167,9 @@ fun Messages(
                 reverseLayout = true
 
             ) {
-                itemsIndexed(loginViewModel.firstMsgGet.sortedByDescending { it.created }) { lastIndex, item ->
+                itemsIndexed(mainViewModel.firstMsgGet.sortedByDescending { it.created }) { lastIndex, item ->
 
-                    val isCurrentUser = item.sender_username == loginViewModel.user_name.value
+                    val isCurrentUser = item.sender_username == mainViewModel.user_name.value
                     val messageBackgroundColor = if (isCurrentUser) SenderColor else ReceiverColor
                     val messageTextColor = if (isCurrentUser) Color.Black else Color.Black
                     val time = item.created.subSequence(11, 16)
@@ -259,7 +258,7 @@ fun Messages(
                     maxLines = 2,
                     onValueChange = {
                         inputText = it
-                        IsTypingHelpingFunction(context, loginViewModel)
+                        IsTypingHelpingFunction(context, mainViewModel)
 
                     },
                     placeholder = { Text(text = "Start typing..", color = Color.LightGray) }
@@ -267,7 +266,7 @@ fun Messages(
                 IconButton(
                     onClick = {
                         webSocketManager.sendMessage(inputText)
-                        startMessaging(context, inputText, result, loginViewModel)
+                        startMessaging(context, inputText, result, mainViewModel)
                         inputText = ""
                     },
                     modifier = Modifier.padding(start = 8.dp)
@@ -280,7 +279,7 @@ fun Messages(
 
     }
 
-    if (loginViewModel.isLoading.value == true) {
+    if (mainViewModel.isLoading.value == true) {
         LoadingView()
     }
 

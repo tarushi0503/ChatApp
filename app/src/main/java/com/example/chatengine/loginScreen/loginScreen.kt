@@ -32,13 +32,14 @@ import androidx.compose.ui.text.style.TextAlign
 import androidx.compose.ui.unit.dp
 import androidx.compose.ui.unit.sp
 import androidx.navigation.NavController
-import com.example.chatengine.CircularProgressIndicator.LoadingView
-import com.example.chatengine.Navigation.NavigationItems
+import com.example.chatengine.circularProgressIndicator.LoadingView
+import com.example.chatengine.navigation.NavigationItems
 import com.example.chatengine.R
 import com.example.chatengine.ui.theme.Purple200
 import com.example.chatengine.ui.theme.Purple500
 import com.example.chatengine.ui.theme.card
 import com.example.chatengine.userScreen.getChatHistory
+import com.example.chatengine.viewModel.MainViewModel
 import retrofit2.Call
 import retrofit2.Callback
 import retrofit2.Response
@@ -51,11 +52,11 @@ private fun getDataUsingRetrofit(
     result: MutableState<String>,
     secret: MutableState<String>,
     navController: NavController,
-    loginViewModel: LoginViewModel,
+    mainViewModel: MainViewModel,
     sharedPreferences: SharedPreferences
 ) {
 
-    val retrofitAPI = loginViewModel.AuthenticateUser()
+    val retrofitAPI = mainViewModel.AuthenticateUser()
 
     val call: Call<LoginDataClass?>? = retrofitAPI.getUsers()
 
@@ -71,16 +72,16 @@ private fun getDataUsingRetrofit(
 //                "Response Code : " + response.code() + "\n"+"Id: " + model?.is_authenticated+  "\n"+ model?.username
 //            result.value=resp
             secret.value = model?.secret.toString()
-            loginViewModel.UserData=model
+            mainViewModel.UserData=model
             if(model?.is_authenticated==true){
                 navController.navigate(NavigationItems.UserScreen.route)
-                loginViewModel.isLoading.value=false
+                mainViewModel.isLoading.value=false
 //                Toast.makeText(ctx,"Logged in successfully",Toast.LENGTH_SHORT).show()
             }
 //            println("/////////////////////////////////////////////////////${secret.value}")
 
             if(response.isSuccessful){
-                getChatHistory(loginViewModel)
+                getChatHistory(mainViewModel)
                 editor.putString("USERNAME", username)
                 editor.putString("SECRET", password)
                 editor.apply()
@@ -98,13 +99,13 @@ private fun getDataUsingRetrofit(
 @Composable
 fun getDataLogin(
     navController: NavController,
-    loginViewModel: LoginViewModel,
+    mainViewModel: MainViewModel,
     sharedPreferences: SharedPreferences
 ) {
     val context= LocalContext.current
 
-    val userName = loginViewModel.user_name
-    val password = loginViewModel.password
+    val userName = mainViewModel.user_name
+    val password = mainViewModel.password
 
     val secret = remember {
         mutableStateOf("")
@@ -126,9 +127,9 @@ fun getDataLogin(
     println("******* $email")
 
     if (email.isNotBlank()){
-        loginViewModel.user_name.value = email
-        loginViewModel.password.value = secrett
-        getDataUsingRetrofit(context,email,secrett,result,secret,navController,loginViewModel,sharedPreferences)
+        mainViewModel.user_name.value = email
+        mainViewModel.password.value = secrett
+        getDataUsingRetrofit(context,email,secrett,result,secret,navController,mainViewModel,sharedPreferences)
     }
     else {
         // on below line we are creating a column.
@@ -257,8 +258,8 @@ fun getDataLogin(
                         },
                     )
 
-                    loginViewModel.user_name = userName
-                    loginViewModel.password = password
+                    mainViewModel.user_name = userName
+                    mainViewModel.password = password
 
 
                     Spacer(modifier = Modifier.height(10.dp))
@@ -272,7 +273,7 @@ fun getDataLogin(
                                     Toast.LENGTH_SHORT
                                 ).show()
                             } else {
-                                loginViewModel.isLoading.value = true
+                                mainViewModel.isLoading.value = true
                                 getDataUsingRetrofit(
                                     context,
                                     userName.value,
@@ -280,7 +281,7 @@ fun getDataLogin(
                                     result,
                                     secret,
                                     navController,
-                                    loginViewModel,
+                                    mainViewModel,
                                     sharedPreferences
                                 )
                             }
@@ -322,7 +323,7 @@ fun getDataLogin(
             }
         }
     }
-    if (loginViewModel.isLoading.value){
+    if (mainViewModel.isLoading.value){
         LoadingView()
     }
 }
