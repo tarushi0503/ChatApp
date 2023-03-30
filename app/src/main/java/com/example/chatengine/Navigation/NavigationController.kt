@@ -40,7 +40,7 @@ fun NavigationController(sharedPreferences: SharedPreferences, navController: Na
         }
 
         composable(NavigationItems.Chat.route){
-            Chat(navController)
+            Chat(navController,loginViewModel)
         }
 
         composable(NavigationItems.Messages.route){

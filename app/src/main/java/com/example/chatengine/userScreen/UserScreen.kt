@@ -6,6 +6,7 @@ import android.content.Context
 import android.content.Intent
 import android.content.SharedPreferences
 import android.widget.Toast
+import androidx.compose.foundation.Image
 import androidx.compose.foundation.background
 import androidx.compose.foundation.clickable
 import androidx.compose.foundation.layout.*
@@ -24,64 +25,32 @@ import androidx.compose.runtime.remember
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.graphics.Color
+import androidx.compose.ui.graphics.painter.Painter
 import androidx.compose.ui.platform.LocalContext
+import androidx.compose.ui.res.painterResource
 import androidx.compose.ui.text.font.FontWeight
 import androidx.compose.ui.text.style.TextOverflow
 import androidx.compose.ui.unit.dp
+import androidx.compose.ui.unit.sp
 import androidx.navigation.NavController
 import androidx.navigation.NavHostController
 import com.example.chatengine.ChatScreen.ChatDataClass
 import com.example.chatengine.CircularProgressIndicator.LoadingView
 import com.example.chatengine.MainActivity
 import com.example.chatengine.Navigation.NavigationItems
+import com.example.chatengine.R
 import com.example.chatengine.loginScreen.LoginViewModel
 import com.example.chatengine.messageScreen.RecieveDataClass
 import com.example.chatengine.ui.theme.Purple200
+import com.example.chatengine.ui.theme.ReceiverColor
+import com.example.chatengine.ui.theme.card
+import com.example.chatengine.userScreen.DataClass.People
+import com.example.chatengine.userScreen.DataClass.Person
 import retrofit2.Call
 import retrofit2.Callback
 import retrofit2.Response
 
 
-//FLOATING ACTION BUTTON: CREATE NEW ROOM
-private fun postRoom(
-    ctx: Context,
-    title: String,
-    result: MutableState<String>,
-    navController: NavController,
-    loginViewModel: LoginViewModel
-) {
-
-    val retrofitAPI = loginViewModel.createChat()
-    val chatDataClass=ChatDataClass(title,false, listOf("tarushi07"))
-
-    val call: Call<ChatDataClass?>? = retrofitAPI.postChatRoom(chatDataClass)
-
-    call!!.enqueue(object : Callback<ChatDataClass?> {
-
-        override fun onResponse(call: Call<ChatDataClass?>, response: Response<ChatDataClass?>) {
-            Toast.makeText(ctx, " in", Toast.LENGTH_SHORT).show()
-            val model: ChatDataClass? = response.body()
-            val resp =
-                "Response Code : " + response.code() + "\n"+"Id: " + model?.is_direct_chat+  "\n"+ model?.title
-            result.value=resp
-//            secret.value = model?.secret.toString()
-            loginViewModel.newChatDetails = model
-//            loginViewModel.chatId= loginViewModel.newChatDetails!!.id
-//            loginViewModel.accessId= loginViewModel.newChatDetails!!.access_key
-
-            //print("################################################### ${loginViewModel.chatId}")
-            if(model?.is_direct_chat==false){
-                navController.navigate(NavigationItems.Chat.route)
-                Toast.makeText(ctx,"Chat created", Toast.LENGTH_LONG).show()
-            }
-
-        }
-
-        override fun onFailure(call: Call<ChatDataClass?>, t: Throwable) {
-        result.value="error "+t.message
-        }
-    })
-}
 
 
 //onCLick -> to chatting screen
@@ -115,11 +84,7 @@ private fun getMsgHistory(
 
 //number of users
  fun getChatHistory(
-    //context: Context,
-    loginViewModel: LoginViewModel,
-//    username: String,
-//    password: String,
-
+    loginViewModel: LoginViewModel
     ) {
     val retrofitAPI = loginViewModel.getAllChats()
 
@@ -158,11 +123,7 @@ fun UserScreen(
 ) {
     val editor: SharedPreferences.Editor = sharedPreferences.edit()
     val context = LocalContext.current
-    val title = loginViewModel.user_name
 
-    val result = remember {
-        mutableStateOf("")
-    }
     val getApiResult = remember {
         mutableStateOf("")
     }
@@ -199,7 +160,7 @@ fun UserScreen(
         floatingActionButton = {
             FloatingActionButton(
                 onClick = {
-                    postRoom(context, title.value, result, navController, loginViewModel)
+                    navController.navigate(NavigationItems.Chat.route)
                 },
                 backgroundColor = Purple200,
                 contentColor = Color.White,
@@ -214,73 +175,99 @@ fun UserScreen(
 
         ) {
 
-        LazyColumn(
-            modifier = Modifier
-                .fillMaxWidth()
-                .height(690.dp)
-                .background(Color.White)
-                .padding(8.dp),
+        if((loginViewModel.allChats.size!=0)) {
+            LazyColumn(
+                modifier = Modifier
+                    .fillMaxWidth()
+                    .height(690.dp)
+                    .background(Color.White)
+                    .padding(8.dp),
 
 
-            ) {
-            itemsIndexed(loginViewModel.allChats) { lastIndex, item ->
-                val time = item.created.subSequence(11, 16)
-                val cardName = if(loginViewModel.user_name.value == "tarushi07") item.title else "tarushi07"
-
-                Card(
-                    modifier = Modifier
-                        .fillMaxWidth()
-                        .padding(bottom = 8.dp)
-                        .clickable {
-                            navController.navigate(NavigationItems.Messages.route)
-                            loginViewModel.isLoading.value = true
-                            loginViewModel.chatId = item.id
-                            loginViewModel.accesskey = item.access_key
-                            getMsgHistory(context, getApiResult, loginViewModel, navController)
-
-                        },
-                    elevation = 4.dp,
-                    shape = RoundedCornerShape(8.dp),
-                    backgroundColor = Color.White
                 ) {
-                    Row(
-                        verticalAlignment = Alignment.CenterVertically,
-                        modifier = Modifier.padding(horizontal = 8.dp, vertical = 12.dp)
+                itemsIndexed(loginViewModel.allChats) { lastIndex, item ->
+                    val time = item.created.subSequence(11, 16)
+                    val cardName =
+                        if (loginViewModel.user_name.value == "tarushi07") item.title else "tarushi07"
+
+                    Card(
+                        modifier = Modifier
+                            .fillMaxWidth()
+                            .padding(bottom = 8.dp)
+                            .clickable {
+                                navController.navigate(NavigationItems.Messages.route)
+                                loginViewModel.isLoading.value = true
+                                loginViewModel.chatId = item.id
+                                loginViewModel.accesskey = item.access_key
+                                getMsgHistory(context, getApiResult, loginViewModel, navController)
+
+                            },
+                        elevation = 4.dp,
+                        shape = RoundedCornerShape(8.dp),
+                        backgroundColor = Color.White
                     ) {
-                        Column(
-                            modifier = Modifier
-                                .padding(horizontal = 8.dp)
-                                .weight(1f)
+                        Row(
+                            verticalAlignment = Alignment.CenterVertically,
+                            modifier = Modifier.padding(horizontal = 8.dp, vertical = 12.dp)
                         ) {
-                            Text(
-                                text = cardName,
-                                style = MaterialTheme.typography.h6,
-                                fontWeight = FontWeight.Bold,
-                                color = Color.Black
+
+                            Image(
+                                painter = painterResource(id = R.drawable.user),
+                                contentDescription = "user-image",
+                                modifier = Modifier
+                                    .width(60.dp)
+                                    .height(60.dp) // set the height of the image
                             )
-                            Spacer(modifier = Modifier.height(10.dp))
+                            Spacer(modifier = Modifier.width(10.dp))
+
+                            Column(
+                                modifier = Modifier
+                                    .padding(horizontal = 8.dp)
+                                    .weight(1f)
+                            ) {
+                                Text(
+                                    text = cardName,
+                                    style = MaterialTheme.typography.h6,
+                                    fontWeight = FontWeight.Bold,
+                                    color = Color.Black
+                                )
+                                Spacer(modifier = Modifier.height(10.dp))
+                                Text(
+                                    text = item.last_message.text,
+                                    style = MaterialTheme.typography.body1,
+                                    maxLines = 1,
+                                    overflow = TextOverflow.Ellipsis,
+                                    color = Color.Gray
+                                )
+                            }
                             Text(
-                                text = item.last_message.text,
+                                text = time.toString(),
                                 style = MaterialTheme.typography.body1,
-                                maxLines = 1,
-                                overflow = TextOverflow.Ellipsis,
-                                color = Color.Gray
+                                color = Color.Gray,
+                                modifier = Modifier.padding(horizontal = 8.dp)
                             )
                         }
-                        Text(
-                            text = time.toString(),
-                            style = MaterialTheme.typography.body1,
-                            color = Color.Gray,
-                            modifier = Modifier.padding(horizontal = 8.dp)
-                        )
                     }
-                }
 
+                }
             }
         }
-        Text(
-            text = result.value,
-        )
+        else{
+            Box(
+                modifier = Modifier.height(550.dp)
+                    .width(800.dp)
+                    .padding(top=180.dp, start = 50.dp, end = 50.dp)
+                    .background(card
+                        ,shape = RoundedCornerShape(16.dp)),
+                contentAlignment = Alignment.Center,
+            ){
+                Text(text = "No Chats Available",
+                    fontSize = 20.sp)
+            }
+        }
+//        Text(
+//            text = result.value,
+//        )
 
 //            Button(
 //                modifier = Modifier.padding(horizontal = 120.dp, vertical = 300.dp),

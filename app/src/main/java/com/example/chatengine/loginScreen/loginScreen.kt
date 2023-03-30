@@ -145,13 +145,6 @@ fun getDataLogin(
             contentAlignment = Alignment.Center
         ) {
 
-//        Image(
-//            painter = painterResource(id = R.drawable.background),
-//            contentDescription = "",
-//            modifier = Modifier.fillMaxSize(),
-//            contentScale = ContentScale.FillBounds
-//        )
-
             Card(
                 modifier = Modifier
                     .fillMaxWidth()
@@ -164,12 +157,6 @@ fun getDataLogin(
 
             ) {
 
-//            Image(
-//                painter = painterResource(id = R.drawable.cardbackground), contentDescription = "",
-//                modifier = Modifier.fillMaxWidth()
-//                    .height(200.dp),
-//                contentScale = ContentScale.Crop,
-//            )
                 Column(
                     modifier = Modifier
                         .fillMaxSize()

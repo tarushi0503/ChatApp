@@ -111,23 +111,23 @@ fun Messages(
 
     Scaffold(
         topBar = {
-            TopAppBar(backgroundColor = Purple200,
+            TopAppBar(
+                backgroundColor = Purple200,
                 title = {
-                    if(loginViewModel.istyping.value&&loginViewModel.user_name.value!=loginViewModel.istypinguser.value){
+                    if (loginViewModel.istyping.value && loginViewModel.user_name.value != loginViewModel.istypinguser.value) {
                         Text(text = " is typing")
                         loginViewModel.startTyping()
 //                    isTYping=false
+                    } else {
+                        Text(
+                            text = if (loginViewModel.user_name.value == "tarushi07") "" else "tarushi07",
+                            modifier = Modifier
+                                .fillMaxWidth()
+                                .padding(start = 10.dp),
+                            //textAlign = TextAlign.Center,
+                            color = Color.White
+                        )
                     }
-                    else{
-                    Text(
-                        text = if (loginViewModel.user_name.value == "tarushi07") "" else "tarushi07",
-                        modifier = Modifier
-                            .fillMaxWidth()
-                            .padding(start = 10.dp),
-                        //textAlign = TextAlign.Center,
-                        color = Color.White
-                    )
-                }
                 },
                 navigationIcon = {
                     IconButton(onClick = {
@@ -140,63 +140,102 @@ fun Messages(
                         )
                     }
                 },
-            )},
+            )
+        },
 
         ) {
 
-        LazyColumn(
-            modifier = Modifier
-                .fillMaxWidth()
-                .height(690.dp)
-                .background(Color.White)
-                .padding(8.dp),
+        if (loginViewModel.firstMsgGet.size == 0) {
+            Box(
+                modifier = Modifier.height(500.dp)
+                    .width(800.dp),
+                contentAlignment = Alignment.Center
+            ){
+                Text(text = "No Chat History",
+                fontSize = 20.sp)
+            }
 
-            reverseLayout = true
+        } else {
 
-        ) {
-            itemsIndexed(loginViewModel.firstMsgGet.sortedByDescending{it.created}) { lastIndex, item ->
 
-                val isCurrentUser = item.sender_username == loginViewModel.user_name.value
-                val messageBackgroundColor = if (isCurrentUser) SenderColor else ReceiverColor
-                val messageTextColor = if (isCurrentUser) Color.Black else Color.Black
+            LazyColumn(
+                modifier = Modifier
+                    .fillMaxWidth()
+                    .height(690.dp)
+                    .background(Color.White)
+                    .padding(8.dp),
 
-                val time = item.created.subSequence(11, 16)
+                reverseLayout = true
 
-                Column(
-                    modifier = Modifier
-                        .fillMaxWidth()
-                    ,
-                    horizontalAlignment = if (isCurrentUser) Alignment.End else Alignment.Start
-                ) {
-                    Box(
+            ) {
+                itemsIndexed(loginViewModel.firstMsgGet.sortedByDescending { it.created }) { lastIndex, item ->
+
+                    val isCurrentUser = item.sender_username == loginViewModel.user_name.value
+                    val messageBackgroundColor = if (isCurrentUser) SenderColor else ReceiverColor
+                    val messageTextColor = if (isCurrentUser) Color.Black else Color.Black
+                    val time = item.created.subSequence(11, 16)
+                    val date = item.created.subSequence(8, 10)
+                    var month = item.created.subSequence(5, 7)
+                    val year = item.created.subSequence(0, 4)
+                    month = when (month) {
+                        "01" -> "Jan"
+                        "02" -> "Feb"
+                        "03" -> "March"
+                        "04" -> "April"
+                        "05" -> "May"
+                        "06" -> "June"
+                        "07" -> "July"
+                        "08" -> "Aug"
+                        "09" -> "Sept"
+                        "10" -> "Oct"
+                        "11" -> "Nov"
+                        else -> "Dec"
+                    }
+
+                    Column(
                         modifier = Modifier
-                            .padding(8.dp)
+                            .fillMaxWidth(),
+                        horizontalAlignment = if (isCurrentUser) Alignment.End else Alignment.Start
                     ) {
-
-                        Card(
+                        Box(
                             modifier = Modifier
-                                .clip(RoundedCornerShape(12.dp, 0.dp, 9.dp, 12.dp)),
-                            elevation = 10.dp,
+                                .padding(8.dp)
+                        ) {
 
-                            ) {
-                            Column(
+                            Card(
                                 modifier = Modifier
-                                    .background(messageBackgroundColor)
-                                    .padding(10.dp)
-                            ) {
-                                Text(
-                                    text = item.text,
-                                    color = messageTextColor,
-                                    style = TextStyle(fontSize = 16.sp),
-                                )
-                                Spacer(modifier = Modifier.height(4.dp))
+                                    .clip(RoundedCornerShape(12.dp, 0.dp, 9.dp, 12.dp)),
+                                elevation = 10.dp,
 
-                                Text(
-                                    text = "$time",
-                                    color = messageTextColor,
-                                    style = TextStyle(fontSize = 12.sp),
-                                    modifier = Modifier.align(Alignment.End)
-                                )
+                                ) {
+                                Column(
+                                    modifier = Modifier
+                                        .background(messageBackgroundColor)
+                                        .padding(10.dp)
+                                ) {
+                                    Text(
+                                        text = item.text,
+                                        color = messageTextColor,
+                                        style = TextStyle(fontSize = 16.sp),
+                                        modifier = Modifier.align(Alignment.End)
+                                    )
+                                    Spacer(modifier = Modifier.height(6.dp))
+
+                                    Text(
+                                        text = "$date $month $year",
+                                        color = messageTextColor,
+                                        style = TextStyle(fontSize = 12.sp),
+                                        modifier = Modifier.align(Alignment.End)
+                                    )
+                                    Spacer(modifier = Modifier.height(4.dp))
+
+                                    Text(
+                                        text = "$time",
+                                        color = messageTextColor,
+                                        style = TextStyle(fontSize = 12.sp),
+                                        modifier = Modifier.align(Alignment.End)
+                                    )
+                                }
                             }
                         }
                     }
@@ -217,18 +256,20 @@ fun Messages(
                 OutlinedTextField(
                     modifier = Modifier.weight(1f),
                     value = inputText,
+                    maxLines = 2,
                     onValueChange = {
                         inputText = it
-                        IsTypingHelpingFunction(context,loginViewModel)
+                        IsTypingHelpingFunction(context, loginViewModel)
 
                     },
-                    placeholder = { Text(text = "Start typing..", color = Color.LightGray)}
+                    placeholder = { Text(text = "Start typing..", color = Color.LightGray) }
                 )
-                IconButton(onClick = {
-                    webSocketManager.sendMessage(inputText)
-                    startMessaging(context, inputText, result, loginViewModel)
-                    inputText = ""
-                },
+                IconButton(
+                    onClick = {
+                        webSocketManager.sendMessage(inputText)
+                        startMessaging(context, inputText, result, loginViewModel)
+                        inputText = ""
+                    },
                     modifier = Modifier.padding(start = 8.dp)
                 ) {
                     Icon(Icons.Filled.Send, contentDescription = "", tint = Purple200)
@@ -239,7 +280,7 @@ fun Messages(
 
     }
 
-    if(loginViewModel.isLoading.value==true){
+    if (loginViewModel.isLoading.value == true) {
         LoadingView()
     }
 
