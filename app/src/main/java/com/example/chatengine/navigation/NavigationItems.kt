@@ -9,5 +9,6 @@ sealed class NavigationItems(val route:String) {
     object  Chat: NavigationItems("chat")
 
     object Messages: NavigationItems("messages")
+    object QuestionsList:NavigationItems("question_list")
 
 }

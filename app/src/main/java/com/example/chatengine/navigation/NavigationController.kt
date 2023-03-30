@@ -9,11 +9,12 @@ import androidx.navigation.NavHostController
 import androidx.navigation.compose.NavHost
 import androidx.navigation.compose.composable
 import androidx.navigation.compose.rememberNavController
-import com.example.chatengine.questionsScreen.Chat
 import com.example.chatengine.webSocket.WebSocketManager
 import com.example.chatengine.viewModel.MainViewModel
 import com.example.chatengine.loginScreen.getDataLogin
 import com.example.chatengine.messageScreen.Messages
+import com.example.chatengine.questionsRoom.QuestionsList
+import com.example.chatengine.questionsRoom.QuestionsViewModel
 import com.example.chatengine.signupScreen.PostDataSignUpScaffold
 import com.example.chatengine.userScreen.UserScreen
 
@@ -21,6 +22,7 @@ import com.example.chatengine.userScreen.UserScreen
 @RequiresApi(Build.VERSION_CODES.O)
 @Composable
 fun NavigationController(sharedPreferences: SharedPreferences, navController: NavHostController = rememberNavController()) {
+   val questionViewModel: QuestionsViewModel = viewModel()
 
     val mainViewModel: MainViewModel = viewModel()
     val webSocketManager=WebSocketManager(mainViewModel)
@@ -39,12 +41,16 @@ fun NavigationController(sharedPreferences: SharedPreferences, navController: Na
             UserScreen(navController, mainViewModel,sharedPreferences)
         }
 
-        composable(NavigationItems.Chat.route){
-            Chat(navController,mainViewModel)
-        }
+//        composable(NavigationItems.Chat.route){
+//            Chat(navController,mainViewModel)
+//        }
 
         composable(NavigationItems.Messages.route){
             Messages(navController,mainViewModel,webSocketManager)
+        }
+
+        composable(NavigationItems.QuestionsList.route){
+            QuestionsList(navController, mainViewModel,questionViewModel)
         }
 
     }}

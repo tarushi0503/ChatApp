@@ -154,7 +154,7 @@ fun UserScreen(
         floatingActionButton = {
             FloatingActionButton(
                 onClick = {
-                    navController.navigate(NavigationItems.Chat.route)
+                    navController.navigate(NavigationItems.QuestionsList.route)
                 },
                 backgroundColor = Purple200,
                 contentColor = Color.White,
@@ -259,20 +259,6 @@ fun UserScreen(
                     fontSize = 20.sp)
             }
         }
-//        Text(
-//            text = result.value,
-//        )
-
-//            Button(
-//                modifier = Modifier.padding(horizontal = 120.dp, vertical = 300.dp),
-//                onClick = {
-//                    getMsgHistory(context, getApiResult, loginViewModel)
-//                    navController.navigate(NavigationItems.Messages.route)
-//                }
-//            ) {
-//                Text(text = "Start messaging")
-//            }
-
     }
     if (mainViewModel.isLoading.value) {
         LoadingView()
