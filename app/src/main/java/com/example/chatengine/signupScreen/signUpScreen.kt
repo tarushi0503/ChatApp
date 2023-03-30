@@ -44,7 +44,7 @@ import retrofit2.Response
 
 
 
-private fun postDataUsingRetrofit(
+private fun signUpData(
     ctx: Context,
     userName: MutableState<TextFieldValue>,
     firstName: MutableState<TextFieldValue>,
@@ -77,7 +77,7 @@ private fun postDataUsingRetrofit(
 
 
 @Composable
-fun postData(navController:NavController, mainViewModel: MainViewModel) {
+fun SignUpScreen(navController:NavController, mainViewModel: MainViewModel) {
     val ctx = LocalContext.current
 
     val userName = remember {
@@ -356,10 +356,10 @@ fun postData(navController:NavController, mainViewModel: MainViewModel) {
 
                         else{
                             mainViewModel.isLoading.value = true
-                            postDataUsingRetrofit(
+                            signUpData(
                                 ctx, userName, firstName, lastName, password, response,mainViewModel
                             )
-                            navController.navigate(NavigationItems.getDataLogin.route)
+                            navController.navigate(NavigationItems.LoginScreen.route)
                             mainViewModel.isLoading.value = false
                         }
 
@@ -392,7 +392,7 @@ fun postData(navController:NavController, mainViewModel: MainViewModel) {
                     Spacer(modifier = Modifier.width(8.dp))
                     Text(text = "Login", color = Color.Blue,
                         modifier = Modifier.clickable {
-                            navController.navigate(NavigationItems.getDataLogin.route)
+                            navController.navigate(NavigationItems.LoginScreen.route)
                         })
                 }
 

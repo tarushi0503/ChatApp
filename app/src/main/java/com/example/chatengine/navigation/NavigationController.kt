@@ -9,13 +9,14 @@ import androidx.navigation.NavHostController
 import androidx.navigation.compose.NavHost
 import androidx.navigation.compose.composable
 import androidx.navigation.compose.rememberNavController
+import com.example.chatengine.loginScreen.LoginScreen
 import com.example.chatengine.webSocket.WebSocketManager
 import com.example.chatengine.viewModel.MainViewModel
-import com.example.chatengine.loginScreen.getDataLogin
 import com.example.chatengine.messageScreen.Messages
 import com.example.chatengine.questionsRoom.QuestionsList
 import com.example.chatengine.questionsRoom.QuestionsViewModel
-import com.example.chatengine.signupScreen.PostDataSignUpScaffold
+import com.example.chatengine.signupScreen.SignUpScaffold
+import com.example.chatengine.signupScreen.SignUpScreen
 import com.example.chatengine.userScreen.UserScreen
 
 
@@ -28,13 +29,13 @@ fun NavigationController(sharedPreferences: SharedPreferences, navController: Na
     val webSocketManager=WebSocketManager(mainViewModel)
 
 
-    NavHost(navController = navController, startDestination = NavigationItems.getDataLogin.route){
-        composable(NavigationItems.getDataLogin.route){
-            getDataLogin(navController,mainViewModel,sharedPreferences)
+    NavHost(navController = navController, startDestination = NavigationItems.LoginScreen.route){
+        composable(NavigationItems.LoginScreen.route){
+            LoginScreen(navController,mainViewModel,sharedPreferences)
         }
 
-        composable(NavigationItems.PostDataSignUpScaffold.route){
-            PostDataSignUpScaffold(navController,mainViewModel)
+        composable(NavigationItems.SignUpScaffold.route){
+            SignUpScaffold(navController,mainViewModel)
         }
 
         composable(NavigationItems.UserScreen.route){

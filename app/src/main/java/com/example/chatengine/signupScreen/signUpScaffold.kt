@@ -17,7 +17,7 @@ import com.example.chatengine.ui.theme.Purple200
 
 @SuppressLint("UnusedMaterialScaffoldPaddingParameter")
 @Composable
-fun PostDataSignUpScaffold(navController: NavHostController, mainViewModel: MainViewModel){
+fun SignUpScaffold(navController: NavHostController, mainViewModel: MainViewModel){
     Scaffold(
         // in scaffold we are specifying top bar.
         topBar = {
@@ -53,6 +53,6 @@ fun PostDataSignUpScaffold(navController: NavHostController, mainViewModel: Main
 
         ) {
         // on the below line we are calling the pop window dialog method to display ui.
-        postData(navController,mainViewModel)
+        SignUpScreen(navController,mainViewModel)
     }
 }

@@ -25,9 +25,6 @@ class ChatRoom(username:String,password:String){
         val loggingInterceptor= HttpLoggingInterceptor()
         loggingInterceptor.setLevel(HttpLoggingInterceptor.Level.BODY)
         val url = "https://api.chatengine.io/"
-
-        println("//////////////////////////////////////////$username $password")
-
         val httpClient= OkHttpClient.Builder()
             .addInterceptor(loggingInterceptor)
             .addInterceptor { chain ->

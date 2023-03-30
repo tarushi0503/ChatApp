@@ -45,7 +45,7 @@ import retrofit2.Callback
 import retrofit2.Response
 
 
-private fun getDataUsingRetrofit(
+private fun loginData(
     ctx: Context,
     username:String,
     password:String,
@@ -97,7 +97,7 @@ private fun getDataUsingRetrofit(
 
 
 @Composable
-fun getDataLogin(
+fun LoginScreen(
     navController: NavController,
     mainViewModel: MainViewModel,
     sharedPreferences: SharedPreferences
@@ -129,7 +129,7 @@ fun getDataLogin(
     if (email.isNotBlank()){
         mainViewModel.user_name.value = email
         mainViewModel.password.value = secrett
-        getDataUsingRetrofit(context,email,secrett,result,secret,navController,mainViewModel,sharedPreferences)
+        loginData(context,email,secrett,result,secret,navController,mainViewModel,sharedPreferences)
     }
     else {
         // on below line we are creating a column.
@@ -274,7 +274,7 @@ fun getDataLogin(
                                 ).show()
                             } else {
                                 mainViewModel.isLoading.value = true
-                                getDataUsingRetrofit(
+                                loginData(
                                     context,
                                     userName.value,
                                     password.value,
@@ -315,7 +315,7 @@ fun getDataLogin(
                         Spacer(modifier = Modifier.width(8.dp))
                         Text(text = "SignUp", color = Color.Blue,
                             modifier = Modifier.clickable {
-                                navController.navigate(NavigationItems.PostDataSignUpScaffold.route)
+                                navController.navigate(NavigationItems.SignUpScaffold.route)
                             })
                     }
 
