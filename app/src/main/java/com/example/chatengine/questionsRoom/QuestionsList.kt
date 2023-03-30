@@ -89,10 +89,10 @@ fun QuestionsList(navController: NavController, mainViewModel: MainViewModel,que
                             .fillMaxWidth()
                     )
                 }
-//            }
 
                 if (expandedQuestion.value == question) {
                     question.subQuestions.forEach { subQuestion ->
+                        mainViewModel.chatName=subQuestion.question
                         SubQuestion(
                             subQuestion = subQuestion,
                             onSubQuestionClick = { expandedQuestion.value = question },
