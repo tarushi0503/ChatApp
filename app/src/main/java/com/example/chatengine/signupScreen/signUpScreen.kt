@@ -54,20 +54,20 @@ private fun postDataUsingRetrofit(
     mainViewModel: MainViewModel
 ) {
     val retrofitAPI = mainViewModel.signup()
-    val signupDataClass=DataModel(userName.value.text,
+    val signupDataClass=SignUpDataClass(userName.value.text,
         firstName.value.text,
         lastName.value.text,
         password.value.text,
         email = "")
 
-    val call: Call<DataModel?>? = retrofitAPI.postData(signupDataClass)
+    val call: Call<SignUpDataClass?>? = retrofitAPI.postData(signupDataClass)
 
-    call!!.enqueue(object : Callback<DataModel?> {
-        override fun onResponse(call: Call<DataModel?>?, response: Response<DataModel?>) {
+    call!!.enqueue(object : Callback<SignUpDataClass?> {
+        override fun onResponse(call: Call<SignUpDataClass?>?, response: Response<SignUpDataClass?>) {
             Toast.makeText(ctx, "Sign up successful", Toast.LENGTH_SHORT).show()
         }
 
-        override fun onFailure(call: Call<DataModel?>?, t: Throwable) {
+        override fun onFailure(call: Call<SignUpDataClass?>?, t: Throwable) {
             result.value = "Error found is : " + t.message
         }
     })

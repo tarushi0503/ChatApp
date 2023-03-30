@@ -1,4 +1,4 @@
-package com.example.chatengine.chatScreen
+package com.example.chatengine.questionsScreen
 
 import android.annotation.SuppressLint
 import android.content.Context

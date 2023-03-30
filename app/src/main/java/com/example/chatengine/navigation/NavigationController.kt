@@ -9,7 +9,7 @@ import androidx.navigation.NavHostController
 import androidx.navigation.compose.NavHost
 import androidx.navigation.compose.composable
 import androidx.navigation.compose.rememberNavController
-import com.example.chatengine.chatScreen.Chat
+import com.example.chatengine.questionsScreen.Chat
 import com.example.chatengine.webSocket.WebSocketManager
 import com.example.chatengine.viewModel.MainViewModel
 import com.example.chatengine.loginScreen.getDataLogin

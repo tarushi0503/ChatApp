@@ -1,4 +1,4 @@
-package com.example.chatengine.chatScreen
+package com.example.chatengine.questionsScreen
 
 data class ChatDataClass (
     var title: String,

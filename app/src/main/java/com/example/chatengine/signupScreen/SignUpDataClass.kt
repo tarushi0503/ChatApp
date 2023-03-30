@@ -1,6 +1,6 @@
 package com.example.chatengine.signupScreen
 
-data class DataModel(
+data class SignUpDataClass(
     var username:String,
     var first_name: String,
     var last_name: String,

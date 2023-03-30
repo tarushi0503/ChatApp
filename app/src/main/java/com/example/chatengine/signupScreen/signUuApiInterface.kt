@@ -1,7 +1,6 @@
 package com.example.chatengine.signupScreen
 
 
-import com.example.chatengine.messageScreen.PostMessageAPI
 import okhttp3.OkHttpClient
 import okhttp3.logging.HttpLoggingInterceptor
 import retrofit2.Call
@@ -13,7 +12,7 @@ import retrofit2.http.POST
 interface RetrofitAPI {
 
     @POST("users/")
-    fun postData(@Body dataModel: DataModel?): Call<DataModel?>?
+    fun postData(@Body signUpDataClass: SignUpDataClass?): Call<SignUpDataClass?>?
 }
 
 class SignUpClass(username: String, password: String) {

@@ -7,9 +7,9 @@ import androidx.compose.runtime.mutableStateOf
 import androidx.compose.runtime.setValue
 import androidx.lifecycle.ViewModel
 import androidx.lifecycle.viewModelScope
-import com.example.chatengine.chatScreen.ChatApiInterface
-import com.example.chatengine.chatScreen.ChatDataClass
-import com.example.chatengine.chatScreen.ChatRoom
+import com.example.chatengine.questionsScreen.ChatApiInterface
+import com.example.chatengine.questionsScreen.ChatDataClass
+import com.example.chatengine.questionsScreen.ChatRoom
 import com.example.chatengine.isTyping.TypingClass
 import com.example.chatengine.isTyping.isTypingInterface
 import com.example.chatengine.loginScreen.LoginClass
