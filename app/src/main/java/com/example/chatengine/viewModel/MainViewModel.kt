@@ -43,6 +43,8 @@ class MainViewModel:ViewModel() {
     val initial = LoginDataClass("","",false)
     var UserData: LoginDataClass? by mutableStateOf(initial)
 
+    var chatName by mutableStateOf("Agent")
+
     //signup
     fun signup():RetrofitAPI{
         val msgApiService= SignUpClass(user_name.value,password.value).postInstance()

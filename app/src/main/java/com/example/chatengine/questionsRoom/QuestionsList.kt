@@ -95,7 +95,8 @@ fun QuestionsList(navController: NavController, mainViewModel: MainViewModel,que
                     question.subQuestions.forEach { subQuestion ->
                         SubQuestion(
                             subQuestion = subQuestion,
-                            onSubQuestionClick = { expandedQuestion.value = question }
+                            onSubQuestionClick = { expandedQuestion.value = question },
+                            mainViewModel
                         )
                     }
                 }
@@ -137,7 +138,8 @@ fun QuestionsList(navController: NavController, mainViewModel: MainViewModel,que
 @Composable
 fun SubQuestion(
     subQuestion: SubQuestion,
-    onSubQuestionClick: () -> Unit
+    onSubQuestionClick: () -> Unit,
+    mainViewModel: MainViewModel
 ) {
     var expandedSubQuestion by remember { mutableStateOf(false) }
 
@@ -178,9 +180,11 @@ fun SubQuestion(
 
                 if (expandedSubQuestion) {
                     subQuestion.subQuestions?.forEach { nestedSubQuestion ->
+                        mainViewModel.chatName=subQuestion.question
                         SubQuestion(
                             subQuestion = nestedSubQuestion,
-                            onSubQuestionClick = onSubQuestionClick
+                            onSubQuestionClick = onSubQuestionClick,
+                            mainViewModel
                         )
                     }
                 }
@@ -201,7 +205,7 @@ private fun postRoom(
 ) {
 
     val retrofitAPI = mainViewModel.createChat()
-    val chatDataClass= ChatDataClass(title,false, listOf("tarushi07"))
+    val chatDataClass= ChatDataClass(mainViewModel.chatName,false, listOf("tarushi07"))
 
     val call: Call<ChatDataClass?>? = retrofitAPI.postChatRoom(chatDataClass)
 

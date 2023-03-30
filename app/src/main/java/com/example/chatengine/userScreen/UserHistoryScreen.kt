@@ -181,8 +181,8 @@ fun UserScreen(
                 ) {
                 itemsIndexed(mainViewModel.allChats) { lastIndex, item ->
                     val time = item.created.subSequence(11, 16)
-                    val cardName =
-                        if (mainViewModel.user_name.value == "tarushi07") item.title else "tarushi07"
+//                    val cardName =
+//                        if (mainViewModel.user_name.value == "tarushi07") item.title else "tarushi07"
 
                     Card(
                         modifier = Modifier
@@ -220,7 +220,7 @@ fun UserScreen(
                                     .weight(1f)
                             ) {
                                 Text(
-                                    text = cardName,
+                                    text = item.title,
                                     style = MaterialTheme.typography.h6,
                                     fontWeight = FontWeight.Bold,
                                     color = Color.Black
