@@ -170,97 +170,97 @@ fun UserHistoryScreen(
 
         ) {
 
-        if((mainViewModel.allChats.size!=0)) {
-            LazyColumn(
-                modifier = Modifier
-                    .fillMaxWidth()
-                    .height(690.dp)
-                    .background(Color.White)
-                    .padding(8.dp),
+//        if((mainViewModel.allChats.size!=0)) {
+        LazyColumn(
+            modifier = Modifier
+                .fillMaxWidth()
+                .height(690.dp)
+                .background(Color.White)
+                .padding(8.dp),
 
 
-                ) {
-                itemsIndexed(mainViewModel.allChats) { lastIndex, item ->
-                    val time = item.created.subSequence(11, 16)
+            ) {
+            itemsIndexed(mainViewModel.allChats) { lastIndex, item ->
+                val time = item.created.subSequence(11, 16)
 //                    val cardName =
 //                        if (mainViewModel.user_name.value == "tarushi07") item.title else "tarushi07"
 
-                    Card(
-                        modifier = Modifier
-                            .fillMaxWidth()
-                            .padding(10.dp)
-                            .clickable {
-                                navController.navigate(NavigationItems.Messages.route)
-                                mainViewModel.isLoading.value = true
-                                mainViewModel.chatId = item.id
-                                mainViewModel.accesskey = item.access_key
-                                getMsgHistory(context, getApiResult, mainViewModel, navController)
+                Card(
+                    modifier = Modifier
+                        .fillMaxWidth()
+                        .padding(10.dp)
+                        .clickable {
+                            navController.navigate(NavigationItems.Messages.route)
+                            mainViewModel.isLoading.value = true
+                            mainViewModel.chatId = item.id
+                            mainViewModel.accesskey = item.access_key
+                            getMsgHistory(context, getApiResult, mainViewModel, navController)
 
-                            },
-                        elevation = 4.dp,
-                        shape = RoundedCornerShape(8.dp),
-                        backgroundColor = cardTwo
+                        },
+                    elevation = 4.dp,
+                    shape = RoundedCornerShape(8.dp),
+                    backgroundColor = cardTwo
+                ) {
+                    Row(
+                        verticalAlignment = Alignment.CenterVertically,
+                        modifier = Modifier.padding(horizontal = 8.dp, vertical = 12.dp)
                     ) {
-                        Row(
-                            verticalAlignment = Alignment.CenterVertically,
-                            modifier = Modifier.padding(horizontal = 8.dp, vertical = 12.dp)
+
+                        Image(
+                            painter = painterResource(id = R.drawable.user),
+                            contentDescription = "user-image",
+                            modifier = Modifier
+                                .width(60.dp)
+                                .height(60.dp) // set the height of the image
+                        )
+                        Spacer(modifier = Modifier.width(10.dp))
+
+                        Column(
+                            modifier = Modifier
+                                .padding(horizontal = 8.dp)
+                                .weight(1f)
                         ) {
-
-                            Image(
-                                painter = painterResource(id = R.drawable.user),
-                                contentDescription = "user-image",
-                                modifier = Modifier
-                                    .width(60.dp)
-                                    .height(60.dp) // set the height of the image
-                            )
-                            Spacer(modifier = Modifier.width(10.dp))
-
-                            Column(
-                                modifier = Modifier
-                                    .padding(horizontal = 8.dp)
-                                    .weight(1f)
-                            ) {
-                                Text(
-                                    text = item.title,
-                                    fontStyle = FontStyle.Italic,
-                                    fontSize= 20.sp,
-                                    fontWeight = FontWeight.Bold,
-                                    color = Color.Black
-                                )
-                                Spacer(modifier = Modifier.height(10.dp))
-                                Text(
-                                    text = item.last_message.text,
-                                    style = MaterialTheme.typography.body1,
-                                    maxLines = 1,
-                                    overflow = TextOverflow.Ellipsis,
-                                    color = Color.Gray
-                                )
-                            }
                             Text(
-                                text = time.toString(),
+                                text = item.title,
+                                fontStyle = FontStyle.Italic,
+                                fontSize = 20.sp,
+                                fontWeight = FontWeight.Bold,
+                                color = Color.Black
+                            )
+                            Spacer(modifier = Modifier.height(10.dp))
+                            Text(
+                                text = item.last_message.text,
                                 style = MaterialTheme.typography.body1,
-                                color = Color.Gray,
-                                modifier = Modifier.padding(horizontal = 8.dp)
+                                maxLines = 1,
+                                overflow = TextOverflow.Ellipsis,
+                                color = Color.Gray
                             )
                         }
+                        Text(
+                            text = time.toString(),
+                            style = MaterialTheme.typography.body1,
+                            color = Color.Gray,
+                            modifier = Modifier.padding(horizontal = 8.dp)
+                        )
                     }
-
                 }
+
             }
         }
-        else{
-            Box(
-                modifier = Modifier.height(550.dp)
-                    .width(800.dp)
-                    .padding(top=180.dp, start = 50.dp, end = 50.dp)
-                    .background(card
-                        ,shape = RoundedCornerShape(16.dp)),
-                contentAlignment = Alignment.Center,
-            ){
-                Text(text = "No Chats Available",
-                    fontSize = 20.sp)
-            }
-        }
+//        }
+//        else{
+//            Box(
+//                modifier = Modifier.height(550.dp)
+//                    .width(800.dp)
+//                    .padding(top=180.dp, start = 50.dp, end = 50.dp)
+//                    .background(card
+//                        ,shape = RoundedCornerShape(16.dp)),
+//                contentAlignment = Alignment.Center,
+//            ){
+//                Text(text = "No Chats Available",
+//                    fontSize = 20.sp)
+//            }
+//        }
     }
     if (mainViewModel.isLoading.value) {
         LoadingView()

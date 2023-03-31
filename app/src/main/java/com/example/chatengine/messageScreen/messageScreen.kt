@@ -19,6 +19,7 @@ import androidx.compose.ui.Alignment
 import androidx.compose.ui.ExperimentalComposeUiApi
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.draw.clip
+import androidx.compose.ui.graphics.Brush
 import androidx.compose.ui.graphics.Color
 import androidx.compose.ui.platform.LocalContext
 import androidx.compose.ui.text.TextStyle
@@ -134,7 +135,7 @@ fun Messages(
                     } else {
                         Text(
                             text =
-                            if (mainViewModel.username.value == "tarushi07") "" else "tarushi07",
+                            if (mainViewModel.username.value == "tarushi07") "user" else "tarushi07",
                             modifier = Modifier
                                 .fillMaxWidth()
                                 .padding(start = 10.dp),
@@ -165,8 +166,13 @@ fun Messages(
         if (mainViewModel.firstMsgGet.size == 0) {
             Box(
                 modifier = Modifier
-                    .height(500.dp)
-                    .width(800.dp),
+                    .fillMaxHeight(0.88f)
+                    .fillMaxWidth()
+                    .background(
+                        brush = Brush.verticalGradient(
+                            listOf(Color.White,cardTwo)
+                        )
+                    ),
                 contentAlignment = Alignment.Center
             ) {
                 Text(
@@ -184,7 +190,12 @@ fun Messages(
                     .fillMaxWidth()
                     .fillMaxHeight(0.9f)
                     .background(Color.White)
-                    .padding(8.dp),
+                    .padding(bottom = 8.dp)
+                    .background(
+                        brush = Brush.verticalGradient(
+                            listOf(cardTwo,Color.White,cardTwo)
+                        )
+                    ),
                 reverseLayout = true
 
             ) {
@@ -294,7 +305,7 @@ fun Messages(
             OutlinedTextField(
                 modifier = Modifier.weight(1f),
                 value = inputText,
-                maxLines = 2,
+                maxLines = 1,
                 onValueChange = {
                     inputText = it
                     IsTypingHelpingFunction(context, mainViewModel)
