@@ -71,14 +71,18 @@ private fun loginData(
     call!!.enqueue(object : Callback<LoginDataClass?> {
 
         override fun onResponse(call: Call<LoginDataClass?>, response: Response<LoginDataClass?>) {
-            Toast.makeText(ctx, "Logged in", Toast.LENGTH_SHORT).show()
             val model: LoginDataClass? = response.body()
             secret.value = model?.secret.toString()
             mainViewModel.UserData=model
 
             //only when is_authenticated is true the user wil navigate else won't
             if(model?.is_authenticated==true){
+                Toast.makeText(ctx, "Logged in", Toast.LENGTH_SHORT).show()
                 navController.navigate(NavigationItems.UserHistoryScreen.route)
+                mainViewModel.isLoading.value=false
+            }
+            else{
+                Toast.makeText(ctx, "Wrong credentials", Toast.LENGTH_SHORT).show()
                 mainViewModel.isLoading.value=false
             }
 

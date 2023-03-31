@@ -23,6 +23,7 @@ import androidx.compose.ui.text.font.FontWeight
 import androidx.compose.ui.unit.dp
 import androidx.compose.ui.unit.sp
 import androidx.navigation.NavController
+import com.example.chatengine.circularProgressIndicator.LoadingView
 import com.example.chatengine.navigation.NavigationItems
 import com.example.chatengine.questionsRoom.room.QuestionsViewModel
 import com.example.chatengine.ui.theme.Purple500
@@ -123,6 +124,7 @@ fun QuestionsList(navController: NavController, mainViewModel: MainViewModel,que
             //chat room is created on button click using post room function
             Button(
                 onClick = {
+                    mainViewModel.isLoading.value = true
                     postRoom(context, title.value, result, navController, mainViewModel)
                 },
                 modifier = Modifier
@@ -144,6 +146,9 @@ fun QuestionsList(navController: NavController, mainViewModel: MainViewModel,que
 
 
     }
+    }
+    if (mainViewModel.isLoading.value){
+        LoadingView()
     }
 }
 
@@ -250,6 +255,7 @@ private fun postRoom(
                 //on room creation the toast is shown
                 Toast.makeText(ctx,"Chat created", Toast.LENGTH_LONG).show()
                 navController.navigate(NavigationItems.UserHistoryScreen.route)
+                mainViewModel.isLoading.value=false
             }
 
         }

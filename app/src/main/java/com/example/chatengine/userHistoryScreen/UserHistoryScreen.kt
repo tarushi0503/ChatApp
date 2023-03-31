@@ -22,9 +22,15 @@ import androidx.compose.runtime.mutableStateOf
 import androidx.compose.runtime.remember
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
+import androidx.compose.ui.geometry.Offset
+import androidx.compose.ui.graphics.Brush
 import androidx.compose.ui.graphics.Color
+import androidx.compose.ui.graphics.LinearGradient
+import androidx.compose.ui.graphics.TileMode
 import androidx.compose.ui.platform.LocalContext
 import androidx.compose.ui.res.painterResource
+import androidx.compose.ui.text.font.FontFamily
+import androidx.compose.ui.text.font.FontStyle
 import androidx.compose.ui.text.font.FontWeight
 import androidx.compose.ui.text.style.TextOverflow
 import androidx.compose.ui.unit.dp
@@ -38,7 +44,9 @@ import com.example.chatengine.R
 import com.example.chatengine.viewModel.MainViewModel
 import com.example.chatengine.messageScreen.RecieveDataClass
 import com.example.chatengine.ui.theme.Purple200
+import com.example.chatengine.ui.theme.SenderColor
 import com.example.chatengine.ui.theme.card
+import com.example.chatengine.ui.theme.cardTwo
 import retrofit2.Call
 import retrofit2.Callback
 import retrofit2.Response
@@ -180,7 +188,7 @@ fun UserHistoryScreen(
                     Card(
                         modifier = Modifier
                             .fillMaxWidth()
-                            .padding(bottom = 8.dp)
+                            .padding(10.dp)
                             .clickable {
                                 navController.navigate(NavigationItems.Messages.route)
                                 mainViewModel.isLoading.value = true
@@ -191,7 +199,7 @@ fun UserHistoryScreen(
                             },
                         elevation = 4.dp,
                         shape = RoundedCornerShape(8.dp),
-                        backgroundColor = Color.White
+                        backgroundColor = cardTwo
                     ) {
                         Row(
                             verticalAlignment = Alignment.CenterVertically,
@@ -214,7 +222,8 @@ fun UserHistoryScreen(
                             ) {
                                 Text(
                                     text = item.title,
-                                    style = MaterialTheme.typography.h6,
+                                    fontStyle = FontStyle.Italic,
+                                    fontSize= 20.sp,
                                     fontWeight = FontWeight.Bold,
                                     color = Color.Black
                                 )
