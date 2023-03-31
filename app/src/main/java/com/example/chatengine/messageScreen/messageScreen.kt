@@ -113,13 +113,14 @@ fun Messages(
             TopAppBar(
                 backgroundColor = Purple200,
                 title = {
-                    if (mainViewModel.istyping.value && mainViewModel.user_name.value != mainViewModel.istypinguser.value) {
-                        Text(text = " is typing")
+                    if (mainViewModel.istyping.value && mainViewModel.username.value != mainViewModel.istypinguser.value) {
+                        Text(text = " is typing", color=Color.White)
                         mainViewModel.startTyping()
 //                    isTYping=false
                     } else {
                         Text(
-                            text = if (mainViewModel.user_name.value == "tarushi07") "" else "tarushi07",
+                            text =
+                            if (mainViewModel.username.value == "tarushi07") "" else "tarushi07",
                             modifier = Modifier
                                 .fillMaxWidth()
                                 .padding(start = 10.dp),
@@ -146,7 +147,8 @@ fun Messages(
 
         if (mainViewModel.firstMsgGet.size == 0) {
             Box(
-                modifier = Modifier.height(500.dp)
+                modifier = Modifier
+                    .height(500.dp)
                     .width(800.dp),
                 contentAlignment = Alignment.Center
             ){
@@ -169,7 +171,7 @@ fun Messages(
             ) {
                 itemsIndexed(mainViewModel.firstMsgGet.sortedByDescending { it.created }) { lastIndex, item ->
 
-                    val isCurrentUser = item.sender_username == mainViewModel.user_name.value
+                    val isCurrentUser = item.sender_username == mainViewModel.username.value
                     val messageBackgroundColor = if (isCurrentUser) SenderColor else ReceiverColor
                     val messageTextColor = if (isCurrentUser) Color.Black else Color.Black
                     val time = item.created.subSequence(11, 16)

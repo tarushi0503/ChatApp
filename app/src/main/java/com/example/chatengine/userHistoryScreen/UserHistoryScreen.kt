@@ -1,4 +1,4 @@
-package com.example.chatengine.userScreen
+package com.example.chatengine.userHistoryScreen
 
 
 import android.annotation.SuppressLint

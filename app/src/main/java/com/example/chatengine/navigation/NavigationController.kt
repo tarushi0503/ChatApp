@@ -16,8 +16,7 @@ import com.example.chatengine.messageScreen.Messages
 import com.example.chatengine.questionsRoom.QuestionsList
 import com.example.chatengine.questionsRoom.QuestionsViewModel
 import com.example.chatengine.signupScreen.SignUpScaffold
-import com.example.chatengine.signupScreen.SignUpScreen
-import com.example.chatengine.userScreen.UserScreen
+import com.example.chatengine.userHistoryScreen.UserScreen
 
 
 @RequiresApi(Build.VERSION_CODES.O)

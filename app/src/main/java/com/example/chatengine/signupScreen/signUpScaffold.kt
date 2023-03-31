@@ -22,24 +22,24 @@ fun SignUpScaffold(navController: NavHostController, mainViewModel: MainViewMode
         // in scaffold we are specifying top bar.
         topBar = {
 
-            // inside top bar we are specifying background color.
+            // specifying background color to topAppBar
             TopAppBar(backgroundColor = Purple200,
 
-                // along with that we are specifying title for our top bar.
+                //specifying title to topAppBar
                 title = {
 
-                    // in the top bar we are specifying tile as a text
+                    // specifying title as a text
                     Text(
                         // on below line we are specifying text to display in top app bar.
                         text = "New Account",
 
-
-                        // on below line we are specifying modifier to fill max width.
                         modifier = Modifier.fillMaxWidth()
                             .padding(start = 75.dp),
                         color = Color.White
                     )
                 },
+
+                //The button will take user back to previous screen
                 navigationIcon = {
                     IconButton(onClick = { navController.popBackStack() }) { // Use NavHostController to handle navigation back
                         Icon(
@@ -52,7 +52,7 @@ fun SignUpScaffold(navController: NavHostController, mainViewModel: MainViewMode
             )},
 
         ) {
-        // on the below line we are calling the pop window dialog method to display ui.
+        // Composable function defining UI of the sign up screen.
         SignUpScreen(navController,mainViewModel)
     }
 }

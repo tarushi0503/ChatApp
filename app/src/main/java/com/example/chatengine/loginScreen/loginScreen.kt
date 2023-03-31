@@ -38,7 +38,7 @@ import com.example.chatengine.R
 import com.example.chatengine.ui.theme.Purple200
 import com.example.chatengine.ui.theme.Purple500
 import com.example.chatengine.ui.theme.card
-import com.example.chatengine.userScreen.getChatHistory
+import com.example.chatengine.userHistoryScreen.getChatHistory
 import com.example.chatengine.viewModel.MainViewModel
 import retrofit2.Call
 import retrofit2.Callback
@@ -104,7 +104,7 @@ fun LoginScreen(
 ) {
     val context= LocalContext.current
 
-    val userName = mainViewModel.user_name
+    val userName = mainViewModel.username
     val password = mainViewModel.password
 
     val secret = remember {
@@ -127,7 +127,7 @@ fun LoginScreen(
     println("******* $email")
 
     if (email.isNotBlank()){
-        mainViewModel.user_name.value = email
+        mainViewModel.username.value = email
         mainViewModel.password.value = secrett
         loginData(context,email,secrett,result,secret,navController,mainViewModel,sharedPreferences)
     }
@@ -258,7 +258,7 @@ fun LoginScreen(
                         },
                     )
 
-                    mainViewModel.user_name = userName
+                    mainViewModel.username = userName
                     mainViewModel.password = password
 
 

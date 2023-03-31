@@ -41,7 +41,7 @@ fun QuestionsList(navController: NavController, mainViewModel: MainViewModel,que
     val questions by questionViewModel.questions.observeAsState(emptyList())
 
     val context = LocalContext.current
-    val title = mainViewModel.user_name
+    val title = mainViewModel.username
 
     val result = remember {
         mutableStateOf("")

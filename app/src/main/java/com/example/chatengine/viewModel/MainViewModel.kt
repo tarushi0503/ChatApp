@@ -19,11 +19,11 @@ import com.example.chatengine.messageScreen.MessageClass
 import com.example.chatengine.messageScreen.MsgDataClassModel
 import com.example.chatengine.messageScreen.PostMessageAPI
 import com.example.chatengine.messageScreen.RecieveDataClass
-import com.example.chatengine.signupScreen.RetrofitAPI
 import com.example.chatengine.signupScreen.SignUpClass
-import com.example.chatengine.userScreen.GetChatsDataClass
-import com.example.chatengine.userScreen.GetMyChats
-import com.example.chatengine.userScreen.GetMyChatsClass
+import com.example.chatengine.signupScreen.signUpApiInterface
+import com.example.chatengine.userHistoryScreen.GetChatsDataClass
+import com.example.chatengine.userHistoryScreen.GetMyChats
+import com.example.chatengine.userHistoryScreen.GetMyChatsClass
 import kotlinx.coroutines.Dispatchers
 import kotlinx.coroutines.delay
 import kotlinx.coroutines.flow.MutableStateFlow
@@ -33,26 +33,36 @@ import kotlinx.coroutines.withContext
 
 class MainViewModel:ViewModel() {
 
-    var user_name = mutableStateOf("")
+    //stores the username of user
+    var username = mutableStateOf("")
+
+    //stores the password of user
     var password = mutableStateOf("")
+
+    //stores the chatId of room created
     var chatId by mutableStateOf(-1)
+
+    //stores accesskey of the room created
      var accesskey by mutableStateOf("")
 
+    //manages whether or not to show the loader
     var isLoading = mutableStateOf(false)
+
+    //name with which the chat room will be created
+    var chatName by mutableStateOf("Agent")
 
     val initial = LoginDataClass("","",false)
     var UserData: LoginDataClass? by mutableStateOf(initial)
 
-    var chatName by mutableStateOf("Agent")
 
-    //signup
-    fun signup():RetrofitAPI{
-        val msgApiService= SignUpClass(user_name.value,password.value).postInstance()
-        return  msgApiService
+    //signup function inherits signUpApiInterface and passes the values to SignUpClass for passing the desired input to headers
+    fun signup(): signUpApiInterface {
+        val signUpApiInterface= SignUpClass(username.value,password.value).postInstance()
+        return  signUpApiInterface
     }
 
     fun AuthenticateUser(): LoginInterfaceAPI {
-        val apiService= LoginClass(user_name.value,password.value).getInstance()
+        val apiService= LoginClass(username.value,password.value).getInstance()
         return  apiService
     }
 
@@ -61,7 +71,7 @@ class MainViewModel:ViewModel() {
     var initialChat=ChatDataClass("",false, listOf("tarushi07"))
     var newChatDetails:ChatDataClass? by mutableStateOf(initialChat)
     fun createChat():ChatApiInterface{
-        val chatApiService = ChatRoom(user_name.value,password.value).postRoomInstance()
+        val chatApiService = ChatRoom(username.value,password.value).postRoomInstance()
         return  chatApiService
     }
 
@@ -70,7 +80,7 @@ class MainViewModel:ViewModel() {
     var firstMsg = MsgDataClassModel("")
     var newMsgDetails:MsgDataClassModel? by mutableStateOf(firstMsg)
     fun createMsg():PostMessageAPI{
-        val msgApiService= MessageClass(user_name.value,password.value,chatId).postMsgInstance()
+        val msgApiService= MessageClass(username.value,password.value,chatId).postMsgInstance()
         return  msgApiService
     }
 
@@ -87,7 +97,7 @@ class MainViewModel:ViewModel() {
     //get messages
     var firstMsgGet : MutableList<RecieveDataClass> by mutableStateOf(mutableListOf())
     fun createMsgGet():PostMessageAPI{
-        val msgApiService= MessageClass(user_name.value,password.value,chatId).getMsgInstance()
+        val msgApiService= MessageClass(username.value,password.value,chatId).getMsgInstance()
         return  msgApiService
     }
     //update chatting messages
@@ -101,7 +111,7 @@ class MainViewModel:ViewModel() {
     var allChats : MutableList<GetChatsDataClass> by mutableStateOf(mutableListOf())
     //var newMsgDetailsGet:MsgDataClassModel? by mutableStateOf(firstMsgGet)
     fun getAllChats(): GetMyChats {
-        val msgApiService= GetMyChatsClass(user_name.value,password.value).getMsgInstance()
+        val msgApiService= GetMyChatsClass(username.value,password.value).getMsgInstance()
         return  msgApiService
     }
 
@@ -113,7 +123,7 @@ class MainViewModel:ViewModel() {
 
     @SuppressLint("SuspiciousIndentation")
     fun IsUserTyping(): isTypingInterface {
-        val apiService= TypingClass(user_name.value,password.value,chatId.toString()).getTypingInstance()
+        val apiService= TypingClass(username.value,password.value,chatId.toString()).getTypingInstance()
         return apiService
     }
     fun startTyping(){

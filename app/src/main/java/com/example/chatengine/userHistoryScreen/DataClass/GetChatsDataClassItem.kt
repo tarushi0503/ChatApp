@@ -1,7 +1,7 @@
-package com.example.chatengine.userScreen
+package com.example.chatengine.userHistoryScreen
 
-import com.example.chatengine.userScreen.DataClass.LastMessage
-import com.example.chatengine.userScreen.DataClass.People
+import com.example.chatengine.userHistoryScreen.DataClass.LastMessage
+import com.example.chatengine.userHistoryScreen.DataClass.People
 
 data class GetChatsDataClass(
     val created: String,

@@ -1,4 +1,4 @@
-package com.example.chatengine.userScreen.DataClass
+package com.example.chatengine.userHistoryScreen.DataClass
 
 data class People(
     val last_read: Any,
