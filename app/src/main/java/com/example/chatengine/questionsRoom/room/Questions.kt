@@ -9,8 +9,16 @@ import com.google.gson.Gson
 import com.google.gson.reflect.TypeToken
 
 
+//@Entity annotation specifies that this data class represents a table in a Room database
 @Entity(tableName = "questions")
 @TypeConverters(SubQuestionConverter::class)
+
+/*
+* Questions data class has a nested data class SubQuestion.
+* Questions has three properties - an id, a title, and a list of SubQuestions.
+* SubQuestion has four properties - an id, a question, and two optional lists of SubQuestions.
+*/
+
 data class Questions(
     @PrimaryKey val id: Int,
     val title: String,
@@ -24,6 +32,12 @@ data class SubQuestion(
     val nestedSubQuestions: List<SubQuestion>? = null
 )
 
+
+/*
+@TypeConverters annotation specifies that the SubQuestionConverter class should
+be used to convert the subQuestions property of the Questions data class to and
+from a string when saving it to or retrieving it from the database.
+*/
 class SubQuestionConverter {
     @TypeConverter
     fun fromSubQuestionList(subQuestions: List<SubQuestion>): String {

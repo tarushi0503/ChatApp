@@ -42,13 +42,16 @@ fun IsTypingHelpingFunction(
     val retrofitAPI= viewModel.IsUserTyping()
     val call: Call<isTypingDataClass?>? = retrofitAPI.notifyTyping()
     call!!.enqueue(object : Callback<isTypingDataClass?> {
-        override fun onResponse(call: Call<isTypingDataClass?>?, response: Response<isTypingDataClass?>) {
+        override fun onResponse(
+            call: Call<isTypingDataClass?>,
+            response: Response<isTypingDataClass?>
+        ) {
             val model: isTypingDataClass? = response.body()
             val resp =
                 "Response Code : " + response.code()
         }
-        override fun onFailure(call: Call<isTypingDataClass?>?, t: Throwable) {
-            var temp = "Error found is : " + t.message
+        override fun onFailure(call: Call<isTypingDataClass?>, t: Throwable) {
+            val temp = "Error found is : " + t.message
             Toast.makeText(context,temp, Toast.LENGTH_SHORT).show()
         }
     })
@@ -114,7 +117,7 @@ fun Messages(
                 backgroundColor = Purple200,
                 title = {
                     if (mainViewModel.istyping.value && mainViewModel.username.value != mainViewModel.istypinguser.value) {
-                        Text(text = " is typing", color=Color.White)
+                        Text(text = " is typing", color = Color.White)
                         mainViewModel.startTyping()
 //                    isTYping=false
                     } else {
@@ -151,9 +154,11 @@ fun Messages(
                     .height(500.dp)
                     .width(800.dp),
                 contentAlignment = Alignment.Center
-            ){
-                Text(text = "No Chat History",
-                fontSize = 20.sp)
+            ) {
+                Text(
+                    text = "No Chat History",
+                    fontSize = 20.sp
+                )
             }
 
         } else {
@@ -162,7 +167,7 @@ fun Messages(
             LazyColumn(
                 modifier = Modifier
                     .fillMaxWidth()
-                    .height(690.dp)
+                    .fillMaxHeight(0.9f)
                     .background(Color.White)
                     .padding(8.dp),
 
@@ -244,47 +249,46 @@ fun Messages(
             }
         }
 
-        Box(
-            modifier = Modifier.fillMaxSize(),
-            contentAlignment = Alignment.BottomCenter
+//        Box(
+//            modifier = Modifier.fillMaxSize(),
+//            contentAlignment = Alignment.BottomCenter
+//        ) {
+        Row(
+            modifier = Modifier
+                .fillMaxSize(),
+                //.padding(horizontal = 16.dp, vertical = 8.dp),
+            verticalAlignment = Alignment.Bottom
         ) {
-            Row(
-                modifier = Modifier
-                    .fillMaxSize()
-                    .padding(horizontal = 16.dp, vertical = 8.dp),
-                verticalAlignment = Alignment.Bottom
+            OutlinedTextField(
+                modifier = Modifier.weight(1f),
+                value = inputText,
+                maxLines = 2,
+                onValueChange = {
+                    inputText = it
+                    IsTypingHelpingFunction(context, mainViewModel)
+
+                },
+                placeholder = { Text(text = "Start typing..", color = Color.LightGray) }
+            )
+            IconButton(
+                onClick = {
+                    webSocketManager.sendMessage(inputText)
+                    startMessaging(context, inputText, result, mainViewModel)
+                    inputText = ""
+                },
+                modifier = Modifier.padding(start = 8.dp)
             ) {
-                OutlinedTextField(
-                    modifier = Modifier.weight(1f),
-                    value = inputText,
-                    maxLines = 2,
-                    onValueChange = {
-                        inputText = it
-                        IsTypingHelpingFunction(context, mainViewModel)
+                Icon(Icons.Filled.Send, contentDescription = "", tint = Purple200)
 
-                    },
-                    placeholder = { Text(text = "Start typing..", color = Color.LightGray) }
-                )
-                IconButton(
-                    onClick = {
-                        webSocketManager.sendMessage(inputText)
-                        startMessaging(context, inputText, result, mainViewModel)
-                        inputText = ""
-                    },
-                    modifier = Modifier.padding(start = 8.dp)
-                ) {
-                    Icon(Icons.Filled.Send, contentDescription = "", tint = Purple200)
-
-                }
             }
         }
+//        }
 
     }
 
-    if (mainViewModel.isLoading.value == true) {
+    if (mainViewModel.isLoading.value) {
         LoadingView()
     }
-
 }
 
 

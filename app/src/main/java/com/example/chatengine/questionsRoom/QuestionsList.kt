@@ -35,6 +35,8 @@ import retrofit2.Response
 @SuppressLint("UnusedMaterialScaffoldPaddingParameter")
 @Composable
 fun QuestionsList(navController: NavController, mainViewModel: MainViewModel,questionViewModel: QuestionsViewModel) {
+
+    //stores list of questions that will be shown on card click
     val expandedQuestion = remember { mutableStateOf<Questions?>(null) }
 
     val questions by questionViewModel.questions.observeAsState(emptyList())
@@ -47,12 +49,15 @@ fun QuestionsList(navController: NavController, mainViewModel: MainViewModel,que
     }
 
 
+    //implements visual layout structure
     Scaffold(
         topBar = {
+            //inside scaffold, there is top bar
             TopAppBar(
+                //title is the text displayed inside top bar
                 title = { Text(text = "Admin")},
                 navigationIcon = {
-                    IconButton(onClick = { navController.popBackStack() }) { // Use NavHostController to handle navigation back
+                    IconButton(onClick = { navController.popBackStack() }) {
                         Icon(
                             Icons.Default.ArrowBack,
                             contentDescription = "Back",
@@ -65,12 +70,15 @@ fun QuestionsList(navController: NavController, mainViewModel: MainViewModel,que
         }
     ) {
 
-
+        //lazy column is used to display list of questions and further sub-questions on getting clicked
         LazyColumn(
             modifier = Modifier.padding(16.dp).
                     height(650.dp)
         ) {
+            //displays ist of questions
             items(questions) { question ->
+
+                //inside lazy column, there is card
                 Card(
                     modifier = Modifier
                         .fillMaxWidth()
@@ -78,6 +86,7 @@ fun QuestionsList(navController: NavController, mainViewModel: MainViewModel,que
                         .clickable { expandedQuestion.value = question },
                     elevation = 8.dp
                 ) {
+                    //card has text inside it
                     Text(
                         text = question.title,
                         fontWeight = FontWeight.Bold,
@@ -89,6 +98,7 @@ fun QuestionsList(navController: NavController, mainViewModel: MainViewModel,que
                     )
                 }
 
+                //the card which is clicked its subquestions is displayed
                 if (expandedQuestion.value == question) {
                     question.subQuestions.forEach { subQuestion ->
                         mainViewModel.chatName=subQuestion.question
@@ -102,6 +112,7 @@ fun QuestionsList(navController: NavController, mainViewModel: MainViewModel,que
             }
         }
 
+        //Box contains button
         Box(
             modifier = Modifier
                 .fillMaxSize(),
@@ -109,6 +120,7 @@ fun QuestionsList(navController: NavController, mainViewModel: MainViewModel,que
             contentAlignment = Alignment.BottomCenter
         ) {
 
+            //chat room is created on button click using post room function
             Button(
                 onClick = {
                     postRoom(context, title.value, result, navController, mainViewModel)
@@ -123,6 +135,7 @@ fun QuestionsList(navController: NavController, mainViewModel: MainViewModel,que
                 ),
                 shape = RoundedCornerShape(70.dp),
             ) {
+                //text that is displayed inside button
                 Text(text = "Chat with Admin", fontWeight = FontWeight.Bold)
             }
         }
@@ -134,15 +147,17 @@ fun QuestionsList(navController: NavController, mainViewModel: MainViewModel,que
     }
 }
 
+
+//composable displays question inside sub-question list
 @Composable
 fun SubQuestion(
     subQuestion: SubQuestion,
     onSubQuestionClick: () -> Unit,
     mainViewModel: MainViewModel
 ) {
+    //contains questions inside sub-question
     var expandedSubQuestion by remember { mutableStateOf(false) }
 
-//Text(text = subQuestion.subQuestions.toString())
     if(subQuestion.subQuestions?.isEmpty() == true){
         Row() {
             Icon(Icons.Default.ArrowForward, contentDescription = "Solution")
@@ -158,7 +173,9 @@ fun SubQuestion(
         }
     }
     else {
+        //below a card is created
         Card(
+            //card has modifier properties to give width, padding and clickable
             modifier = Modifier
                 .fillMaxWidth()
                 .padding(horizontal = 24.dp, vertical = 8.dp)
@@ -168,7 +185,11 @@ fun SubQuestion(
                 },
             elevation = 4.dp
         ) {
+
+            //Card contains column
             Column(modifier = Modifier.padding(16.dp)) {
+
+                //Column contains text which shows question inside sub question
                 Text(
                     text = subQuestion.question,
                     fontStyle = FontStyle.Italic,
@@ -195,6 +216,8 @@ fun SubQuestion(
 
 
 
+
+//function to create chat room
 private fun postRoom(
     ctx: Context,
     title: String,
@@ -203,21 +226,28 @@ private fun postRoom(
     mainViewModel: MainViewModel
 ) {
 
+    //stores the response of createChat() function created in main view model
     val retrofitAPI = mainViewModel.createChat()
+
+    //the roomDataClass receives parameters passes it to data class
     val roomDataClass= RoomDataClass(mainViewModel.chatName,false, listOf("tarushi07"))
 
+    //represents a call to post data to the server using the postChatRoom() method defined in the RoomApiInterface
     val call: Call<RoomDataClass?>? = retrofitAPI.postChatRoom(roomDataClass)
 
     call!!.enqueue(object : Callback<RoomDataClass?> {
 
         override fun onResponse(call: Call<RoomDataClass?>, response: Response<RoomDataClass?>) {
-            Toast.makeText(ctx, " in", Toast.LENGTH_SHORT).show()
+
             val model: RoomDataClass? = response.body()
             val resp =
                 "Response Code : " + response.code() + "\n"+"Id: " + model?.is_direct_chat+  "\n"+ model?.title
             result.value=resp
             mainViewModel.newChatDetails = model
+
+            //if the value of is_direct_chhat is false, it navigates further
             if(model?.is_direct_chat==false){
+                //on room creation the toast is shown
                 Toast.makeText(ctx,"Chat created", Toast.LENGTH_LONG).show()
                 navController.navigate(NavigationItems.UserHistoryScreen.route)
             }

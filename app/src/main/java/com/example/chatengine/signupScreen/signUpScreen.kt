@@ -73,7 +73,7 @@ private fun signUpData(
             call: Call<SignUpDataClass?>,
             response: Response<SignUpDataClass?>
         ) {
-                //on sign Up the tast is sown
+                //on sign Up the toast is shown
                 Toast.makeText(ctx, "Sign up successful", Toast.LENGTH_SHORT).show()
         }
 

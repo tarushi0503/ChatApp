@@ -4,8 +4,6 @@ import android.annotation.SuppressLint
 import com.example.chatengine.questionsRoom.room.QuestionsViewModel
 
 @SuppressLint("CoroutineCreationDuringComposition", "SuspiciousIndentation")
-
-
 fun QuestionsListing(questionViewModel: QuestionsViewModel) {
     val questions = listOf(
         Questions(
@@ -345,7 +343,4 @@ fun QuestionsListing(questionViewModel: QuestionsViewModel) {
     }
 
     questionViewModel.insertQuestions(convertedQuestions)
-//    LaunchedEffect(Unit) {
-//    }
-
 }

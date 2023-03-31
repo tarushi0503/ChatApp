@@ -45,9 +45,6 @@ import retrofit2.Callback
 import retrofit2.Response
 
 
-
-
-//onCLick -> to chatting screen
 private fun getMsgHistory(
     context: Context,
     getApiResult: MutableState<String>,
@@ -88,17 +85,9 @@ private fun getMsgHistory(
     call!!.enqueue(object : Callback<List<GetChatsDataClass>?> {
 
         override fun onResponse(call: Call<List<GetChatsDataClass>?>, response: Response<List<GetChatsDataClass>?>) {
-            //Toast.makeText(context, "Logged in", Toast.LENGTH_SHORT).show()
             val model: List<GetChatsDataClass> = response.body()?: emptyList()
 
             mainViewModel.allChats= model as MutableList<GetChatsDataClass>
-
-//            val resp =model
-//                        getApiResult.value= resp.toString()
-//            if (model != null) {
-//                loginViewModel.firstMsgGet=model
-//            }
-
         }
 
         override fun onFailure(call: Call<List<GetChatsDataClass>?>, t: Throwable) {
@@ -108,6 +97,7 @@ private fun getMsgHistory(
 }
 
 
+//This composable display the list of users with whom the room has been created
 @SuppressLint("UnusedMaterialScaffoldPaddingParameter")
 @Composable
 fun UserHistoryScreen(
@@ -115,15 +105,23 @@ fun UserHistoryScreen(
     mainViewModel: MainViewModel,
     sharedPreferences: SharedPreferences
 ) {
+
+    //enables shared preferences
     val editor: SharedPreferences.Editor = sharedPreferences.edit()
     val context = LocalContext.current
 
     val getApiResult = remember {
         mutableStateOf("")
     }
+
+    //function to fetch chat user data from api
     getChatHistory(mainViewModel)
+
+    //it implements visual layout structure
     Scaffold(
         modifier = Modifier.background(Color.Blue),
+
+        //it is a component of scaffold
         topBar = {
             TopAppBar(
                 title = { Text(text = "Chats") },
