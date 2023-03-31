@@ -41,10 +41,6 @@ fun NavigationController(sharedPreferences: SharedPreferences, navController: Na
             UserScreen(navController, mainViewModel,sharedPreferences)
         }
 
-//        composable(NavigationItems.Chat.route){
-//            Chat(navController,mainViewModel)
-//        }
-
         composable(NavigationItems.Messages.route){
             Messages(navController,mainViewModel,webSocketManager)
         }

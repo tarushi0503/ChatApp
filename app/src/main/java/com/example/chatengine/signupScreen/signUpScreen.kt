@@ -55,8 +55,8 @@ private fun signUpData(
     mainViewModel: MainViewModel
 ) {
 
-    //stores the response signup function created in main view model
-    val signUpApiInterface = mainViewModel.signup()
+    //stores the response of signup function created in main view model
+    val retrofitAPI = mainViewModel.signup()
 
     //the signUpData receives parameters input by user and passes it to data class
     val signupDataClass=SignUpDataClass(userName.value.text,
@@ -66,7 +66,7 @@ private fun signUpData(
 
 
     //represents an call to post data to the server using the postData() method defined in the signUpApiInterface
-    val call: Call<SignUpDataClass?>? = signUpApiInterface.postData(signupDataClass)
+    val call: Call<SignUpDataClass?>? = retrofitAPI.postData(signupDataClass)
 
     call!!.enqueue(object : Callback<SignUpDataClass?> {
         override fun onResponse(
@@ -121,7 +121,7 @@ fun SignUpScreen(navController:NavController, mainViewModel: MainViewModel) {
         mutableStateOf(false)
     }
 
-    //oly if all the credentials in the singup page will be filled, the signup button will change colour become enabled otherwise, it remains disabled
+    //only if all the credentials in the singup page will be filled, the signup button will change colour become enabled otherwise, it remains disabled
     val isCredentialsFilled = userName.value.text.isNotBlank() && password.value.text.isNotBlank() && firstName.value.text.isNotBlank() && lastName.value.text.isNotBlank()
 
     // on below line a box is created that has a gradient background colour to it
@@ -304,7 +304,7 @@ fun SignUpScreen(navController:NavController, mainViewModel: MainViewModel) {
                     leadingIcon = {
                         IconButton(onClick = { }) {
                             Icon(
-                                Icons.Filled.Face,
+                                Icons.Filled.AccountCircle,
                                 contentDescription = "UserName Icon",
                                 tint = Color.Blue
                             )

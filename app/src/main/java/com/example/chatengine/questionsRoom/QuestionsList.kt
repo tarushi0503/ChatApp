@@ -217,12 +217,7 @@ private fun postRoom(
             val resp =
                 "Response Code : " + response.code() + "\n"+"Id: " + model?.is_direct_chat+  "\n"+ model?.title
             result.value=resp
-//            secret.value = model?.secret.toString()
             mainViewModel.newChatDetails = model
-//            loginViewModel.chatId= loginViewModel.newChatDetails!!.id
-//            loginViewModel.accessId= loginViewModel.newChatDetails!!.access_key
-
-            //print("################################################### ${loginViewModel.chatId}")
             if(model?.is_direct_chat==false){
                 Toast.makeText(ctx,"Chat created", Toast.LENGTH_LONG).show()
                 navController.navigate(NavigationItems.UserScreen.route)

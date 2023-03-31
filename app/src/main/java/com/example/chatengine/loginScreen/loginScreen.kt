@@ -44,7 +44,7 @@ import retrofit2.Call
 import retrofit2.Callback
 import retrofit2.Response
 
-
+//function to get data from API
 private fun loginData(
     ctx: Context,
     username:String,
@@ -56,10 +56,14 @@ private fun loginData(
     sharedPreferences: SharedPreferences
 ) {
 
+    //stores the response of AuthenticateUser() function created in main view model
     val retrofitAPI = mainViewModel.AuthenticateUser()
 
+
+    //represents an call to get data from the server
     val call: Call<LoginDataClass?>? = retrofitAPI.getUsers()
 
+    //for shared preferences
     val editor: SharedPreferences.Editor = sharedPreferences.edit()
 
 
@@ -68,18 +72,16 @@ private fun loginData(
         override fun onResponse(call: Call<LoginDataClass?>?, response: Response<LoginDataClass?>) {
             Toast.makeText(ctx, "Logged in", Toast.LENGTH_SHORT).show()
             val model: LoginDataClass? = response.body()
-//            val resp =
-//                "Response Code : " + response.code() + "\n"+"Id: " + model?.is_authenticated+  "\n"+ model?.username
-//            result.value=resp
             secret.value = model?.secret.toString()
             mainViewModel.UserData=model
+
+            //only when is_authenticated is true the user wil navigate else won't
             if(model?.is_authenticated==true){
                 navController.navigate(NavigationItems.UserScreen.route)
                 mainViewModel.isLoading.value=false
-//                Toast.makeText(ctx,"Logged in successfully",Toast.LENGTH_SHORT).show()
             }
-//            println("/////////////////////////////////////////////////////${secret.value}")
 
+            //on pressing Login button the chat history is fetched and credentials of user are stored in shared preferences
             if(response.isSuccessful){
                 getChatHistory(mainViewModel)
                 editor.putString("USERNAME", username)
@@ -96,6 +98,7 @@ private fun loginData(
 }
 
 
+//composable for login screen
 @Composable
 fun LoginScreen(
     navController: NavController,
@@ -104,33 +107,43 @@ fun LoginScreen(
 ) {
     val context= LocalContext.current
 
+    //stores the changing values of outlined text field for taking username input
     val userName = mainViewModel.username
+
+    //stores the changing values of outlined text field for taking password
     val password = mainViewModel.password
 
     val secret = remember {
         mutableStateOf("")
     }
+
+    //stores api response
     val result = remember {
         mutableStateOf("")
     }
 
+
+    //The is set to true on icon click below when user wants to see the typed password else remains false,i.e., invisible
     var passwordVisibility by remember {
         mutableStateOf(false)
     }
 
+    //only if all the credentials in the singup page will be filled, the signup button will change colour become enabled otherwise, it remains disabled
     val isCredentialsFilled = userName.value.isNotBlank() && password.value.isNotBlank()
 
 
-    val email = sharedPreferences.getString("USERNAME", "").toString()
-    val secrett = sharedPreferences.getString("SECRET", "").toString()
+    //create two variables to enable shared preferences
+    val userNameSharedPreferences = sharedPreferences.getString("USERNAME", "").toString()
+    val passwordSharedPreferences = sharedPreferences.getString("SECRET", "").toString()
 
-    println("******* $email")
-
-    if (email.isNotBlank()){
-        mainViewModel.username.value = email
-        mainViewModel.password.value = secrett
-        loginData(context,email,secrett,result,secret,navController,mainViewModel,sharedPreferences)
+    //if shared preferences already has data, user won't be asked to login again
+    if (userNameSharedPreferences.isNotBlank()){
+        mainViewModel.username.value = userNameSharedPreferences
+        mainViewModel.password.value = passwordSharedPreferences
+        loginData(context,userNameSharedPreferences,passwordSharedPreferences,result,secret,navController,mainViewModel,sharedPreferences)
     }
+
+    //else user will be asked to login again
     else {
         // on below line we are creating a column.
         Box(
@@ -146,6 +159,7 @@ fun LoginScreen(
             contentAlignment = Alignment.Center
         ) {
 
+            // on below line a card is created inside the box
             Card(
                 modifier = Modifier
                     .fillMaxWidth()
@@ -158,6 +172,7 @@ fun LoginScreen(
 
             ) {
 
+                // on below line a column is created inside the card
                 Column(
                     modifier = Modifier
                         .fillMaxSize()
@@ -168,14 +183,21 @@ fun LoginScreen(
                     horizontalAlignment = Alignment.CenterHorizontally
                 ) {
 
+                    // on below line a image is created inside the column
                     Image(
-                        painter = painterResource(id = R.drawable.icon), contentDescription = "",
+
+                        //painter stores the location of the image
+                        painter = painterResource(id = R.drawable.icon),
+                        //contentDescription tell about the image
+                        contentDescription = "",
+                        //modifier enhances the look and feel of component
                         modifier = Modifier
                             .width(100.dp)
                             .height(100.dp),
                         contentScale = ContentScale.Crop,
                     )
 
+                    //It adds space between elements
                     Spacer(modifier = Modifier.height(30.dp))
 
                     Text(
@@ -185,6 +207,8 @@ fun LoginScreen(
                         fontFamily = FontFamily.Default,
                         fontWeight = FontWeight.Bold, textAlign = TextAlign.Center
                     )
+
+                    //It adds space between elements
                     Spacer(modifier = Modifier.height(3.dp))
                     Text(
                         text = "Nye Interactive Assistant",
@@ -193,6 +217,8 @@ fun LoginScreen(
                         fontFamily = FontFamily.Default,
                         fontWeight = FontWeight.ExtraBold, textAlign = TextAlign.Center
                     )
+
+                    //It adds space between elements
                     Spacer(modifier = Modifier.height(4.dp))
                     Text(
                         text = "(NIA)",
@@ -202,9 +228,12 @@ fun LoginScreen(
                         fontWeight = FontWeight.Bold, textAlign = TextAlign.Center
                     )
 
+
+                    //It adds space between elements
                     Spacer(modifier = Modifier.height(30.dp))
 
 
+                    //this textfield stores the username entered by user
                     OutlinedTextField(
                         value = userName.value,
                         onValueChange = { userName.value = it },
@@ -225,14 +254,23 @@ fun LoginScreen(
                         },
                     )
 
+                    //It adds space between elements
                     Spacer(modifier = Modifier.height(5.dp))
-                    // on below line we are creating a text field for our email.
 
+                    //this textfield stores the username entered by user
                     OutlinedTextField(
+
+                        // on below line we are specifying value for our first name text field.
                         value = password.value,
+
+                        // on below line we are adding on value change for text field.
                         onValueChange = { password.value = it },
+
+                        //it keeps the passowrd hidden by default and makes it visible if passwordVisibility is false
                         visualTransformation = if (passwordVisibility) VisualTransformation.None else PasswordVisualTransformation(),
                         keyboardOptions = KeyboardOptions(keyboardType = KeyboardType.Password),
+
+                        //on clicking this icon the password becomes visible and invisible
                         trailingIcon = {
                             IconButton(onClick = { passwordVisibility = !passwordVisibility }) {
                                 Icon(
@@ -241,12 +279,24 @@ fun LoginScreen(
                                 )
                             }
                         },
+
+                        // on below line we are adding place holder as text
                         placeholder = { Text(text = "Enter your Password") },
+
+                        // on below line we are adding modifier to it
+                        // and adding padding to it and filling max width
                         modifier = Modifier
                             .padding(16.dp)
                             .fillMaxWidth(),
+
+                        // on below line we are adding text style
+                        // specifying color and font size to it.
                         textStyle = TextStyle(color = Color.Black, fontSize = 15.sp),
+
+                        // on below line we ar adding single line to it.
                         singleLine = true,
+
+                        //adding icon to enhance UI
                         leadingIcon = {
                             IconButton(onClick = { }) {
                                 Icon(
@@ -262,10 +312,12 @@ fun LoginScreen(
                     mainViewModel.password = password
 
 
+                    //It adds space between elements
                     Spacer(modifier = Modifier.height(10.dp))
                     // on below line we are creating a button
                     Button(
                         onClick = {
+                            //the below check display toast if the credentials are empty
                             if (userName.value == "" || password.value == "") {
                                 Toast.makeText(
                                     context,
@@ -273,7 +325,11 @@ fun LoginScreen(
                                     Toast.LENGTH_SHORT
                                 ).show()
                             } else {
+
+                                //this to display loader while the data is being fetched from api
                                 mainViewModel.isLoading.value = true
+
+                                //this functions is called to get data from api
                                 loginData(
                                     context,
                                     userName.value,
@@ -286,13 +342,14 @@ fun LoginScreen(
                                 )
                             }
                         },
+
+                        //the state of where all credentials are filled of not is assigned to enabled
                         enabled = isCredentialsFilled,
 
                         // on below line we are adding modifier to our button.
                         modifier = Modifier
                             .fillMaxWidth()
                             .padding(16.dp),
-                        //.background(),
                         colors = ButtonDefaults.buttonColors(
                             backgroundColor = Purple500,
                             contentColor = Color.White
@@ -310,6 +367,7 @@ fun LoginScreen(
 
                     Spacer(modifier = Modifier.height(20.dp))
 
+                    //if user is new, user can go to signup page
                     Row {
                         Text(text = "Create an Account")
                         Spacer(modifier = Modifier.width(8.dp))
