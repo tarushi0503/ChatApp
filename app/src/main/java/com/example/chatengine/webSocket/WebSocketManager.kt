@@ -10,20 +10,30 @@ import org.json.JSONObject
 import java.net.SocketException
 
 
+//WebSocketListener provides methods for handling WebSocket events such as onOpen, onMessage, and onFailure.
 class WebSocketManager(private val mainViewModel: MainViewModel):WebSocketListener(){
     private var webSocket: WebSocket
 
+
+    /*
+    * WebSocket instance is created by calling newWebSocket on an instance of the OkHttpClient class.
+    * Pass in a request object that specifies the URL of the WebSocket endpoint.
+     */
     init {
         val request = Request.Builder().url("wss://api.chatengine.io/chat/?projectID=0ddfa87c-cd5d-4103-8946-0b0ccc96cf9e&chatID=${mainViewModel.chatId}&accessKey=${mainViewModel.accesskey}").build()
         val client = OkHttpClient()
         webSocket = client.newWebSocket(request, this)
     }
 
+    //sends a message to the server.
     override fun onOpen(webSocket: WebSocket, response: Response) {
         Log.d("MYTAG", "WebSocket connection established.")
         webSocket.send("Hello, server!")
     }
 
+    /*
+    * parses the received message and updates the MainViewModel instance with the received data
+    * It checks for two possible types of messages - new messages and typing status updates.*/
     override fun onMessage(webSocket: WebSocket, text: String) {
         val gson = Gson()
         val json = JSONObject(text)
@@ -54,12 +64,13 @@ class WebSocketManager(private val mainViewModel: MainViewModel):WebSocketListen
         Log.d("MYTAG", "WebSocket connection closed.")
     }
 
+    //logs an error message when the WebSocket connection fails
     override fun onFailure(webSocket: WebSocket, t: Throwable, response: Response?) {
         if (t is SocketException && t.message?.contains("Broken pipe") == true) {
             Log.d("MYTAG", "WebSocket failure: Broken pipe")
             // Reconnect the WebSocket here
             val request = Request.Builder()
-                .url("wss://api.chatengine.io/chat/?projectID=0ddfa87c-cd5d-4103-8946-0b0ccc96cf9e&chatID=153494&accessKey=ca-468a06ad-8aad-4024-b282-7f1ff509d003")
+                .url("wss://api.chatengine.io/chat/?projectID=0ddfa87c-cd5d-4103-8946-0b0ccc96cf9e&chatID=${mainViewModel.chatId}&accessKey=${mainViewModel.accesskey}")
                 .build()
             val client = OkHttpClient()
             this.webSocket = client.newWebSocket(request, this)
@@ -67,10 +78,12 @@ class WebSocketManager(private val mainViewModel: MainViewModel):WebSocketListen
         else{Log.d("MYTAG", "WebSocket failure.", t)}
     }
 
+    //allows sending messages
     fun sendMessage(message: String) {
         webSocket.send(message)
     }
 
+    //closes the WebSocket connection
     fun closeWebSocket() {
         webSocket.close(1000, "Closing WebSocket.")
         Log.d("MYTAG","Connection Closed")

@@ -61,6 +61,7 @@ class MainViewModel:ViewModel() {
         return  signUpApiInterface
     }
 
+    //login function to authenticate user
     fun AuthenticateUser(): LoginInterfaceAPI {
         val apiService= LoginClass(username.value,password.value).getInstance()
         return  apiService

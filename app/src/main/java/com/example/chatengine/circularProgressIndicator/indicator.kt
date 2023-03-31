@@ -10,6 +10,7 @@ import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.unit.dp
 
+//composable has a loader ui whic is shown when data is getting loaded from api
 @Composable
 fun LoadingView() {
     Box(
