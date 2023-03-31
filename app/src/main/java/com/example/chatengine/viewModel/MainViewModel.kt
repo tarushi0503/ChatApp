@@ -7,8 +7,7 @@ import androidx.compose.runtime.mutableStateOf
 import androidx.compose.runtime.setValue
 import androidx.lifecycle.ViewModel
 import androidx.lifecycle.viewModelScope
-import com.example.chatengine.questionsScreen.ChatApiInterface
-import com.example.chatengine.questionsScreen.ChatDataClass
+import com.example.chatengine.questionsRoom.RoomDataClass
 import com.example.chatengine.questionsScreen.ChatRoom
 import com.example.chatengine.isTyping.TypingClass
 import com.example.chatengine.isTyping.isTypingInterface
@@ -17,12 +16,13 @@ import com.example.chatengine.loginScreen.LoginDataClass
 import com.example.chatengine.loginScreen.LoginInterfaceAPI
 import com.example.chatengine.messageScreen.MessageClass
 import com.example.chatengine.messageScreen.MsgDataClassModel
-import com.example.chatengine.messageScreen.PostMessageAPI
 import com.example.chatengine.messageScreen.RecieveDataClass
+import com.example.chatengine.messageScreen.messageApiInterface
+import com.example.chatengine.questionsScreen.RoomApiInterface
 import com.example.chatengine.signupScreen.SignUpClass
 import com.example.chatengine.signupScreen.signUpApiInterface
+import com.example.chatengine.userHistoryScreen.GetChatHistoryApiInterface
 import com.example.chatengine.userHistoryScreen.GetChatsDataClass
-import com.example.chatengine.userHistoryScreen.GetMyChats
 import com.example.chatengine.userHistoryScreen.GetMyChatsClass
 import kotlinx.coroutines.Dispatchers
 import kotlinx.coroutines.delay
@@ -51,6 +51,7 @@ class MainViewModel:ViewModel() {
     //name with which the chat room will be created
     var chatName by mutableStateOf("Agent")
 
+
     val initial = LoginDataClass("","",false)
     var UserData: LoginDataClass? by mutableStateOf(initial)
 
@@ -69,9 +70,9 @@ class MainViewModel:ViewModel() {
 
     //create new chat room
     //var chat by mutableStateOf("")
-    var initialChat=ChatDataClass("",false, listOf("tarushi07"))
-    var newChatDetails:ChatDataClass? by mutableStateOf(initialChat)
-    fun createChat():ChatApiInterface{
+    var initialChat= RoomDataClass("",false, listOf("tarushi07"))
+    var newChatDetails: RoomDataClass? by mutableStateOf(initialChat)
+    fun createChat(): RoomApiInterface {
         val chatApiService = ChatRoom(username.value,password.value).postRoomInstance()
         return  chatApiService
     }
@@ -80,7 +81,7 @@ class MainViewModel:ViewModel() {
     var text by mutableStateOf("")
     var firstMsg = MsgDataClassModel("")
     var newMsgDetails:MsgDataClassModel? by mutableStateOf(firstMsg)
-    fun createMsg():PostMessageAPI{
+    fun createMsg(): messageApiInterface {
         val msgApiService= MessageClass(username.value,password.value,chatId).postMsgInstance()
         return  msgApiService
     }
@@ -97,7 +98,7 @@ class MainViewModel:ViewModel() {
 
     //get messages
     var firstMsgGet : MutableList<RecieveDataClass> by mutableStateOf(mutableListOf())
-    fun createMsgGet():PostMessageAPI{
+    fun createMsgGet():messageApiInterface{
         val msgApiService= MessageClass(username.value,password.value,chatId).getMsgInstance()
         return  msgApiService
     }
@@ -111,7 +112,7 @@ class MainViewModel:ViewModel() {
     //Different users
     var allChats : MutableList<GetChatsDataClass> by mutableStateOf(mutableListOf())
     //var newMsgDetailsGet:MsgDataClassModel? by mutableStateOf(firstMsgGet)
-    fun getAllChats(): GetMyChats {
+    fun getAllChats(): GetChatHistoryApiInterface {
         val msgApiService= GetMyChatsClass(username.value,password.value).getMsgInstance()
         return  msgApiService
     }

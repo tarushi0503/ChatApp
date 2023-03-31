@@ -14,7 +14,7 @@ import androidx.compose.runtime.remember
 import androidx.lifecycle.lifecycleScope
 import com.example.chatengine.navigation.NavigationController
 import com.example.chatengine.questionsRoom.QuestionsListing
-import com.example.chatengine.questionsRoom.QuestionsViewModel
+import com.example.chatengine.questionsRoom.room.QuestionsViewModel
 import kotlinx.coroutines.Dispatchers
 import kotlinx.coroutines.launch
 import kotlinx.coroutines.withContext

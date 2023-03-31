@@ -77,7 +77,7 @@ private fun loginData(
 
             //only when is_authenticated is true the user wil navigate else won't
             if(model?.is_authenticated==true){
-                navController.navigate(NavigationItems.UserScreen.route)
+                navController.navigate(NavigationItems.UserHistoryScreen.route)
                 mainViewModel.isLoading.value=false
             }
 

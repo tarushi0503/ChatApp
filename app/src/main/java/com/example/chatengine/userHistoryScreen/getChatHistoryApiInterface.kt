@@ -1,4 +1,5 @@
-package com.example.chatengine.loginScreen
+package com.example.chatengine.userHistoryScreen
+
 
 import com.example.chatengine.constants.constants.baseUrl
 import com.example.chatengine.constants.constants.projectId
@@ -9,27 +10,26 @@ import retrofit2.Retrofit
 import retrofit2.converter.gson.GsonConverterFactory
 import retrofit2.http.GET
 
+
 /*the code defines an API interface and a class that use Retrofit
-to make network requests to a server for getting login data with a username and password.*/
-interface LoginInterfaceAPI {
+to make network requests to a server for getting chat user data with a username and password.*/
+interface GetChatHistoryApiInterface {
 
     //gets the data with the specified end point
-    @GET("users/me/")
-    fun getUsers(): Call<LoginDataClass?>?
-
+    @GET("/chats")
+    fun getChats(): Call<List<GetChatsDataClass>?>?
 }
 
-class LoginClass(var username: String, var password: String){
+class GetMyChatsClass(var username: String, var password: String){
 
-    /*getInstance() is a method that returns an instance of loginAPIInterface using the Retrofit.Builder()
+    /*getInstance() is a method that returns an instance interface using the Retrofit.Builder()
     while making network requests.*/
-    fun getInstance(): LoginInterfaceAPI{
+    fun getMsgInstance(): GetChatHistoryApiInterface {
 
         /*loggingInterceptor is an instance of HttpLoggingInterceptor used to log
        the HTTP requests and responses.*/
         val loggingInterceptor=HttpLoggingInterceptor()
         loggingInterceptor.setLevel(HttpLoggingInterceptor.Level.BODY)
-
 
         /*httpClient is an instance of OkHttpClient that configures the HTTP
         client*/
@@ -40,6 +40,7 @@ class LoginClass(var username: String, var password: String){
                     .addHeader("Project-ID", projectId)
                     .addHeader("User-name", username)
                     .addHeader("User-Secret", password)
+                    //.addHeader("Accept", "application/json")
                     .build()
                 chain.proceed(request)
             }
@@ -50,8 +51,9 @@ class LoginClass(var username: String, var password: String){
             .baseUrl(baseUrl)
             .client(httpClient)
             .addConverterFactory(GsonConverterFactory.create())
-            .build().create(LoginInterfaceAPI::class.java)
+            .build().create( GetChatHistoryApiInterface::class.java)
 
         return  retrofit!!
     }
 }
+

@@ -1,5 +1,6 @@
 package com.example.chatengine.isTyping
 
+import com.example.chatengine.constants.constants.projectId
 import okhttp3.OkHttpClient
 import okhttp3.logging.HttpLoggingInterceptor
 import retrofit2.Call
@@ -32,7 +33,7 @@ class TypingClass(val username:String, val password:String,val chatId:String) {
             .addInterceptor(loggingInterceptor)
             .addInterceptor { chain ->
                 val request = chain.request().newBuilder()
-                    .addHeader("Project-ID", "0ddfa87c-cd5d-4103-8946-0b0ccc96cf9e")
+                    .addHeader("Project-ID", projectId)
                     .addHeader("User-Name", username)
                     .addHeader("User-Secret", password)
                     .build()

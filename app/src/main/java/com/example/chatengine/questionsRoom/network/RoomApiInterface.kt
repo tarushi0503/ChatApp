@@ -1,6 +1,9 @@
 package com.example.chatengine.questionsScreen
 
 
+import com.example.chatengine.constants.constants.baseUrl
+import com.example.chatengine.constants.constants.projectId
+import com.example.chatengine.questionsRoom.RoomDataClass
 import okhttp3.OkHttpClient
 import okhttp3.logging.HttpLoggingInterceptor
 import retrofit2.Call
@@ -10,9 +13,14 @@ import retrofit2.http.Body
 import retrofit2.http.PUT
 
 
-interface ChatApiInterface {
+
+/*the code defines an API interface and a class that use Retrofit
+to make network requests to a server for ceate chat room and adding a default user */
+interface RoomApiInterface {
+
+    //gets the data an creates room with the specified end point
     @PUT("chats/")
-    fun postChatRoom(@Body chatDataClass: ChatDataClass?): Call<ChatDataClass?>?
+    fun postChatRoom(@Body roomDataClass: RoomDataClass?): Call<RoomDataClass?>?
 }
 
 class ChatRoom(username:String,password:String){
@@ -21,15 +29,23 @@ class ChatRoom(username:String,password:String){
     var password=password
 
 
-    fun postRoomInstance(): ChatApiInterface{
+
+    /*postRoomInstance() is a method that returns an instance interface using the Retrofit.Builder()
+while making network requests.*/
+    fun postRoomInstance(): RoomApiInterface{
         val loggingInterceptor= HttpLoggingInterceptor()
+
+        /*loggingInterceptor is an instance of HttpLoggingInterceptor used to log
+       the HTTP requests and responses.*/
         loggingInterceptor.setLevel(HttpLoggingInterceptor.Level.BODY)
-        val url = "https://api.chatengine.io/"
+
+        /*httpClient is an instance of OkHttpClient that configures the HTTP
+        client*/
         val httpClient= OkHttpClient.Builder()
             .addInterceptor(loggingInterceptor)
             .addInterceptor { chain ->
                 val request = chain.request().newBuilder()
-                    .addHeader("Project-ID", "0ddfa87c-cd5d-4103-8946-0b0ccc96cf9e")
+                    .addHeader("Project-ID", projectId)
                     .addHeader("User-Name", username)
                     .addHeader("User-Secret", password)
                     //.addHeader("Accept", "application/json")
@@ -38,11 +54,12 @@ class ChatRoom(username:String,password:String){
             }
             .build()
 
+        //creates a Retrofit instance, specifying the base URL, the HTTP client, and the JSON converter factory to use
         val retrofit= Retrofit.Builder()
-            .baseUrl(url)
+            .baseUrl(baseUrl)
             .client(httpClient)
             .addConverterFactory(GsonConverterFactory.create())
-            .build().create(ChatApiInterface::class.java)
+            .build().create(RoomApiInterface::class.java)
 
         return  retrofit!!
     }

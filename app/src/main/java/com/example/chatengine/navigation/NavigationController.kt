@@ -14,9 +14,9 @@ import com.example.chatengine.webSocket.WebSocketManager
 import com.example.chatengine.viewModel.MainViewModel
 import com.example.chatengine.messageScreen.Messages
 import com.example.chatengine.questionsRoom.QuestionsList
-import com.example.chatengine.questionsRoom.QuestionsViewModel
+import com.example.chatengine.questionsRoom.room.QuestionsViewModel
 import com.example.chatengine.signupScreen.SignUpScaffold
-import com.example.chatengine.userHistoryScreen.UserScreen
+import com.example.chatengine.userHistoryScreen.UserHistoryScreen
 
 
 /*
@@ -46,8 +46,8 @@ fun NavigationController(sharedPreferences: SharedPreferences, navController: Na
         }
 
         //A screen that displays all users.
-        composable(NavigationItems.UserScreen.route){
-            UserScreen(navController, mainViewModel,sharedPreferences)
+        composable(NavigationItems.UserHistoryScreen.route){
+            UserHistoryScreen(navController, mainViewModel,sharedPreferences)
         }
 
         // A screen that displays messages between users.

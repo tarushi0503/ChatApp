@@ -22,10 +22,9 @@ import androidx.compose.ui.text.font.FontStyle
 import androidx.compose.ui.text.font.FontWeight
 import androidx.compose.ui.unit.dp
 import androidx.compose.ui.unit.sp
-import androidx.lifecycle.viewmodel.compose.viewModel
 import androidx.navigation.NavController
 import com.example.chatengine.navigation.NavigationItems
-import com.example.chatengine.questionsScreen.ChatDataClass
+import com.example.chatengine.questionsRoom.room.QuestionsViewModel
 import com.example.chatengine.ui.theme.Purple500
 import com.example.chatengine.viewModel.MainViewModel
 import retrofit2.Call
@@ -205,27 +204,27 @@ private fun postRoom(
 ) {
 
     val retrofitAPI = mainViewModel.createChat()
-    val chatDataClass= ChatDataClass(mainViewModel.chatName,false, listOf("tarushi07"))
+    val roomDataClass= RoomDataClass(mainViewModel.chatName,false, listOf("tarushi07"))
 
-    val call: Call<ChatDataClass?>? = retrofitAPI.postChatRoom(chatDataClass)
+    val call: Call<RoomDataClass?>? = retrofitAPI.postChatRoom(roomDataClass)
 
-    call!!.enqueue(object : Callback<ChatDataClass?> {
+    call!!.enqueue(object : Callback<RoomDataClass?> {
 
-        override fun onResponse(call: Call<ChatDataClass?>, response: Response<ChatDataClass?>) {
+        override fun onResponse(call: Call<RoomDataClass?>, response: Response<RoomDataClass?>) {
             Toast.makeText(ctx, " in", Toast.LENGTH_SHORT).show()
-            val model: ChatDataClass? = response.body()
+            val model: RoomDataClass? = response.body()
             val resp =
                 "Response Code : " + response.code() + "\n"+"Id: " + model?.is_direct_chat+  "\n"+ model?.title
             result.value=resp
             mainViewModel.newChatDetails = model
             if(model?.is_direct_chat==false){
                 Toast.makeText(ctx,"Chat created", Toast.LENGTH_LONG).show()
-                navController.navigate(NavigationItems.UserScreen.route)
+                navController.navigate(NavigationItems.UserHistoryScreen.route)
             }
 
         }
 
-        override fun onFailure(call: Call<ChatDataClass?>, t: Throwable) {
+        override fun onFailure(call: Call<RoomDataClass?>, t: Throwable) {
             result.value="error "+t.message
         }
     })

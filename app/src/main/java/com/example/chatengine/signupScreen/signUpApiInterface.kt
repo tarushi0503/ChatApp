@@ -1,8 +1,8 @@
 package com.example.chatengine.signupScreen
 
 
-import com.example.chatengine.constants.baseUrl
-import com.example.chatengine.constants.privateKey
+import com.example.chatengine.constants.constants.baseUrl
+import com.example.chatengine.constants.constants.privateKey
 import okhttp3.OkHttpClient
 import okhttp3.logging.HttpLoggingInterceptor
 import retrofit2.Call

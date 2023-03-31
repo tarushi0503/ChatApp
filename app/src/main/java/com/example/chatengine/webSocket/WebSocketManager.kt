@@ -2,6 +2,7 @@ package com.example.chatengine.webSocket
 
 
 import android.util.Log
+import com.example.chatengine.constants.constants.projectId
 import com.example.chatengine.viewModel.MainViewModel
 import com.example.chatengine.messageScreen.RecieveDataClass
 import com.google.gson.Gson
@@ -20,7 +21,7 @@ class WebSocketManager(private val mainViewModel: MainViewModel):WebSocketListen
     * Pass in a request object that specifies the URL of the WebSocket endpoint.
      */
     init {
-        val request = Request.Builder().url("wss://api.chatengine.io/chat/?projectID=0ddfa87c-cd5d-4103-8946-0b0ccc96cf9e&chatID=${mainViewModel.chatId}&accessKey=${mainViewModel.accesskey}").build()
+        val request = Request.Builder().url("wss://api.chatengine.io/chat/?projectID=${projectId}&chatID=${mainViewModel.chatId}&accessKey=${mainViewModel.accesskey}").build()
         val client = OkHttpClient()
         webSocket = client.newWebSocket(request, this)
     }
@@ -70,7 +71,7 @@ class WebSocketManager(private val mainViewModel: MainViewModel):WebSocketListen
             Log.d("MYTAG", "WebSocket failure: Broken pipe")
             // Reconnect the WebSocket here
             val request = Request.Builder()
-                .url("wss://api.chatengine.io/chat/?projectID=0ddfa87c-cd5d-4103-8946-0b0ccc96cf9e&chatID=${mainViewModel.chatId}&accessKey=${mainViewModel.accesskey}")
+                .url("wss://api.chatengine.io/chat/?projectID=${projectId}=${mainViewModel.chatId}&accessKey=${mainViewModel.accesskey}")
                 .build()
             val client = OkHttpClient()
             this.webSocket = client.newWebSocket(request, this)

@@ -110,7 +110,7 @@ private fun getMsgHistory(
 
 @SuppressLint("UnusedMaterialScaffoldPaddingParameter")
 @Composable
-fun UserScreen(
+fun UserHistoryScreen(
     navController: NavHostController,
     mainViewModel: MainViewModel,
     sharedPreferences: SharedPreferences
