@@ -12,7 +12,8 @@ import retrofit2.http.Body
 import retrofit2.http.POST
 
 
-//the code defines an API interface and a class that use Retrofit to make network requests to a server for posting sign up data with a username and password.
+/*the code defines an API interface and a class that use Retrofit to make network requests to a server
+ for posting sign up data with a username and password*/
 interface signUpApiInterface {
 
     //specifies that the postData() method is making an HTTP POST request to the server with the "users/" endpoint.

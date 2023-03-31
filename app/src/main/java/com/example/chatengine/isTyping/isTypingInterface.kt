@@ -7,8 +7,11 @@ import retrofit2.Retrofit
 import retrofit2.converter.gson.GsonConverterFactory
 import retrofit2.http.POST
 
+
+/*the code defines an API interface and a class that use Retrofit to make network requests to a server */
 interface isTypingInterface {
 
+    //specifies that the notifyTyping() method is making an HTTP POST request to the server with the specified endpoint.
     @POST("typing/")
     fun notifyTyping(): Call<isTypingDataClass?>?
 }
@@ -17,6 +20,8 @@ interface isTypingInterface {
 class TypingClass(val username:String, val password:String,val chatId:String) {
 
 
+    /*getTypingInstance() is a method that returns an instance of isTypingInterface using the Retrofit.Builder()
+   while making network requests.*/
     fun getTypingInstance(): isTypingInterface {
         val loggingInterceptor = HttpLoggingInterceptor()
         loggingInterceptor.setLevel(HttpLoggingInterceptor.Level.BODY)
@@ -35,6 +40,7 @@ class TypingClass(val username:String, val password:String,val chatId:String) {
             }
             .build()
 
+        //creates a Retrofit instance, specifying the base URL, the HTTP client, and the JSON converter factory to use
         val retrofit = Retrofit.Builder()
             .baseUrl(url)
             .client(httpClient)

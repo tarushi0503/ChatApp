@@ -69,7 +69,7 @@ private fun loginData(
 
     call!!.enqueue(object : Callback<LoginDataClass?> {
 
-        override fun onResponse(call: Call<LoginDataClass?>?, response: Response<LoginDataClass?>) {
+        override fun onResponse(call: Call<LoginDataClass?>, response: Response<LoginDataClass?>) {
             Toast.makeText(ctx, "Logged in", Toast.LENGTH_SHORT).show()
             val model: LoginDataClass? = response.body()
             secret.value = model?.secret.toString()
@@ -91,7 +91,7 @@ private fun loginData(
 
         }
 
-        override fun onFailure(call: Call<LoginDataClass?>?, t: Throwable) {
+        override fun onFailure(call: Call<LoginDataClass?>, t: Throwable) {
             result.value="error "+t.message
         }
     })
