@@ -39,8 +39,12 @@ fun IsTypingHelpingFunction(
     viewModel: MainViewModel
 )
 {
+    //stores the response of IsUserTyping() function created in main view model
     val retrofitAPI= viewModel.IsUserTyping()
+
+    //represents a call to get data from the server
     val call: Call<isTypingDataClass?>? = retrofitAPI.notifyTyping()
+
     call!!.enqueue(object : Callback<isTypingDataClass?> {
         override fun onResponse(
             call: Call<isTypingDataClass?>,
@@ -58,11 +62,16 @@ fun IsTypingHelpingFunction(
 }
 
 
+//function is called when send button is pressed to post the message
 fun startMessaging(context: Context, value: String, result: MutableState<String>, mainViewModel: MainViewModel) {
 
+    //stores the response of createMsg() function created in main view model
     val retrofitAPI = mainViewModel.createMsg()
+
+    //the MsgDataClassModel receives parameters input by user and passes it to data class
     val msgDataClassModel=MsgDataClassModel(value)
 
+    //represents a call to get data from the server
     val call: Call<MsgDataClassModel?>? = retrofitAPI.postMsg(msgDataClassModel)
 
     call!!.enqueue(object : Callback<MsgDataClassModel?> {
@@ -86,6 +95,7 @@ fun startMessaging(context: Context, value: String, result: MutableState<String>
 
 
 
+//Composable for message screen
 @RequiresApi(Build.VERSION_CODES.O)
 @OptIn(ExperimentalComposeUiApi::class)
 @SuppressLint("UnusedMaterialScaffoldPaddingParameter")
@@ -100,6 +110,7 @@ fun Messages(
     val messageList = messageListState.value
     Text(text = messageList.size.toString())
 
+    //this filed takes the input of the message to be sent by user
     var inputText by remember {
         mutableStateOf("")
     }
@@ -116,10 +127,10 @@ fun Messages(
             TopAppBar(
                 backgroundColor = Purple200,
                 title = {
+                    //check which makes sure that if user1 is typing only the other user in the chat sees it.
                     if (mainViewModel.istyping.value && mainViewModel.username.value != mainViewModel.istypinguser.value) {
                         Text(text = " is typing", color = Color.White)
                         mainViewModel.startTyping()
-//                    isTYping=false
                     } else {
                         Text(
                             text =
@@ -132,6 +143,8 @@ fun Messages(
                         )
                     }
                 },
+
+                //the button take the user back to the previous screen
                 navigationIcon = {
                     IconButton(onClick = {
                         navController.popBackStack()
@@ -148,6 +161,7 @@ fun Messages(
 
         ) {
 
+        //to show a text when no chats are there
         if (mainViewModel.firstMsgGet.size == 0) {
             Box(
                 modifier = Modifier
@@ -161,28 +175,42 @@ fun Messages(
                 )
             }
 
-        } else {
-
-
+        }
+        //when chats are present
+        else {
+            //display all the cat messages in a room
             LazyColumn(
                 modifier = Modifier
                     .fillMaxWidth()
                     .fillMaxHeight(0.9f)
                     .background(Color.White)
                     .padding(8.dp),
-
                 reverseLayout = true
 
             ) {
                 itemsIndexed(mainViewModel.firstMsgGet.sortedByDescending { it.created }) { lastIndex, item ->
 
                     val isCurrentUser = item.sender_username == mainViewModel.username.value
+
+                    //determines the background colour of message
                     val messageBackgroundColor = if (isCurrentUser) SenderColor else ReceiverColor
+
+                    //determines the message colour of message
                     val messageTextColor = if (isCurrentUser) Color.Black else Color.Black
+
+                    //extraction of time
                     val time = item.created.subSequence(11, 16)
+
+                    //extraction of date
                     val date = item.created.subSequence(8, 10)
+
+                    //extraction of month
                     var month = item.created.subSequence(5, 7)
+
+                    ////extraction of year
                     val year = item.created.subSequence(0, 4)
+
+                    //Gettng month name on basis of month
                     month = when (month) {
                         "01" -> "Jan"
                         "02" -> "Feb"
@@ -201,6 +229,7 @@ fun Messages(
                     Column(
                         modifier = Modifier
                             .fillMaxWidth(),
+                        //shows the messages in chat view
                         horizontalAlignment = if (isCurrentUser) Alignment.End else Alignment.Start
                     ) {
                         Box(
@@ -219,6 +248,7 @@ fun Messages(
                                         .background(messageBackgroundColor)
                                         .padding(10.dp)
                                 ) {
+                                    //displays message sent
                                     Text(
                                         text = item.text,
                                         color = messageTextColor,
@@ -227,6 +257,7 @@ fun Messages(
                                     )
                                     Spacer(modifier = Modifier.height(6.dp))
 
+                                    //displays date, month, year
                                     Text(
                                         text = "$date $month $year",
                                         color = messageTextColor,
@@ -235,6 +266,7 @@ fun Messages(
                                     )
                                     Spacer(modifier = Modifier.height(4.dp))
 
+                                    //displays time
                                     Text(
                                         text = "$time",
                                         color = messageTextColor,
@@ -272,8 +304,13 @@ fun Messages(
             )
             IconButton(
                 onClick = {
+                    //websocket manages the instant sending of messages
                     webSocketManager.sendMessage(inputText)
+
+                    //function is called when send button is pressed to post the message
                     startMessaging(context, inputText, result, mainViewModel)
+
+                    //this empties the textfield after sending message
                     inputText = ""
                 },
                 modifier = Modifier.padding(start = 8.dp)

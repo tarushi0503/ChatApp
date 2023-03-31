@@ -61,7 +61,7 @@ private fun loginData(
     val retrofitAPI = mainViewModel.AuthenticateUser()
 
 
-    //represents an call to get data from the server
+    //represents a call to get data from the server
     val call: Call<LoginDataClass?>? = retrofitAPI.getUsers()
 
     //for shared preferences

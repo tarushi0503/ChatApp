@@ -1,6 +1,5 @@
 package com.example.chatengine.userHistoryScreen
 
-
 import android.annotation.SuppressLint
 import android.content.Context
 import android.content.Intent
@@ -108,6 +107,10 @@ fun UserHistoryScreen(
 
     //enables shared preferences
     val editor: SharedPreferences.Editor = sharedPreferences.edit()
+//    editor.putString("USERNAME",mainViewModel.username.value)
+//    editor.putString("USERNAME",mainViewModel.password.value)
+//    editor.apply()
+
     val context = LocalContext.current
 
     val getApiResult = remember {
@@ -125,16 +128,8 @@ fun UserHistoryScreen(
         topBar = {
             TopAppBar(
                 title = { Text(text = "Chats") },
-                navigationIcon = {
-                    IconButton(onClick = { navController.popBackStack() }) {
-                        Icon(
-                            Icons.Default.ArrowBack,
-                            contentDescription = "Back",
-                            tint = Color.White
-                        )
-                    }
-                },
                 actions = {
+                    //logs out user from app and clear backgroud activity
                     IconButton(onClick = {
                         editor.putString("USERNAME", "")
                         editor.putString("SECRET", "")

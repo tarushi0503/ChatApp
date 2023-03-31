@@ -69,7 +69,6 @@ class MainViewModel:ViewModel() {
     }
 
     //create new chat room
-    //var chat by mutableStateOf("")
     var initialChat= RoomDataClass("",false, listOf("tarushi07"))
     var newChatDetails: RoomDataClass? by mutableStateOf(initialChat)
     fun createChat(): RoomApiInterface {
@@ -109,15 +108,13 @@ class MainViewModel:ViewModel() {
 
 
 
-    //Different users
+    //Different users list
     var allChats : MutableList<GetChatsDataClass> by mutableStateOf(mutableListOf())
     //var newMsgDetailsGet:MsgDataClassModel? by mutableStateOf(firstMsgGet)
     fun getAllChats(): GetChatHistoryApiInterface {
         val msgApiService= GetMyChatsClass(username.value,password.value).getMsgInstance()
         return  msgApiService
     }
-
-
 
     //user is typing or not
     val istyping = mutableStateOf(false)
