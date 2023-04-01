@@ -4,9 +4,7 @@ import android.annotation.SuppressLint
 import android.content.Context
 import android.content.SharedPreferences
 import android.widget.Toast
-import androidx.compose.foundation.Image
-import androidx.compose.foundation.background
-import androidx.compose.foundation.clickable
+import androidx.compose.foundation.*
 import androidx.compose.foundation.layout.*
 import androidx.compose.foundation.shape.RoundedCornerShape
 import androidx.compose.foundation.text.KeyboardOptions
@@ -151,8 +149,7 @@ fun LoginScreen(
 
     //else user will be asked to login again
     else {
-        // on below line we are creating a column.
-        Scaffold {
+        // on below line a card is created inside the box
             Box(
                 modifier = Modifier
                     .background(
@@ -171,6 +168,7 @@ fun LoginScreen(
                     modifier = Modifier
                         .fillMaxWidth()
                         .height(700.dp)
+                        .verticalScroll(rememberScrollState())
                         //.alpha(0.9f)
                         .padding(16.dp),
                     backgroundColor = card,
@@ -387,7 +385,6 @@ fun LoginScreen(
                     }
                 }
             }
-        }
     }
     if (mainViewModel.isLoading.value){
         LoadingView()

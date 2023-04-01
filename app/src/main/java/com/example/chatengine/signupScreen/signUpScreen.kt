@@ -3,9 +3,7 @@ package com.example.chatengine.signupScreen
 import android.content.Context
 import android.text.TextUtils
 import android.widget.Toast
-import androidx.compose.foundation.Image
-import androidx.compose.foundation.background
-import androidx.compose.foundation.clickable
+import androidx.compose.foundation.*
 import androidx.compose.foundation.layout.*
 import androidx.compose.foundation.shape.RoundedCornerShape
 import androidx.compose.foundation.text.KeyboardOptions
@@ -145,6 +143,7 @@ fun SignUpScreen(navController:NavController, mainViewModel: MainViewModel) {
             modifier = Modifier
                 .fillMaxWidth()
                 .height(700.dp)
+                .verticalScroll(rememberScrollState())
                 .padding(16.dp),
             backgroundColor = card,
             shape = RoundedCornerShape(50.dp),
@@ -172,7 +171,8 @@ fun SignUpScreen(navController:NavController, mainViewModel: MainViewModel) {
                     //contentDescription tell about the image
                     contentDescription = "logo",
                     //modifier enhances the look and feel of component
-                    modifier = Modifier.width(80.dp)
+                    modifier = Modifier
+                        .width(80.dp)
                         .height(80.dp)
                         .padding(top = 5.dp),
                     contentScale = ContentScale.Crop,

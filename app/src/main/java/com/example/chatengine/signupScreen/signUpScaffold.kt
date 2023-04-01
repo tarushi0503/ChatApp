@@ -7,6 +7,7 @@ import androidx.compose.material.*
 import androidx.compose.material.icons.Icons
 import androidx.compose.material.icons.filled.ArrowBack
 import androidx.compose.runtime.Composable
+import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.graphics.Color
 import androidx.compose.ui.unit.dp
@@ -33,8 +34,7 @@ fun SignUpScaffold(navController: NavHostController, mainViewModel: MainViewMode
                         // on below line we are specifying text to display in top app bar.
                         text = "New Account",
 
-                        modifier = Modifier.fillMaxWidth()
-                            .padding(start = 75.dp),
+                        modifier = Modifier.fillMaxWidth(),
                         color = Color.White
                     )
                 },

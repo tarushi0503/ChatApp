@@ -27,6 +27,7 @@ import androidx.compose.ui.unit.dp
 import androidx.compose.ui.unit.sp
 import androidx.navigation.NavHostController
 import com.example.chatengine.circularProgressIndicator.LoadingView
+import com.example.chatengine.constants.constants.admin
 import com.example.chatengine.webSocket.WebSocketManager
 import com.example.chatengine.isTyping.isTypingDataClass
 import com.example.chatengine.viewModel.MainViewModel
@@ -135,7 +136,7 @@ fun Messages(
                     } else {
                         Text(
                             text =
-                            if (mainViewModel.username.value == "tarushi07") "user" else "tarushi07",
+                            if (mainViewModel.username.value == admin) "user" else admin,
                             modifier = Modifier
                                 .fillMaxWidth()
                                 .padding(start = 10.dp),
@@ -144,7 +145,6 @@ fun Messages(
                         )
                     }
                 },
-
                 //the button take the user back to the previous screen
                 navigationIcon = {
                     IconButton(onClick = {

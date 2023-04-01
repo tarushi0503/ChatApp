@@ -24,6 +24,7 @@ import androidx.compose.ui.unit.dp
 import androidx.compose.ui.unit.sp
 import androidx.navigation.NavController
 import com.example.chatengine.circularProgressIndicator.LoadingView
+import com.example.chatengine.constants.constants.admin
 import com.example.chatengine.navigation.NavigationItems
 import com.example.chatengine.questionsRoom.room.QuestionsViewModel
 import com.example.chatengine.ui.theme.Purple500
@@ -235,7 +236,7 @@ private fun postRoom(
     val retrofitAPI = mainViewModel.createChat()
 
     //the roomDataClass receives parameters passes it to data class
-    val roomDataClass= RoomDataClass(mainViewModel.chatName,false, listOf("tarushi07"))
+    val roomDataClass= RoomDataClass(mainViewModel.chatName,false, listOf(admin))
 
     //represents a call to post data to the server using the postChatRoom() method defined in the RoomApiInterface
     val call: Call<RoomDataClass?>? = retrofitAPI.postChatRoom(roomDataClass)

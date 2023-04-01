@@ -23,11 +23,7 @@ interface RoomApiInterface {
     fun postChatRoom(@Body roomDataClass: RoomDataClass?): Call<RoomDataClass?>?
 }
 
-class ChatRoom(username:String,password:String){
-
-    var username=username
-    var password=password
-
+class ChatRoom(var username: String, var password: String){
 
 
     /*postRoomInstance() is a method that returns an instance interface using the Retrofit.Builder()
