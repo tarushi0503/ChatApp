@@ -105,7 +105,7 @@ fun LoginScreen(
 
     //if shared preferences already has data, user won't be asked to login again and user history screen will open
     if (userNameSharedPreferences.isNotBlank()) {
-//        mainViewModel.isLoading.value = true
+        mainViewModel.isLoading.value = true
         mainViewModel.username.value = userNameSharedPreferences
         mainViewModel.password.value = passwordSharedPreferences
         UserHistoryScreen(navController, mainViewModel, sharedPreferences )
@@ -114,7 +114,6 @@ fun LoginScreen(
     //else user will be asked to login again
     else {
         Login(navController, mainViewModel, sharedPreferences)
-
     }
 }
 

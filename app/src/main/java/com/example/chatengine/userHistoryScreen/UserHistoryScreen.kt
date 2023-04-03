@@ -95,6 +95,7 @@ private fun getMsgHistory(
             val model: List<GetChatsDataClass> = response.body()?: emptyList()
 
             mainViewModel.allChats= model as MutableList<GetChatsDataClass>
+            mainViewModel.isLoading.value = false
         }
 
         override fun onFailure(call: Call<List<GetChatsDataClass>?>, t: Throwable) {
