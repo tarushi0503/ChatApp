@@ -28,14 +28,9 @@ class MainActivity : ComponentActivity() {
     * initialization of a QuestionsViewModel instance using viewModels.
      */
     lateinit var sharedPreferences:SharedPreferences
-    val questionViewModel by viewModels<QuestionsViewModel>()
     @RequiresApi(Build.VERSION_CODES.O)
     override fun onCreate(savedInstanceState: Bundle?) {
-        lifecycleScope.launch {
-            withContext(Dispatchers.IO){
-                QuestionsListing(questionViewModel)
-            }
-        }
+
         super.onCreate(savedInstanceState)
 
         //setContent method is used to set the content view for the activity

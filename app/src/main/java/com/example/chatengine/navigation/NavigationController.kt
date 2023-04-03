@@ -4,6 +4,8 @@ import android.content.SharedPreferences
 import android.os.Build
 import androidx.annotation.RequiresApi
 import androidx.compose.runtime.Composable
+import androidx.compose.runtime.LaunchedEffect
+import androidx.lifecycle.lifecycleScope
 import androidx.lifecycle.viewmodel.compose.viewModel
 import androidx.navigation.NavHostController
 import androidx.navigation.compose.NavHost
@@ -14,9 +16,13 @@ import com.example.chatengine.webSocket.WebSocketManager
 import com.example.chatengine.viewModel.MainViewModel
 import com.example.chatengine.messageScreen.Messages
 import com.example.chatengine.questionsRoom.QuestionsList
+import com.example.chatengine.questionsRoom.QuestionsListing
 import com.example.chatengine.questionsRoom.room.QuestionsViewModel
 import com.example.chatengine.signupScreen.SignUpScaffold
 import com.example.chatengine.userHistoryScreen.UserHistoryScreen
+import kotlinx.coroutines.Dispatchers
+import kotlinx.coroutines.launch
+import kotlinx.coroutines.withContext
 
 
 /*
@@ -28,7 +34,11 @@ import com.example.chatengine.userHistoryScreen.UserHistoryScreen
 @Composable
 fun NavigationController(sharedPreferences: SharedPreferences, navController: NavHostController = rememberNavController()) {
    val questionViewModel: QuestionsViewModel = viewModel()
-
+    LaunchedEffect(key1 = true){
+            withContext(Dispatchers.IO){
+                QuestionsListing(questionViewModel)
+            }
+    }
     val mainViewModel: MainViewModel = viewModel()
     val webSocketManager=WebSocketManager(mainViewModel)
 

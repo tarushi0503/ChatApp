@@ -75,7 +75,7 @@ private fun getMsgHistory(
         }
 
         override fun onFailure(call: Call<List<RecieveDataClass>?>, t: Throwable) {
-            //getApiResult.value="error "+t.message
+            getApiResult.value="error "+t.message
         }
     })
 }
@@ -108,16 +108,19 @@ private fun getMsgHistory(
 @SuppressLint("UnusedMaterialScaffoldPaddingParameter")
 @Composable
 fun UserHistoryScreen(
-    navController: NavHostController,
+    navController: NavController,
     mainViewModel: MainViewModel,
     sharedPreferences: SharedPreferences
 ) {
 
+    //function to fetch chat user data from api
+    getChatHistory(mainViewModel)
+
     //enables shared preferences
     val editor: SharedPreferences.Editor = sharedPreferences.edit()
-//    editor.putString("USERNAME",mainViewModel.username.value)
-//    editor.putString("USERNAME",mainViewModel.password.value)
-//    editor.apply()
+    editor.putString("USERNAME", mainViewModel.username.value)
+    editor.putString("SECRET", mainViewModel.password.value)
+    editor.apply()
 
     val context = LocalContext.current
 
@@ -125,8 +128,6 @@ fun UserHistoryScreen(
         mutableStateOf("")
     }
 
-    //function to fetch chat user data from api
-    getChatHistory(mainViewModel)
 
     //it implements visual layout structure
     Scaffold(
@@ -170,7 +171,7 @@ fun UserHistoryScreen(
 
         ) {
 
-//        if((mainViewModel.allChats.size!=0)) {
+        if((mainViewModel.allChats.size!=0)) {
         LazyColumn(
             modifier = Modifier
                 .fillMaxWidth()
@@ -247,24 +248,23 @@ fun UserHistoryScreen(
 
             }
         }
-//        }
-//        else{
-//            Box(
-//                modifier = Modifier.height(550.dp)
-//                    .width(800.dp)
-//                    .padding(top=180.dp, start = 50.dp, end = 50.dp)
-//                    .background(card
-//                        ,shape = RoundedCornerShape(16.dp)),
-//                contentAlignment = Alignment.Center,
-//            ){
-//                Text(text = "No Chats Available",
-//                    fontSize = 20.sp)
-//            }
-//        }
+        }
+        else{
+            Box(
+                modifier = Modifier.height(550.dp)
+                    .width(800.dp)
+                    .padding(top=180.dp, start = 50.dp, end = 50.dp)
+                    .background(card
+                        ,shape = RoundedCornerShape(16.dp)),
+                contentAlignment = Alignment.Center,
+            ){
+                Text(text = "No Chats Available",
+                    fontSize = 20.sp)
+            }
+        }
     }
     if (mainViewModel.isLoading.value) {
         LoadingView()
     }
-
 }
 
