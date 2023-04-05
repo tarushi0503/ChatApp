@@ -20,6 +20,7 @@ import androidx.compose.ui.graphics.Brush
 import androidx.compose.ui.graphics.Color
 import androidx.compose.ui.layout.ContentScale
 import androidx.compose.ui.platform.LocalContext
+import androidx.compose.ui.platform.testTag
 import androidx.compose.ui.res.painterResource
 import androidx.compose.ui.text.TextStyle
 import androidx.compose.ui.text.font.FontFamily
@@ -221,7 +222,8 @@ fun SignUpScreen(navController:NavController, mainViewModel: MainViewModel) {
                     placeholder = { Text(text = "Enter your Username") },
                     modifier = Modifier
                         .padding(16.dp)
-                        .fillMaxWidth(),
+                        .fillMaxWidth()
+                        .testTag("Enter your Username"),
                     textStyle = TextStyle(color = Color.Black, fontSize = 15.sp),
                     singleLine = true,
                     leadingIcon = {
@@ -255,7 +257,8 @@ fun SignUpScreen(navController:NavController, mainViewModel: MainViewModel) {
                     // and adding padding to it and filling max width
                     modifier = Modifier
                         .padding(16.dp)
-                        .fillMaxWidth(),
+                        .fillMaxWidth()
+                        .testTag("Enter your first name"),
 
                     // on below line we are adding text style
                     // specifying color and font size to it.
@@ -291,7 +294,8 @@ fun SignUpScreen(navController:NavController, mainViewModel: MainViewModel) {
                     // and adding padding to it and filling max width
                     modifier = Modifier
                         .padding(16.dp)
-                        .fillMaxWidth(),
+                        .fillMaxWidth()
+                        .testTag("Enter your last name"),
 
                     // on below line we are adding text style
                     // specifying color and font size to it.
@@ -339,7 +343,8 @@ fun SignUpScreen(navController:NavController, mainViewModel: MainViewModel) {
                     // and adding padding to it and filling max width
                     modifier = Modifier
                         .padding(16.dp)
-                        .fillMaxWidth(),
+                        .fillMaxWidth()
+                        .testTag("Password"),
 
                     // on below line we are adding text style
                     // specifying color and font size to it.
@@ -456,6 +461,7 @@ fun SignUpScreen(navController:NavController, mainViewModel: MainViewModel) {
                     modifier = Modifier
                         .fillMaxWidth()
                         .padding(16.dp)
+                        .testTag("SignUp_Button")
                 ) {
                     // on below line we are adding text for our button
                     Text(text = "SignUp", fontWeight = FontWeight.Bold)
