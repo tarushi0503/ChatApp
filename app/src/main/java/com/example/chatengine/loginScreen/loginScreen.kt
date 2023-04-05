@@ -20,6 +20,7 @@ import androidx.compose.ui.graphics.Brush
 import androidx.compose.ui.graphics.Color
 import androidx.compose.ui.layout.ContentScale
 import androidx.compose.ui.platform.LocalContext
+import androidx.compose.ui.platform.testTag
 import androidx.compose.ui.res.painterResource
 import androidx.compose.ui.text.TextStyle
 import androidx.compose.ui.text.font.FontFamily
@@ -45,15 +46,12 @@ import retrofit2.Callback
 import retrofit2.Response
 
 //function to get data from API
-private fun loginData(
+fun loginData(
     ctx: Context,
-    username:String,
-    password:String,
     result: MutableState<String>,
     secret: MutableState<String>,
     navController: NavController,
     mainViewModel: MainViewModel,
-    sharedPreferences: SharedPreferences
 ) {
 
     //stores the response of AuthenticateUser() function created in main view model
@@ -108,12 +106,12 @@ fun LoginScreen(
         mainViewModel.isLoading.value = true
         mainViewModel.username.value = userNameSharedPreferences
         mainViewModel.password.value = passwordSharedPreferences
-        UserHistoryScreen(navController, mainViewModel, sharedPreferences )
+        UserHistoryScreen(navController, mainViewModel, sharedPreferences)
     }
 
     //else user will be asked to login again
     else {
-        Login(navController, mainViewModel, sharedPreferences)
+        Login(navController, mainViewModel)
     }
 }
 
@@ -122,7 +120,6 @@ fun LoginScreen(
 fun Login(
     navController: NavController,
     mainViewModel: MainViewModel,
-    sharedPreferences: SharedPreferences
 ){
 
     val context = LocalContext.current
@@ -246,6 +243,7 @@ fun Login(
                     onValueChange = { userName.value = it },
                     placeholder = { Text(text = "Enter your Username") },
                     modifier = Modifier
+                        .testTag("Enter your Username")
                         .padding(16.dp)
                         .fillMaxWidth(),
                     textStyle = TextStyle(color = Color.Black, fontSize = 15.sp),
@@ -264,9 +262,15 @@ fun Login(
                 //It adds space between elements
                 Spacer(modifier = Modifier.height(5.dp))
 
-                //this textfield stores the username entered by user
+                //this textfield stores the password entered by user
                 OutlinedTextField(
 
+                    // on below line we are adding modifier to it
+                    // and adding padding to it and filling max width
+                    modifier = Modifier
+                        .testTag("Password")
+                        .padding(16.dp)
+                        .fillMaxWidth(),
                     // on below line we are specifying value for our first name text field.
                     value = password.value,
 
@@ -288,13 +292,8 @@ fun Login(
                     },
 
                     // on below line we are adding place holder as text
-                    placeholder = { Text(text = "Enter your Password") },
+                    placeholder = { Text(text = "Password") },
 
-                    // on below line we are adding modifier to it
-                    // and adding padding to it and filling max width
-                    modifier = Modifier
-                        .padding(16.dp)
-                        .fillMaxWidth(),
 
                     // on below line we are adding text style
                     // specifying color and font size to it.
@@ -323,6 +322,12 @@ fun Login(
                 Spacer(modifier = Modifier.height(10.dp))
                 // on below line we are creating a button
                 Button(
+
+                    // on below line we are adding modifier to our button.
+                    modifier = Modifier
+                        .testTag("Login_Button")
+                        .fillMaxWidth()
+                        .padding(16.dp),
                     onClick = {
                         //the below check display toast if the credentials are empty
                         if (userName.value == "" || password.value == "") {
@@ -339,13 +344,10 @@ fun Login(
                             //this functions is called to get data from api
                             loginData(
                                 context,
-                                userName.value,
-                                password.value,
                                 result,
                                 secret,
                                 navController,
                                 mainViewModel,
-                                sharedPreferences
                             )
                         }
                     },
@@ -353,10 +355,7 @@ fun Login(
                     //the state of where all credentials are filled of not is assigned to enabled
                     enabled = isCredentialsFilled,
 
-                    // on below line we are adding modifier to our button.
-                    modifier = Modifier
-                        .fillMaxWidth()
-                        .padding(16.dp),
+
                     colors = ButtonDefaults.buttonColors(
                         backgroundColor = Purple500,
                         contentColor = Color.White

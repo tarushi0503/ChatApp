@@ -8,6 +8,7 @@ import androidx.compose.material.MaterialTheme
 import androidx.compose.runtime.Composable
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
+import androidx.compose.ui.platform.testTag
 import androidx.compose.ui.unit.dp
 
 //composable has a loader ui whic is shown when data is getting loaded from api
@@ -17,6 +18,7 @@ fun LoadingView() {
         contentAlignment = Alignment.Center,
         modifier = Modifier.fillMaxSize()
             .padding(top = 500.dp)
+            .testTag("loading")
     ) {
         CircularProgressIndicator(color = MaterialTheme.colors.primary)
     }
